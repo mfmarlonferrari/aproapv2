@@ -1,0 +1,70 @@
+{% include "header.html" %}
+
+<form class="form-horizontal" method="post" action="/salvar_ideia/{{ espacoId }}/">
+    <div class="section">
+      <div class="background-image" style="background-image : url('http://images8.alphacoders.com/405/405672.jpg')"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <form role="form">
+              <div class="form-group has-feedback">
+              {% csrf_token %}
+                <label class="control-label">Sugestões para questão de investigação:</label>
+                <input class="form-control input-lg" type="text" name="ideia">
+                  <span class="fa fa-check form-control-feedback"></span>
+              <button type="submit" class="btn btn-default">Enviar</button>
+              </form>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</form>
+
+<form class="form-horizontal" method="post" action="/terminar_etapa2/{{ espacoId }}/">
+    <div class="section">
+      <div class="background-image" style="background-image : url('http://www.solidbackgrounds.com/images/1280x1024/1280x1024-light-sky-blue-solid-color-background.jpg')"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="col-md-12 text-center">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-lg btn-primary">Terminei!</button>
+            </div>
+          </div>
+        </div>
+            <div class="row">
+              <div class="col-md-12">
+                <h1>Minhas sugestões até agora</h1>
+                <ul class="list-group">
+                   {% for ideia in ideias %}
+                      <li class="list-group-item list-group-item-text">{{ ideia }}</li>
+                   {% endfor %}
+                </ul>
+              </div>
+            </div>
+      <div class="row">
+            <div class="col-md-12 text-right">
+                <ul class="pagination">
+                    <li><a href="#">Prev</a>
+                    </li>
+                    <li><a href="#">1</a>
+                    </li>
+                    <li><a href="#">2</a>
+                    </li>
+                    <li><a href="#">3</a>
+                    </li>
+                    <li><a href="#">4</a>
+                    </li>
+                    <li><a href="#">5</a>
+                    </li>
+                    <li><a href="#">Next</a>
+                    </li>
+                </ul>
+            </div>
+           </div>
+          </div>
+        </div>
+</form>
+
+{% include "footer.html" %}

@@ -1,0 +1,101 @@
+{% load staticfiles %}
+{%include "header.html" %}
+
+<div class="section" id="questoes">
+<div class="background-image" style="background-image : url('http://images8.alphacoders.com/405/405672.jpg')"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="list-group">
+                    {% for questao in questoes %}
+                    <li class="list-group-item">{{ questao }}</li>
+                    <div class="row">
+			            <div class='col-sm-5'>
+				           <div class="form-group">
+					            <p>
+                                    <div data-productid="{{ questao.id }}" class="rateit"></div>
+					            </p>
+				           </div>
+			            </div>
+		            </div>
+                   {% endfor %}
+                </ul>
+            </div>
+        </div>
+    <div class="row">
+            <div class="col-md-12 text-right">
+                <ul class="pagination">
+                    <li><a href="#">Prev</a></li>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                    <li><a href="#">Next</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<form class="ok" method="post" action="/terminar_etapa2/{{ idEspaco }}/">
+    {% csrf_token %}
+<div class="section">
+    <div class="background-image" style="background-image : url('http://www.solidbackgrounds.com/images/1280x1024/1280x1024-light-sky-blue-solid-color-background.jpg')"></div>
+    <div class="container">
+        <div class="row">
+        <div class="col-md-12 text-center">
+            <button type="submit" class="btn btn-lg btn-primary">Terminei!</button>
+        </div>
+       </div>
+    </div>
+</div>
+</form>
+
+<script type ="text/javascript">
+var csrftoken = $.cookie('csrftoken');
+
+function csrfSafeMethod(method) {
+// these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+     //we bind only to the rateit controls within the products div
+     $('#questoes .rateit').bind('rated reset', function (e) {
+         var ri = $(this);
+
+         //if the use pressed reset, it will get value: 0 (to be compatible with the HTML range control), we could check if e.type == 'reset', and then set the value to  null .
+         var value = ri.rateit('value');
+         var productID = ri.data('productid'); // if the product id was in some hidden field: ri.closest('li').find('input[name="productid"]').val()
+
+         //maybe we want to disable voting?
+         ri.rateit('readonly', true);
+
+         $.ajax({
+             url: '/fechar_voto/', //your server side script
+             data: { id: productID, value: value }, //our data
+             type: 'POST',
+             success: function (data) {
+                  //alert('Funcionou');
+                 console.log('Salvou com sucesso '+value+' estrelas para a questao '+productID)
+
+             },
+             error : function(xhr,errmsg,err) {
+                 console.log(xhr.status + ": " + xhr.responseText + err); // provide a bit more info about the error to the console
+                 alert(xhr.status + ": " + xhr.responseText + err); //para exibir na tela o erro
+        }
+
+         });
+     });
+ </script>
+
+
+{%include "footer.html" %}

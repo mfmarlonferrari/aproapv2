@@ -1,0 +1,80 @@
+{% load staticfiles %}
+
+<html><head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="{% static 'static/js/jquery.min.js' %}"></script>
+        <script src="{% static 'static/js/bootstrap.min.js' %}"></script>
+        <link href="{% static 'static/css/font-awesome.min.css' %}" rel="stylesheet">
+        <link href="{% static 'static/css/bootstrap-custon-sabia.css' %}" rel="stylesheet">
+        <link href="{% static 'static/css/bootstrap.css' %}" rel="stylesheet">
+        <script src="{% static 'static/js/documento.js' %}"></script>
+    </head><body>
+        <div class="cover">
+            <div class="navbar">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-ex-collapse">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="#"><span>Sobre</span></a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="navbar-ex-collapse">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="active">
+                                <a href="/login/"><i class="fa fa-fw fa-lg fa-sign-in"></i>Entrar</a>
+                            </li>
+                            <li>
+                                <a href="#">Contato</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="cover-image" style="background-image : url('{% static "static/img/calidad-educacion.jpg" %}')"></div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h1>Bem-vindo!</h1>
+                        <p>Desenvolver atividades baseadas em projetos ficou fácil!</p>
+
+                        <br>
+                        <br>
+                        <a href="/cadastrar/" class="btn btn-lg btn-primary">Cadastre-se</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <img src="{% static "static/img/view.jpg" %}" class="img-responsive">
+                    </div>
+                    <div class="col-md-6">
+                        <h1 class="text-primary">Exercite a curiosidade!</h1>
+                        <h3>Mais autonomia</h3>
+                        <p>Aprendizagem baseada em projetos é a abordagem ideal para que os estudantes possam desenvolver a autonomia e tomada de decisões. Cada envolvido é um sujeito ativo na construção do conhecimento e que portanto é responsável por seu aprendizado.<br>A abordagem baseada em projetos utiliza a motivação dos estudantes como catalisador das mudanças, portanto é natural que os projetos sejam em si interessantes, motivadores e altmente construtivos.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h1 class="text-primary">Habilidades reais!</h1>
+                        <h3>Aprendizado significativo</h3>
+                        <p>Ao depararem-se com desafios do mundo real, os estudantes precisam desenvolver soluções tal qual farão no cenário real. Isso significa praticar e não simplesmente testarem seu poder de memorização ou lidarem com problemas artificiais.&nbsp;O resultado é um aprendizado significativo, útil e aplicável.<br>Cada vez mais o cenário global precisa de pessoas articuladoras, com senso crítico e poder de mudanças. Envolver os estudantes na aprendizagem baseada em projetos significa torná-los capazes de enfrentar os desafios cotidianos com todas as habilidades necessárias para o sucesso.</p>
+                    </div>
+                    <div class="col-md-6">
+                        <img src="{% static "static/img/Bewerbung-optimieren-Tipps-Beispiele.jpg" %}" class="img-responsive">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</body></html>

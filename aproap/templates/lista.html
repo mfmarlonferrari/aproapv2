@@ -1,0 +1,69 @@
+{%include "header.html" %}
+
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-dismissable alert-success">
+                    <b>Aqui é possível visualizar os espaços de projetos!</b>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+ <div class="modal fade" id="myModal">
+     <form class="well" method="post" action="/salvar_espaco/">
+         {% csrf_token %}
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title">Novo espaço de projeto</h4>
+          </div>
+          <div class="modal-body">
+            <form role="form">
+              <div class="form-group">
+                <label class="control-label">Digite o nome do espaço:</label>
+                <input class="form-control" type="text" id="nomeEspaco" name="nomeEspaco">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+              {% csrf_token %}
+            <a class="btn btn-default" data-dismiss="modal">Fechar</a>
+            <button id="salvar" type="submit"  name="salvar" class="btn btn-primary">Criar</button>
+          </div>
+        </div>
+      </div>
+     </form>
+ </div>
+
+<div class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 text-right">
+            <a class="btn btn-primary" data-toggle="modal" data-target="#myModal"><i class="fa fa-fw fa-folder-open"></i>Novo Espaço</a>
+          </div>
+        </div>
+      </div>
+</div>
+
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="list-group">
+                    {% for espaco in espacos %}
+                        <li class="list-group-item">
+                            <a href="{% url 'lobby' espaco.pk%}"> {{ espaco }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{%include "footer.html" %}

@@ -1,0 +1,58 @@
+{%include "header.html" %}
+<div class="section">
+            <div class="background-image" style="background-image : url('{{ STATIC_URL }}../static/img/Rocket.jpg')"></div>
+            <div class="container">
+<div class="modal-dialog" id="mymodal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Faça login para entrar</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form"  method="POST" action="{% url 'django.contrib.auth.views.login' %}">
+                    {% csrf_token %}
+                    {% if form.errors %}
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
+                            <p>Ops! Os dados não conferem <br/> Verifique corretamente o usuário e a senha.</p>
+                        </div>
+                    {% endif %}
+                    <div class="form-group">
+                        <div class="col-sm-2">
+                            <label for="inputEmail3" class="control-label">Usuário</label>
+                        </div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputEmail3" placeholder="Email" name="username">
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <div class="col-sm-2">
+                            <label for="inputEmail3" class="control-label">Senha</label>
+                        </div>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="inputPassword3" placeholder="Password" name="password">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <h4>Ainda não possui conta? <a href="/cadastrar/"> cadastre-se!</a></h4>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">OK</button>
+                            <input type="hidden" name="next" value="{{ next }}" />
+                        </div>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+     </div>
+ </div>
+ </div>
+ </div>
+</div>
+
+{%include "footer.html" %}

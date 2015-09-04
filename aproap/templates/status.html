@@ -1,0 +1,83 @@
+{% include "header.html" %}
+{% load static %}
+
+<div class="litetooltip-hotspot-wrapper" style="max-width: 1591px">
+<div class="litetooltip-hotspot-container" style="padding-bottom: 60.84223758642363%">
+<img src="{% static "static/img/lobby.jpg" %}" class="img-responsive" />
+<div class="hotspot" style="top: 9.090909090909092%; left: 3.331238214959145%; width: 17.347580138277813%; height: 21.694214876033058%; background: transparent; border: 1px solid transparent; border-radius: 20px; opacity: 0.8" id="resultados" data-location="top" data-template="" data-templatename="" data-opacity="0.8" data-backcolor="#000000" data-textcolor="#ffffff" data-textalign="center" data-margin="5" data-padding="10" data-width="0" data-delay="0" data-trigger="hover" data-issticky="true" data-hotspot-x="3.331238214959145" data-hotspot-y="9.090909090909092" data-hotspot-blink="false" data-hotspot-bgcolor="transparent" data-hotspot-bordercolor="transparent" data-hotspot-borderradius="20">
+<div class="data-container">Resultados</div>
+</div>
+
+<div class="hotspot" style="top: 15.702479338842975%; left: 31.6781898177247%; width: 24.512884978001257%; height: 19.111570247933884%; background: transparent; border: 1px solid transparent; border-radius: 20px; opacity: 0.8" id="questaodeinvestigacao" data-location="top" data-template="" data-templatename="" data-opacity="0.8" data-backcolor="#000000" data-textcolor="#ffffff" data-textalign="center" data-margin="5" data-padding="10" data-width="0" data-delay="0" data-trigger="hover" data-issticky="true" data-hotspot-x="31.6781898177247" data-hotspot-y="15.702479338842975" data-hotspot-blink="false" data-hotspot-bgcolor="transparent" data-hotspot-bordercolor="transparent" data-hotspot-borderradius="20">
+<div class="data-container">{{ questaoDeInvestigacao }}</div>
+</div>
+
+<div class="hotspot" style="top: 40.39256355979226%; left: 10.873664362036454%; width: 37.586423632935265%; height: 42.14876033057851%; background: transparent; border: 1px solid transparent; border-radius: 20px; opacity: 0.8" id="etapaatual" data-location="top" data-template="" data-templatename="" data-opacity="0.8" data-backcolor="#000000" data-textcolor="#ffffff" data-textalign="center" data-margin="5" data-padding="10" data-width="0" data-delay="0" data-trigger="hover" data-issticky="true" data-hotspot-x="10.873664362036454" data-hotspot-y="40.39256355979226" data-hotspot-blink="false" data-hotspot-bgcolor="transparent" data-hotspot-bordercolor="transparent" data-hotspot-borderradius="20">
+<div class="data-container">Ir à etapa atual</div>
+</div>
+
+<div class="hotspot" style="top: 53.40909248541209%; left: 58.20238843494657%; width: 15.147705845380264%; height: 33.88429752066116%; background: transparent; border: 1px solid transparent; border-radius: 20px; opacity: 0.8" id="apresentacoes" data-location="top" data-template="" data-templatename="" data-opacity="0.8" data-backcolor="#000000" data-textcolor="#ffffff" data-textalign="center" data-margin="5" data-padding="10" data-width="0" data-delay="0" data-trigger="hover" data-issticky="true" data-hotspot-x="58.20238843494657" data-hotspot-y="53.40909248541209" data-hotspot-blink="false" data-hotspot-bgcolor="transparent" data-hotspot-bordercolor="transparent" data-hotspot-borderradius="20">
+<div class="data-container">Apresentações</div>
+</div>
+{% if estaParticipando < 1 %}
+<div class="hotspot blink" style="top: 33.574380165289256%; left: 74.67001885606537%; width: 4.274041483343809%; height: 6.508264462809918%; background: #cc0000; border: 1px solid #cc0000; border-radius: 20px; opacity: 0.8" id="solicitar" data-location="top" data-template="" data-templatename="" data-opacity="0.8" data-backcolor="#000000" data-textcolor="#ffffff" data-textalign="center" data-margin="5" data-padding="10" data-width="0" data-delay="0" data-trigger="hover" data-issticky="true" data-hotspot-x="74.67001885606537" data-hotspot-y="33.574380165289256" data-hotspot-blink="true" data-hotspot-bgcolor="#cc0000" data-hotspot-bordercolor="#cc0000" data-hotspot-borderradius="20">
+<div class="data-container">Solicitar participação</div>
+</div>
+{% endif %}
+<div class="hotspot" style="top: 10.12396694214876%; left: 74.4186046511628%; width: 16.907605279698306%; height: 19.214876033057852%; background: transparent; border: 1px solid transparent; border-radius: 20px; opacity: 0.8" id="participacaomembros" data-location="top" data-template="" data-templatename="" data-opacity="0.8" data-backcolor="#000000" data-textcolor="#ffffff" data-textalign="center" data-margin="5" data-padding="10" data-width="0" data-delay="0" data-trigger="hover" data-issticky="true" data-hotspot-x="74.4186046511628" data-hotspot-y="10.12396694214876" data-hotspot-blink="false" data-hotspot-bgcolor="transparent" data-hotspot-bordercolor="transparent" data-hotspot-borderradius="20">
+<div class="data-container">Participação dos membros</div>
+</div>
+
+</div>
+</div>
+
+<script type="text/javascript">
+$('.litetooltip-hotspot-wrapper .hotspot').each(function () {
+    $(this).LiteTooltip({ title: $(this).find('.data-container').html() });
+ });
+
+var spyElement = document.getElementById("resultados");
+var oldMousedown = spyElement.onmousedown;
+spyElement.onmousedown = function () {
+    window.location.href = "#results";
+    if(oldMousedown) oldMousedown();
+};
+
+var spyElement = document.getElementById("questaodeinvestigacao");
+var oldMousedown = spyElement.onmousedown;
+spyElement.onmousedown = function () {
+    window.location.href = "#QI";
+    if(oldMousedown) oldMousedown();
+};
+
+var spyElement = document.getElementById("etapaatual");
+var oldMousedown = spyElement.onmousedown;
+spyElement.onmousedown = function () {
+    window.location.href = "{{ link }}";
+    if(oldMousedown) oldMousedown();
+};
+
+var spyElement = document.getElementById("apresentacoes");
+var oldMousedown = spyElement.onmousedown;
+spyElement.onmousedown = function () {
+    window.location.href = "#view";
+    if(oldMousedown) oldMousedown();
+};
+
+var spyElement = document.getElementById("solicitar");
+var oldMousedown = spyElement.onmousedown;
+spyElement.onmousedown = function () {
+    window.location.href = "/participar_projeto/{{ pk }}";
+    if(oldMousedown) oldMousedown();
+};
+
+var spyElement = document.getElementById("participacaomembros");
+var oldMousedown = spyElement.onmousedown;
+spyElement.onmousedown = function () {
+    window.location.href = "#rendimento";
+    if(oldMousedown) oldMousedown();
+};
+
+</script>
+
+{% include "footer.html" %}

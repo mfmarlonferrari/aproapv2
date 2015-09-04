@@ -1,0 +1,10 @@
+.star-colorize{
+	color: #FFA500;	
+	font-size:20px;
+	cursor:pointer;
+}
+.star-decolorize{
+	color: #D3D3D3;
+	font-size:20px;
+	cursor:pointer;
+}

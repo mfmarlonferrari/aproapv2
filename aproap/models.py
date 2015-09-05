@@ -37,7 +37,7 @@ class votosQuestao(models.Model):
 
 class resultadoVotacao(models.Model):
     questao = models.ForeignKey(ideaDeQuestao)
-    totalDeVotosRecebidos = models.FloatField()
+    totalDeVotosRecebidos = models.FloatField(null=True)
 
 class alunosNoProjeto(models.Model):
     projeto = models.ForeignKey(Projeto)

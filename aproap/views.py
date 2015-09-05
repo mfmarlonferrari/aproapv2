@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 import json
 from django.contrib.auth.decorators import login_required
-from django.db.models import Sum
+from django.db.models import Sum, Max
 from django import template
 from itertools import chain
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -130,23 +130,30 @@ def terminaEtapa2(request, pk):
         idQuestao = ideaDeQuestao.objects.filter(espaco=pk)
         #Soma todos os votos de uma questao
         somaDosVotos = ideaDeQuestao.objects.filter(espaco=pk).annotate(total=Sum('votosquestao__classificacao'))
-        for questao in somaDosVotos:
-            a = resultadoVotacao.objects.create(questao=questao, totalDeVotosRecebidos=questao.total)
-            a.save()
-        #verifica se ha mais de uma questao empatada no primeiro lugar
-        listaDuplicados = resultadoVotacao.objects.filter(totalDeVotosRecebidos=somaDosVotos[0].total)
-        duplicados = listaDuplicados.count()
-        #se houver mais de um registro, indica que ha questoes empatadas
-        if duplicados > 1:
+        #pegando o maior valor
+        maioresValores = somaDosVotos.all().aggregate(maior=Max('total'))
+        #variavel contendo o maior valor do dicionario maioresValores
+        valorMax = maioresValores.get('maior')
+        #pesquisar quais questoes tem o valor maximo dos votos
+        questoesMaximas = somaDosVotos.filter(total=valorMax)
+        #quantidade de questoes com o valor maximo dos votos
+        qtdQuestoesMaximas = questoesMaximas.count()
+        #caso a quantidade seja maior que 1 significa que ha empate
+        if qtdQuestoesMaximas > 1:
             #atualiza o campo etapaAtual de todos os alunos do projeto, voltando a etapa anterior
             endereco = '/votar/%s' %pk
             etapaValida = alunosNoProjeto.objects.filter(projeto=idProjeto).update(etapaAtual=2, ondeparou=endereco)
-            #seleciona as questoes para uma nova triagem, zerando os votos dados a elas pelos alunos
-            for i in listaDuplicados:
-                o = votosQuestao.objects.filter(questao=i.questao).delete()
+            for i in questoesMaximas:
+                #apaga os registros de votacao anteriores das questoes repetidas para uma nova etapa de votacao
+                o = votosQuestao.objects.filter(questao=i).delete()
             return HttpResponseRedirect("/votar/%s" %pk)
+
         #se nao houver projetos duplicados, passe para a etapa 3
         else:
+            #salva as questoes e seus votos para log
+            for questao in somaDosVotos:
+                a = resultadoVotacao.objects.create(questao=questao, totalDeVotosRecebidos=questao.total)
+                a.save()
             idProjeto.etapa = 3
             #ordena as questoes por ordem descrescente de mais votadas
             listaDecrescente = somaDosVotos.order_by('-total')

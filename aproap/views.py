@@ -32,6 +32,14 @@ def inserirIdeia(request,pk):
     c = RequestContext(request, context)
     return render_to_response('inserirIdeia.html', c)
 
+def detalhesUnidade(request,pk, unidade):
+    idProjeto = Projeto.objects.get(espaco=pk)
+    #filtra todos os conhecimentos sem investigador vinculado
+    pendentes = unidadeInvestigacao.objects.filter(qualProjeto=idProjeto, nomeDoBloco=unidade, investigador='')
+    context = dict(pendentes=pendentes)
+    c = RequestContext(request, context)
+    return render_to_response('detalhesUnidade.html', c)
+
 @login_required
 def votarIdeia(request,pk):
     #filtra todas as questoes do espaco de projeto atual

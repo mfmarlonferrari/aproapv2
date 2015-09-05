@@ -62,6 +62,9 @@ class unidadeInvestigacao(models.Model):
     nomeDoBloco = models.IntegerField()
     qualProjeto = models.ForeignKey(Projeto)
     conhecimentoPrevio = models.CharField(max_length=200)
+    investigador = models.CharField(max_length = 100, blank=True)
+    prazo = models.DateField(blank=True, null=True)
+    precisaAjuda = models.IntegerField(default=0)
 
     def __unicode__(self):
         return "%s - %s" %(self.nomeDoBloco, self.conhecimentoPrevio)

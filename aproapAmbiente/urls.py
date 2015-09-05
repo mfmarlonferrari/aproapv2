@@ -25,5 +25,6 @@ urlpatterns = patterns('',
     url(r'^participar_projeto/(?P<pk>[0-9]+)/$', 'aproap.views.participarProjeto', name='participar_projeto'),
     url(r'^unidades/(?P<pk>[0-9]+)/$', 'aproap.views.unidadesInvestigacao', name='unidades'),
     url(r'^unidades/(?P<pk>[0-9]+)/(?P<unidade>[0-9]+)$', 'aproap.views.unidadesInvestigacao', name='unidades'),
+    url(r'^detalhes_unidade/(?P<pk>[0-9]+)/(?P<unidade>[0-9]+)/$', 'aproap.views.detalhesUnidade', name='detalhesUnidade'),
     url(r'^areaDeTrabalho/(?P<pk>[0-9]+)/(?P<id>[0-9]+)/$', 'aproap.views.areaDeTrabalho', name='area'),
 )

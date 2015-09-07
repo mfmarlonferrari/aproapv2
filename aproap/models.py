@@ -64,6 +64,7 @@ class unidadeInvestigacao(models.Model):
     conhecimentoPrevio = models.CharField(max_length=200)
     investigador = models.CharField(max_length = 100, blank=True)
     prazo = models.DateField(blank=True, null=True)
+    prazoFinal = models.DateField(blank=True, null=True)
     precisaAjuda = models.IntegerField(default=0)
 
     def __unicode__(self):

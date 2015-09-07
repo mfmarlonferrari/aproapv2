@@ -24,14 +24,18 @@ def showcronograma(request):
 
     if request.is_ajax():
         print 'Its ajax from fullCalendar()'
-
-    entries = unidadeInvestigacao.objects.filter(investigador=request.user.username)
+    #filtra as entradas cujo investigador seja o usuario atual e os prazos nao sejam nulos
+    entries = unidadeInvestigacao.objects.filter(investigador=request.user.username, prazo__isnull=False, prazoFinal__isnull=False)
     print entries
     json_list = []
     for entry in entries:
         title = entry.conhecimentoPrevio
+        print title
         start = entry.prazo.strftime("%Y-%m-%d")
-        json_entry = {'start':start, 'title': title}
+        print start
+        end = entry.prazoFinal.strftime("%Y-%m-%d")
+        print end
+        json_entry = {'start':start, 'end': end, 'title': title}
         json_list.append(json_entry)
     return HttpResponse(json.dumps(json_list), content_type='application/json')
 
@@ -39,28 +43,37 @@ def salvaCronograma(request):
     if request.method == 'POST':
         eventsJson = request.POST.get('eventsJson')
         jsonDec = json.loads(eventsJson)
-        titulo,dataBruta = [], []
+        titulo,dataBruta, dataBrutaFinal = [], [], []
         #percorre os objetos do jsonDec
         for i in range(len(jsonDec)):
             titulo.append(jsonDec[i]['title'])
             #pega a data no formato com hora
             dataBruta.append(jsonDec[i]['start'])
+            dataBrutaFinal.append(jsonDec[i]['end'])
         #rotina para formatar a data para salvamento
-        dataApenas = []
+        dataApenas, dataApenasFinal = [],[]
         for i in range(len(dataBruta)):
             #divide a data em dois itens data e hora
             divide = dataBruta[i].split('T')
+            divideFinal = dataBrutaFinal[i].split('T')
             #pega apenas o item da data
             dataApenas.append(divide[0])
+            dataApenasFinal.append(divideFinal[0])
         response_data = {}
         for i in range(len(titulo)):
             dataFormat = datetime.strptime(dataApenas[i], '%Y-%m-%d').date()
-            atualiza = unidadeInvestigacao.objects.select_for_update().filter(conhecimentoPrevio=titulo[i]).update(prazo=dataFormat)
+            dataFormatFinal = datetime.strptime(dataApenasFinal[i], '%Y-%m-%d').date()
+            atualiza = unidadeInvestigacao.objects.select_for_update().filter(
+                conhecimentoPrevio=titulo[i]).update(prazo=dataFormat, prazoFinal=dataFormatFinal)
         response_data['result'] = 'Create post successful!'
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 def cronograma(request):
-    return render_to_response('cronograma.html', {})
+    itensSemPrazo = unidadeInvestigacao.objects.filter(
+        investigador=request.user.username, prazo__isnull=True, prazoFinal__isnull=True)
+    context = dict(itensSemPrazo=itensSemPrazo)
+    c = RequestContext(request, context)
+    return render_to_response('cronograma.html', c)
 
 def listagem(request):
     espacos = espacoProjeto.objects.all()

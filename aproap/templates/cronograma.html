@@ -45,6 +45,7 @@
 				center: 'title'
 			},
             events:"/showcronograma/",
+            eventLimit: true,
 			editable: true,
 			droppable: true, // this allows things to be dropped onto the calendar
 			drop: function() {
@@ -117,11 +118,9 @@
 
 		<div id='external-events'>
 			<h4>Meus itens a investigar</h4>
-			<div class='fc-event'>My Event 1</div>
-			<div class='fc-event'>My Event 2</div>
-			<div class='fc-event'>My Event 3</div>
-			<div class='fc-event'>My Event 4</div>
-			<div class='fc-event'>My Event 5</div>
+            {% for i in itensSemPrazo %}
+			    <div class='fc-event'>{{ i.conhecimentoPrevio }}</div>
+            {% endfor %}
 			<p>
 				<input type='checkbox' hidden checked="True" id='drop-remove' />
 			</p>
@@ -149,15 +148,25 @@
                 }
             });
 
+            var myEvents = [];
             var events = $('#calendar').fullCalendar('clientEvents');
+            //quando se adiciona um objeto novo na tela (item pendente) ocorre cyclic error porque o
+            //array possui duas posicoes 0. Para normalizar o array:
+            $.each(events, function(i, v) {
+                var evt = {};
+                evt.title = v.title;
+                evt.start = v.start;
+                evt.end = v.end;
+                myEvents.push(evt);
+            });
 
                 $.ajax({
                     type: "POST",
                     dataType: "json",
-                    data: {eventsJson: JSON.stringify(events)},
+                    data: {eventsJson: JSON.stringify(myEvents)},
                     url: '/salvacronograma/',
                     success: function (data) {
-                        alert('Funcionou');
+                        alert('Cronograma alterado com sucesso!');
                         console.log('Salvou com sucesso')
 
                     },

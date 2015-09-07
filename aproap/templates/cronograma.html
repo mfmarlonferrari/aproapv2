@@ -3,6 +3,7 @@
 <html>
 <head>
 <meta charset='utf-8' />
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link href='http://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.4.0/fullcalendar.min.css' rel='stylesheet' />
 <link href='http://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.4.0/fullcalendar.print.css' rel='stylesheet' media='print' />
 <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.js'></script>
@@ -10,6 +11,9 @@
 <script src="{% static 'static/js/jquery.cookie.js' %}"></script>
 <script src="{% static 'static/js/jquery-ui.custom.min.js' %}"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.4.0/fullcalendar.min.js"></script>
+<script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel='stylesheet' />
+<link href="http://pingendo.github.io/pingendo-bootstrap/themes/default/bootstrap.css" rel='stylesheet' />
 <script>
 
 	$(document).ready(function() {
@@ -40,10 +44,6 @@
 		-----------------------------------------------------------------*/
 
 		$('#calendar').fullCalendar({
-			header: {
-				left: 'prev,next today',
-				center: 'title'
-			},
             events:"/showcronograma/",
             eventLimit: true,
 			editable: true,
@@ -56,18 +56,14 @@
 				}
 			}
 		});
-
-
 	});
-
 </script>
+
 <style>
 
 	body {
-		margin-top: 40px;
+
 		text-align: center;
-		font-size: 14px;
-		font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
 	}
 
 	#wrap {
@@ -114,23 +110,113 @@
 </style>
 </head>
 <body>
-	<div id='wrap'>
+ <div class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-ex-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-ex-collapse">
+          <p class="navbar-right navbar-text"><a href="/admin/logout">Sair </a></p>
+          <ul class="nav navbar-left navbar-nav">
+            <li class="">
+              <a href="/espacos/"><i class="fa fa-fw fa-home"></i>Página Inicial</a>
+            </li>
+            <li>
+              <a href="#"><i class="fa fa-fw fa-at"></i>Mensagens</a>
+            </li>
+            <li>
+              <a href="#"><i class="fa fa-fw fa-user"></i>Meu perfil</a>
+            </li>
+            <li>
+              <a href="#"><i class="fa fa-star fa-fw"></i>Meus projetos</a>
+            </li>
+          </ul>
+          {% if user.is_authenticated %}
+              <p class="navbar-text navbar-right">Olá, {{ user.username }} </p>
+          {% else %}
+              <p class="navbar-text navbar-right">Olá!
+                  <a href="#" class="navbar-link" data-toggle="modal" data-target="#login">você pode se logar aqui</a>
+              </p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
 
-		<div id='external-events'>
-			<h4>Meus itens a investigar</h4>
-            {% for i in itensSemPrazo %}
-			    <div class='fc-event'>{{ i.conhecimentoPrevio }}</div>
-            {% endfor %}
-			<p>
-				<input type='checkbox' hidden checked="True" id='drop-remove' />
-			</p>
-		</div>
+  <div class="modal fade" id="login">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title">Entrar</h4>
+          </div>
+          <div class="modal-body">
+            <form role="form">
+              <div class="form-group">
+                <label class="control-label">Nome de usuário</label>
+                <input class="form-control" type="text" name="username">
+              </div>
+              <div class="form-group">
+                <label class="control-label">Senha</label>
+                <input class="form-control" type="password" name="password">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <a class="btn btn-default" data-dismiss="modal">Fechar</a>
+            <button type="submit" class="btn btn-primary">OK</button>
+            <input type="hidden" name="next" value="{{ next }}" />
+          </div>
+        </div>
+      </div>
+    </div>
 
-		<div id='calendar'></div>
+ <div class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <ul class="breadcrumb">
+              <li>
+                <a href="#">Home</a>
+              </li>
+              <li>
+                <a href="#">Library</a>
+              </li>
+              <li class="active">Data</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+ </div>
 
-		<div style='clear:both'></div>
 
-        <script type ="text/javascript">
+<div class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+              <div id='external-events'>
+		          <h4>Meus itens a investigar</h4>
+                  {% for i in itensSemPrazo %}
+			          <div class='fc-event'>{{ i.conhecimentoPrevio }}</div>
+                  {% endfor %}
+		          <p>
+			         <input type='checkbox' hidden checked="True" id='drop-remove' />
+		          </p>
+		     </div>
+       </div>
+          <div class="col-md-8">
+              <div id='calendar'></div>
+          </div>
+        </div>
+      </div>
+</div>
+
+
+<script type ="text/javascript">
 
         function myFunction() {
             var csrftoken = $.cookie('csrftoken');
@@ -179,7 +265,7 @@
         }
 </script>
 
-        <button id="demo" onclick="myFunction()">Salvar </button>
+    <button class="btn btn-primary" id="demo" onclick="myFunction()"><i class="fa fa-fw fa-check"></i>Salvar</button>
 
 	</div>
 </body>

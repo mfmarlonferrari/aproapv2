@@ -23,6 +23,27 @@
         <![endif]-->
     </head><body>
 
+<form class="form-horizontal" method="post" action="/vincular/{{ espacoId }}/myBookId">
+{% csrf_token %}
+<div class="modal fade" id="confirmapendente">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title">Adicionar item</h4>
+          </div>
+          <div class="modal-body">
+            <p>Deseja adicionar item a ser investigado sob seus cuidados?</p>
+          </div>
+          <div class="modal-footer">
+            <a class="btn btn-default" data-dismiss="modal">Fechar</a>
+            <button type="submit" class="btn btn-primary">Adicionar</button>
+          </div>
+        </div>
+      </div>
+</div>
+</form>
+
     <div id="wrapper">
       <!-- Navigation -->
       <nav class="navbar navbar-default navbar-static-top" role="navigation"
@@ -353,8 +374,8 @@
                     <i class="fa fa-tasks fa-5x"></i>
                   </div>
                   <div class="col-xs-9 text-right">
-                    <div class="huge">12</div>
-                    <div>Tarefas pendentes</div>
+                    <div class="huge">{{ qtdPendentes }}</div>
+                    <div>Itens pendentes</div>
                   </div>
                 </div>
               </div>
@@ -507,7 +528,31 @@
               <div class="panel-body">
                 <ul class="list-group">
                   {% for i in pendentes %}
-                      <li class="list-group-item">{{ i.conhecimentoPrevio }}&nbsp;<a class="glyphicon glyphicon-plus" title="adicionar este item aos seus cuidados" href="/vincular/{{ i.id }}"></a></li>
+
+                      <form class="form-horizontal" method="post" action="/vincular/{{ espacoId }}/{{ unidade }}/{{ i.id }}/">
+                      {% csrf_token %}
+                      <div class="modal fade" id="confirmapendente{{ i.id }}">
+                          <div class="modal-dialog">
+                              <div class="modal-content">
+                                 <div class="modal-header">
+                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                     <h4 class="modal-title">Adicionar item</h4>
+                                  </div>
+                                 <div class="modal-body">
+                                     <p>Deseja adicionar item a ser investigado sob seus cuidados?</p>
+                                 </div>
+                                 <div class="modal-footer">
+                                     <a class="btn btn-default" data-dismiss="modal">Fechar</a>
+                                      <button type="submit" class="btn btn-primary">Adicionar</button>
+                                 </div>
+                              </div>
+                          </div>
+                      </div>
+                      </form>
+
+                      <li class="list-group-item" id="{{ i.id }}">{{ i.conhecimentoPrevio }}&nbsp;
+                          <a class="glyphicon glyphicon-plus" title="adicionar este item aos seus cuidados"
+                             href="#" data-toggle="modal" data-target="#confirmapendente{{ i.id }}"></a></li>
                   {% endfor %}
                 </ul>
                 <ul class="pagination">

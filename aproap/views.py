@@ -75,6 +75,10 @@ def cronograma(request):
     c = RequestContext(request, context)
     return render_to_response('cronograma.html', c)
 
+def vincularItem(request, id, unidade, pk):
+    item = unidadeInvestigacao.objects.select_for_update().filter(id=pk).update(investigador=request.user.username)
+    return HttpResponseRedirect("/detalhes_unidade/%s/%s/" % (id, unidade))
+
 def listagem(request):
     espacos = espacoProjeto.objects.all()
     context = dict(espacos=espacos)
@@ -90,11 +94,12 @@ def inserirIdeia(request,pk):
     c = RequestContext(request, context)
     return render_to_response('inserirIdeia.html', c)
 
-def detalhesUnidade(request,pk, unidade):
+def detalhesUnidade(request, pk, unidade):
     idProjeto = Projeto.objects.get(espaco=pk)
     #filtra todos os conhecimentos sem investigador vinculado
     pendentes = unidadeInvestigacao.objects.filter(qualProjeto=idProjeto, nomeDoBloco=unidade, investigador='')
-    context = dict(pendentes=pendentes)
+    qtdPendentes = pendentes.count()
+    context = dict(pendentes=pendentes, espacoId=pk, unidade=unidade, qtdPendentes=qtdPendentes)
     c = RequestContext(request, context)
     return render_to_response('detalhesUnidade.html', c)
 

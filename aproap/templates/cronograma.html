@@ -132,6 +132,7 @@
 		<div style='clear:both'></div>
 
         <script type ="text/javascript">
+
         function myFunction() {
             var csrftoken = $.cookie('csrftoken');
 
@@ -147,23 +148,9 @@
                     }
                 }
             });
-            $("#demo").click(function () {
-                var events = $('#calendar').fullCalendar('clientEvents');
-                var listaTitulo = new Array;
-                for(var o in events) {
-                    listaTitulo.push(events[o].title);
-                }
-                var listaData = new Array;
-                for(var p in events) {
-                    listaData.push(events[p].start.format("YYYY-MM-DD"));
-                }
-                //console.log(events);
-                alert(listaTitulo+'>>'+listaData);
-                //events = JSON.stringify(events);
-                //result = {'titulo': listaTitulo, 'dia': listaData};
-                //console.log(result);
-                //console.log(listaTitulo);
-                //console.log(listaData);
+
+            var events = $('#calendar').fullCalendar('clientEvents');
+
                 $.ajax({
                     type: "POST",
                     dataType: "json",
@@ -180,7 +167,6 @@
                     }
 
                 });
-            });
         }
 </script>
 

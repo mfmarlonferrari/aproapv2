@@ -118,7 +118,7 @@ def elementosTextuais(request, pk, item):
 def redator(request):
     context = dict()
     c = RequestContext(request, context)
-    return render_to_response('redator.html', c)
+    return render_to_response('edicaotextual.html', c)
 
 @login_required
 def votarIdeia(request,pk):

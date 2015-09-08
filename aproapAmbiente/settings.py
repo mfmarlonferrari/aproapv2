@@ -54,6 +54,8 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'aproapAmbiente.urls'
 
+CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'
+
 WSGI_APPLICATION = 'aproapAmbiente.wsgi.application'
 
 STATICFILES_FINDERS = (
@@ -84,7 +86,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/

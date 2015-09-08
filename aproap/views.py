@@ -103,6 +103,23 @@ def detalhesUnidade(request, pk, unidade):
     c = RequestContext(request, context)
     return render_to_response('detalhesUnidade.html', c)
 
+def detalhesItem(request, pk, item):
+    qualItem = unidadeInvestigacao.objects.get(pk=item).conhecimentoPrevio
+    tarefasPendentes = tarefasItem.objects.filter(vinculoConhecimento=qualItem, responsavel__isnull=True)
+    context = dict(tarefasPendentes=tarefasPendentes)
+    c = RequestContext(request, context)
+    return render_to_response('detalheItem.html', c)
+
+def elementosTextuais(request, pk, item):
+    context = dict()
+    c = RequestContext(request, context)
+    return render_to_response('elementosTextuais.html', c)
+
+def redator(request):
+    context = dict()
+    c = RequestContext(request, context)
+    return render_to_response('redator.html', c)
+
 @login_required
 def votarIdeia(request,pk):
     #filtra todas as questoes do espaco de projeto atual

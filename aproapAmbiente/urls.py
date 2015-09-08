@@ -30,5 +30,8 @@ urlpatterns = patterns('',
     url(r'^unidades/(?P<pk>[0-9]+)/$', 'aproap.views.unidadesInvestigacao', name='unidades'),
     url(r'^unidades/(?P<pk>[0-9]+)/(?P<unidade>[0-9]+)$', 'aproap.views.unidadesInvestigacao', name='unidades'),
     url(r'^detalhes_unidade/(?P<pk>[0-9]+)/(?P<unidade>[0-9]+)/$', 'aproap.views.detalhesUnidade', name='detalhesUnidade'),
+    url(r'^detalhes_item/(?P<pk>[0-9]+)/(?P<item>[0-9]+)/$', 'aproap.views.detalhesItem', name='detalhesItem'),
+    url(r'^elementos_textuais/(?P<pk>[0-9]+)/(?P<item>[0-9]+)/$', 'aproap.views.elementosTextuais', name='elementosTextuais'),
+    url(r'^redator/$', 'aproap.views.redator', name='redator'),
     url(r'^areaDeTrabalho/(?P<pk>[0-9]+)/(?P<id>[0-9]+)/$', 'aproap.views.areaDeTrabalho', name='area'),
 )

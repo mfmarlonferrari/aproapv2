@@ -57,7 +57,7 @@ spyElement.onmousedown = function () {
 var spyElement = document.getElementById("2");
 var oldMousedown = spyElement.onmousedown;
 spyElement.onmousedown = function () {
-    window.location.href = "#cronograma";
+    window.location.href = "/cronograma/";
     if(oldMousedown) oldMousedown();
 };
 

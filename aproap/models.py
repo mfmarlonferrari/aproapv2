@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime
+from ckeditor.fields import RichTextField
 
 class Usuarios(models.Model):
     nomeCompleto = models.CharField(max_length = 100)
@@ -69,3 +70,17 @@ class unidadeInvestigacao(models.Model):
 
     def __unicode__(self):
         return "%s - %s" %(self.nomeDoBloco, self.conhecimentoPrevio)
+
+class tarefasItem(models.Model):
+    tarefaDesc = models.CharField(max_length=100)
+    vinculoConhecimento = models.CharField(max_length=100)
+    responsavel = models.CharField(max_length=100, blank=True)
+    prazoInicial = models.DateField(blank=True, null=True)
+    prazoFinal = models.DateField(blank=True, null=True)
+    finalizado = models.IntegerField(default=0)
+
+    def __unicode__(self):
+        return self.tarefaDesc
+
+class sinteseDoc(models.Model):
+    texto = models.TextField()

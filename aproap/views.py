@@ -13,7 +13,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 register = template.Library()
 
 def index(request):
-    return render_to_response('intro.html', {})
+    return render_to_response('index.html', {})
 
 def cadastrar(request):
     return render_to_response('cadastrar.html', {})

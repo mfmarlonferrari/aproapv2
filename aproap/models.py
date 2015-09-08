@@ -71,6 +71,13 @@ class unidadeInvestigacao(models.Model):
     def __unicode__(self):
         return "%s - %s" %(self.nomeDoBloco, self.conhecimentoPrevio)
 
+class ajudantes(models.Model):
+    ajudante = models.CharField(max_length=100)
+    qualItem = models.ForeignKey(unidadeInvestigacao)
+
+    def __unicode__(self):
+        return self.ajudante
+
 class tarefasItem(models.Model):
     tarefaDesc = models.CharField(max_length=100)
     vinculoConhecimento = models.CharField(max_length=100)

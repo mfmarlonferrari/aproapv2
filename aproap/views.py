@@ -99,7 +99,25 @@ def detalhesUnidade(request, pk, unidade):
     #filtra todos os conhecimentos sem investigador vinculado
     pendentes = unidadeInvestigacao.objects.filter(qualProjeto=idProjeto, nomeDoBloco=unidade, investigador='')
     qtdPendentes = pendentes.count()
-    context = dict(pendentes=pendentes, espacoId=pk, unidade=unidade, qtdPendentes=qtdPendentes)
+    #filtra todos os conhecimentos cujo investigador exista
+    todos = unidadeInvestigacao.objects.filter(qualProjeto=idProjeto, nomeDoBloco=unidade).exclude(investigador='')
+    #verifica se o usuario possui itens a investigar sem cronograma
+    semCronograma = unidadeInvestigacao.objects.filter(qualProjeto=idProjeto, nomeDoBloco=unidade,
+                                                       investigador=request.user.username, prazo__isnull=True,
+                                                       prazoFinal__isnull=True).count()
+    #filtra todos os itens do usuario atual
+    desteUsuario = unidadeInvestigacao.objects.filter(qualProjeto=idProjeto, nomeDoBloco=unidade,
+                                                      investigador=request.user.username)
+    #calcula o andamento da unidade pela media de andamento dos itens
+    somaUnidade = unidadeInvestigacao.objects.filter(qualProjeto=idProjeto, nomeDoBloco=unidade).annotate(total=Sum('status'))
+    somaUnidadeValor = somaUnidade[0].status
+    print 'SOMA:%s ' % somaUnidadeValor
+    qtdItens = unidadeInvestigacao.objects.filter(qualProjeto=idProjeto, nomeDoBloco=unidade).count()
+    print 'QTD: %s' % qtdItens
+    mediaDaUnidade = somaUnidadeValor/qtdItens
+    context = dict(pendentes=pendentes, espacoId=pk, unidade=unidade,
+                   qtdPendentes=qtdPendentes, todos=todos, semCronograma=semCronograma, desteUsuario=desteUsuario,
+                   mediaDaUnidade=mediaDaUnidade)
     c = RequestContext(request, context)
     return render_to_response('detalhesUnidade.html', c)
 

@@ -67,6 +67,7 @@ class unidadeInvestigacao(models.Model):
     prazo = models.DateField(blank=True, null=True)
     prazoFinal = models.DateField(blank=True, null=True)
     precisaAjuda = models.IntegerField(default=0)
+    status = models.IntegerField(default=0)
 
     def __unicode__(self):
         return "%s - %s" %(self.nomeDoBloco, self.conhecimentoPrevio)

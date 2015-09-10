@@ -96,7 +96,7 @@
             <ul class="dropdown-menu dropdown-tasks">
             {% for item in desteUsuario %}
             <li>
-                <a href="/detalhes_item/{{ espacoId }}/{{ item.id }}/">
+                <a href="/projeto/{{ slug }}/unidade/{{ unidade }}/item/{{ item.slugConhecimento }}/">
                 <div>
                     <p>
                     <strong>{{ item.conhecimentoPrevio }}</strong>
@@ -410,7 +410,7 @@
                   <tbody>
                   {% for item in todos %}
                     <tr>
-                      <td><a href="/detalhes_item/{{ espacoId }}/{{ item.id }}/">{{ item.conhecimentoPrevio }}</a></td>
+                      <td><a href="/projeto/{{ slug }}/unidade/{{ unidade }}/item/{{ item.slugConhecimento }}/">{{ item.conhecimentoPrevio }}</a></td>
                       <td>{{ item.investigador }}</td>
                       <td>0</td>
                       <td>Em andamento - {{ item.status }}%</td>

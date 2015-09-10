@@ -47,7 +47,7 @@
                 <ul class="list-group">
                     {% for espaco in espacos %}
                         <li class="list-group-item">
-                            <a href="{% url 'lobby' espaco.pk%}"> {{ espaco }}</a>
+                            <a href="{% url 'lobby' espaco.slugProjeto%}"> {{ espaco }}</a>
                         </li>
                     {% endfor %}
                 </ul>

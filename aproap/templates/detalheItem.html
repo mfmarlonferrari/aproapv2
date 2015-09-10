@@ -305,6 +305,11 @@
       <div id="page-wrapper">
         <div class="row">
           <div class="col-lg-12">
+              {% if semCronograma == True %}
+                  <div class="alert alert-danger alert-dismissable">
+                  <strong>Atenção!&nbsp;</strong>Você ainda não definiu um cronograma para este item.
+                   Clique <a href="/cronograma/">aqui</a> para resolver</div>
+              {% endif %}
             <h1 class="page-header">Quadro de informações</h1>
               <div>
                    <p>
@@ -435,7 +440,7 @@
                     <tr>
                       <td>{{ tarefa.tarefaDesc }}</td>
                        <td>{{ tarefa.responsavel }}</td>
-                       <td>{{ tarefa.status }}</td>
+                       <td>{{ tarefa.status }}%</td>
                        <td>{{ tarefa.categoria }}</td>
                     </tr>
                   {% endfor %}
@@ -466,17 +471,17 @@
                 <ul class="list-group">
                   {% for i in tarefasPendentes %}
 
-                      <form class="form-horizontal" method="post" action="/vincular_tarefa/{{ pk }}/{{ item }}/{{ i.id }}/">
+                      <form class="form-horizontal" method="post" action="/vincular_tarefa/{{ slug }}/{{ unidade }}/{{ itemslug }}/{{ i.slugTarefa }}/">
                       {% csrf_token %}
                       <div class="modal fade" id="confirmapendente{{ i.id }}">
                           <div class="modal-dialog">
                               <div class="modal-content">
                                  <div class="modal-header">
                                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                     <h4 class="modal-title">Adicionar item</h4>
+                                     <h4 class="modal-title">Adicionar tarefa</h4>
                                   </div>
                                  <div class="modal-body">
-                                     <p>Deseja adicionar item a ser investigado sob seus cuidados?</p>
+                                     <p>Deseja adicionar tarefa sob seus cuidados?</p>
                                  </div>
                                  <div class="modal-footer">
                                      <a class="btn btn-default" data-dismiss="modal">Fechar</a>
@@ -488,7 +493,7 @@
                       </form>
 
                       <li class="list-group-item" id="{{ i.id }}">{{ i.tarefaDesc }}&nbsp;
-                          <a class="glyphicon glyphicon-plus" title="adicionar este item aos seus cuidados"
+                          <a class="glyphicon glyphicon-plus" title="adicionar esta tarefa aos seus cuidados"
                              href="#" data-toggle="modal" data-target="#confirmapendente{{ i.id }}"></a></li>
                   {% endfor %}
                 </ul>
@@ -703,7 +708,7 @@
   </body>
 
 
-<form method="post" action="/inserir_tarefa/{{ pk }}/{{ qualItem }}/">
+<form method="post" action="/inserir_tarefa/{{ slug }}/{{ unidade }}/{{ itemslug }}/">
 {% csrf_token %}
 <div class="modal fade" id="novatarefa">
       <div class="modal-dialog">

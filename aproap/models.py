@@ -6,7 +6,7 @@ class Usuarios(models.Model):
 
 class espacoProjeto(models.Model):
     nome = models.CharField(max_length=50)
-
+    slugProjeto = models.SlugField()
     def __unicode__(self):
         return self.nome
 
@@ -43,7 +43,7 @@ class alunosNoProjeto(models.Model):
     projeto = models.ForeignKey(Projeto)
     aluno = models.CharField(max_length = 100)
     etapaAtual = models.IntegerField(default=1)
-    ondeparou = models.CharField(max_length=30, default="/espacos/")
+    ondeparou = models.CharField(max_length=200, default="/espacos/")
 
     def __unicode__(self):
         return "Projeto:%s -Aluno:%s-Etapa:%s" %(self.projeto_id, self.aluno, self.etapaAtual)
@@ -62,6 +62,7 @@ class unidadeInvestigacao(models.Model):
     nomeDoBloco = models.IntegerField()
     qualProjeto = models.ForeignKey(Projeto)
     conhecimentoPrevio = models.CharField(max_length=200)
+    slugConhecimento = models.SlugField()
     investigador = models.CharField(max_length = 100, blank=True)
     prazo = models.DateField(blank=True, null=True)
     prazoFinal = models.DateField(blank=True, null=True)
@@ -80,6 +81,7 @@ class ajudantes(models.Model):
 
 class tarefasItem(models.Model):
     tarefaDesc = models.CharField(max_length=100)
+    slugTarefa = models.SlugField()
     vinculoConhecimento = models.ForeignKey(unidadeInvestigacao)
     responsavel = models.CharField(max_length=100, blank=True)
     status = models.IntegerField(default=0)

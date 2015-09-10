@@ -148,6 +148,17 @@ def detalhesItem(request, slug, unidade, itemslug):
     c = RequestContext(request, context)
     return render_to_response('detalheItem.html', c)
 
+def salvarElementoTextual(request, slug, unidade, itemslug):
+    qualItem = unidadeInvestigacao.objects.get(slugConhecimento=itemslug)
+    titulo = request.POST['titulo']
+    url = request.POST['link']
+    subcategoria = request.POST['categoria']
+    historico = '%s inseriu "%s"' % (request.user.username, titulo)
+    a = elementoTextual.objects.create(vinculadoItem=qualItem, quemEnviou=request.user.username,
+                                       titulo=titulo, url=url, subcategoria=subcategoria, historico=historico)
+    a.save()
+    return HttpResponseRedirect("/projeto/%s/unidade/%s/item/%s/" % (slug, unidade, itemslug))
+
 def insereTarefa(request, slug, unidade, itemslug):
     titulo = request.POST['titulo']
     categoria = request.POST['categoria']
@@ -162,12 +173,15 @@ def vincularTarefa(request, slug, unidade, itemslug, slugtarefa):
     vincItem = tarefasItem.objects.select_for_update().filter(slugTarefa=slugtarefa).update(responsavel=request.user.username)
     return HttpResponseRedirect("/projeto/%s/unidade/%s/item/%s/" % (slug, unidade, itemslug))
 
-def elementosTextuais(request, pk, item):
-    context = dict()
+def elementosTextuais(request, slug, unidade, itemslug):
+    itemId = unidadeInvestigacao.objects.get(slugConhecimento=itemslug)
+    nomeDoItem = itemId.conhecimentoPrevio
+    todos = elementoTextual.objects.filter(vinculadoItem=itemId)
+    context = dict(todos=todos, nomeDoItem=nomeDoItem, slug=slug, unidade=unidade, itemslug=itemslug)
     c = RequestContext(request, context)
     return render_to_response('elementosTextuais.html', c)
 
-def redator(request):
+def redator(request, slug, unidade, itemslug):
     context = dict()
     c = RequestContext(request, context)
     return render_to_response('edicaotextual.html', c)

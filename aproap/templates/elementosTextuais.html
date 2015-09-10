@@ -23,6 +23,45 @@
         <![endif]-->
     </head><body>
 
+
+
+<form method="post" action="/inserir_elementoTextual/{{ slug }}/{{ unidade }}/{{ itemslug }}/">
+{% csrf_token %}
+<div class="modal fade" id="novoelemento">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title">Inserindo elemento textual</h4>
+          </div>
+          <div class="modal-body">
+            <form role="form">
+              <div class="form-group">
+                <label class="control-label">Título</label>
+                <input class="form-control" type="text" name="titulo">
+                <label class="control-label">Link</label>
+                <input class="form-control" type="url" name="link">
+              </div>
+              <div class="form-group">
+                <label class="control-label">Categoria do elemento</label>
+                <select class="form-control" name="categoria">
+                  <option>Artigo científico</option>
+                  <option>Matéria, post, informativo</option>
+                  <option>Outro</option>
+                </select>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <a class="btn btn-default" data-dismiss="modal">Fechar</a>
+            <button class="btn btn-primary" type="submit">OK</button>
+          </div>
+        </div>
+      </div>
+</div>
+</form>
+
+
     <div id="wrapper">
       <!-- Navigation -->
       <nav class="navbar navbar-default navbar-static-top" role="navigation"
@@ -34,7 +73,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">AProAp: Elementos Textuais de "nome do item que está sendo investigado"</a>
+          <a class="navbar-brand">AProAp: Elementos Textuais de&nbsp;"<strong>{{ nomeDoItem }}"</strong></a>
         </div>
         <!-- /.navbar-header -->
         <ul class="nav navbar-top-links navbar-right">
@@ -325,13 +364,7 @@
                     </button>
                     <ul class="dropdown-menu pull-right" role="menu">
                       <li>
-                        <a href="#">Artigo científico</a>
-                      </li>
-                      <li>
-                        <a href="#">Matéria, postagem</a>
-                      </li>
-                      <li>
-                        <a href="#">Outro</a>
+                        <a href="#" data-toggle="modal" data-target="#novoelemento">Novo elemento textual</a>
                       </li>
                     </ul>
                   </div>
@@ -340,7 +373,9 @@
               <!-- /.panel-heading -->
               <div class="panel-body">
                 <ul class="list-group">
-                     <li class="list-group-item" id="listaArquivos">http://googole.com.br/sommervillehasacar2015/>
+                     {% for i in todos %}
+                         <a href="{{ i.url }}"><li class="list-group-item" id="listaArquivos">{{ i.titulo }} </li> </a>
+                     {% endfor %}
                 </ul>
                 <ul class="pagination">
                   <li>
@@ -406,55 +441,17 @@
                 <i class="fa fa-bell fa-fw"></i>Histórico</div>
               <!-- /.panel-heading -->
               <div class="panel-body">
-                <div class="list-group">
-                  <a href="#" class="list-group-item">
-                                    <i class="fa fa-comment fa-fw"></i> João Paulo enviou um artigo científico
-                                    <span class="pull-right text-muted small"><em>4 minutes ago</em>
+                {% for i in todos %}
+                  <div class="list-group">
+                    <a href="{{ i.url }}" class="list-group-item">
+                                <i class="fa fa-comment fa-fw"></i> {{ i.historico }}
+                                    <span class="pull-right text-muted small"><em>{{ i.data }}</em>
                                     </span>
                                 </a>
-                  <a href="#" class="list-group-item">
-                                    <i class="fa fa-twitter fa-fw"></i> Augusto Lemos enviou um link para post
-                                    <span class="pull-right text-muted small"><em>12 minutes ago</em>
-                                    </span>
-                                </a>
-                  <a href="#" class="list-group-item">
-                                    <i class="fa fa-envelope fa-fw"></i> Message Sent
-                                    <span class="pull-right text-muted small"><em>27 minutes ago</em>
-                                    </span>
-                                </a>
-                  <a href="#" class="list-group-item">
-                                    <i class="fa fa-tasks fa-fw"></i> New Task
-                                    <span class="pull-right text-muted small"><em>43 minutes ago</em>
-                                    </span>
-                                </a>
-                  <a href="#" class="list-group-item">
-                                    <i class="fa fa-upload fa-fw"></i> Server Rebooted
-                                    <span class="pull-right text-muted small"><em>11:32 AM</em>
-                                    </span>
-                                </a>
-                  <a href="#" class="list-group-item">
-                                    <i class="fa fa-bolt fa-fw"></i> Server Crashed!
-                                    <span class="pull-right text-muted small"><em>11:13 AM</em>
-                                    </span>
-                                </a>
-                  <a href="#" class="list-group-item">
-                                    <i class="fa fa-warning fa-fw"></i> Server Not Responding
-                                    <span class="pull-right text-muted small"><em>10:57 AM</em>
-                                    </span>
-                                </a>
-                  <a href="#" class="list-group-item">
-                                    <i class="fa fa-shopping-cart fa-fw"></i> New Order Placed
-                                    <span class="pull-right text-muted small"><em>9:49 AM</em>
-                                    </span>
-                                </a>
-                  <a href="#" class="list-group-item">
-                                    <i class="fa fa-money fa-fw"></i> Payment Received
-                                    <span class="pull-right text-muted small"><em>Yesterday</em>
-                                    </span>
-                                </a>
+                {% endfor %}
                 </div>
                 <!-- /.list-group -->
-                <a href="#" class="btn btn-default btn-block">View All Alerts</a>
+                <a href="#" class="btn btn-default btn-block">Ver todo o histórico</a>
               </div>
               <!-- /.panel-body -->
             </div>

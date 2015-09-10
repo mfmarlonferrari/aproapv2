@@ -90,5 +90,17 @@ class tarefasItem(models.Model):
     def __unicode__(self):
         return self.tarefaDesc
 
-class sinteseDoc(models.Model):
+class elementoTextual(models.Model):
+    vinculadoItem = models.ForeignKey(unidadeInvestigacao)
+    quemEnviou = models.CharField(max_length=100)
+    titulo = models.CharField(max_length=100)
+    url = models.CharField(max_length=100)
+    subcategoria = models.CharField(max_length=30)
+    historico = models.CharField(max_length=300)
+    data = models.DateTimeField(default=datetime.now())
+
+class textoProduzido(models.Model):
+    vinculadoItem = models.ForeignKey(unidadeInvestigacao)
     texto = models.TextField()
+    historico = models.CharField(max_length=300)
+    data = models.DateTimeField(default=datetime.now())

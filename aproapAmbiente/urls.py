@@ -31,10 +31,10 @@ urlpatterns = patterns('',
     url(r'^projeto/(?P<slug>[\w-]+)/unidade/(?P<unidade>[0-9]+)/$', 'aproap.views.unidadesInvestigacao', name='unidades'),
     url(r'^projeto/(?P<slug>[\w-]+)/unidade/(?P<unidade>[0-9]+)/detalhes/$', 'aproap.views.detalhesUnidade', name='detalhesUnidade'),
     url(r'^projeto/(?P<slug>[\w-]+)/unidade/(?P<unidade>[0-9]+)/item/(?P<itemslug>[\w-]+)/$', 'aproap.views.detalhesItem', name='detalhesItem'),
-    url(r'^elementos_textuais/(?P<pk>[0-9]+)/(?P<item>[0-9]+)/$', 'aproap.views.elementosTextuais', name='elementosTextuais'),
-    url(r'^redator/$', 'aproap.views.redator', name='redator'),
+    url(r'^projeto/(?P<slug>[\w-]+)/(?P<unidade>[0-9]+)/(?P<itemslug>[\w-]+)/elementos_textuais/$', 'aproap.views.elementosTextuais', name='elementosTextuais'),
+    url(r'^projeto/(?P<slug>[\w-]+)/(?P<unidade>[0-9]+)/(?P<itemslug>[\w-]+)/elementos_textuais/editor/$', 'aproap.views.redator', name='redator'),
     url(r'^areaDeTrabalho/(?P<pk>[0-9]+)/(?P<id>[0-9]+)/$', 'aproap.views.areaDeTrabalho', name='area'),
     url(r'^inserir_tarefa/(?P<slug>[\w-]+)/(?P<unidade>[0-9]+)/(?P<itemslug>[\w-]+)/$', 'aproap.views.insereTarefa', name='inserirTarefa'),
     url(r'^vincular_tarefa/(?P<slug>[\w-]+)/(?P<unidade>[0-9]+)/(?P<itemslug>[\w-]+)/(?P<slugtarefa>[\w-]+)/$', 'aproap.views.vincularTarefa', name='vincularTarefa'),
-
+    url(r'^inserir_elementoTextual/(?P<slug>[\w-]+)/(?P<unidade>[0-9]+)/(?P<itemslug>[\w-]+)/$', 'aproap.views.salvarElementoTextual', name='salvarElementoTextual'),
 )

@@ -123,10 +123,30 @@ def detalhesUnidade(request, pk, unidade):
 
 def detalhesItem(request, pk, item):
     qualItem = unidadeInvestigacao.objects.get(pk=item).conhecimentoPrevio
-    tarefasPendentes = tarefasItem.objects.filter(vinculoConhecimento=qualItem, responsavel__isnull=True)
-    context = dict(tarefasPendentes=tarefasPendentes)
+    qualItemId = unidadeInvestigacao.objects.get(pk=item).id
+    investigadorPrincipal = unidadeInvestigacao.objects.get(pk=item).investigador
+    ajudantes = tarefasItem.objects.filter(vinculoConhecimento=qualItemId).exclude(responsavel=investigadorPrincipal)
+    ajudantes = ajudantes.exclude(responsavel='')
+    ajudantes = ajudantes.count()
+    tarefasAndamento = tarefasItem.objects.filter(vinculoConhecimento=qualItemId).exclude(responsavel='')
+    tarefasPendentes = tarefasItem.objects.filter(vinculoConhecimento=qualItemId, responsavel='')
+    qtdTarefasPendentes = tarefasItem.objects.filter(vinculoConhecimento=qualItemId, responsavel='').count()
+    context = dict(tarefasPendentes=tarefasPendentes, tarefasAndamento=tarefasAndamento,
+                   qualItem=qualItemId, pk=pk, item=item, qtdTarefasPendentes=qtdTarefasPendentes, ajudantes=ajudantes)
     c = RequestContext(request, context)
     return render_to_response('detalheItem.html', c)
+
+def insereTarefa(request, pk, item):
+    titulo = request.POST['titulo']
+    categoria = request.POST['categoria']
+    qualItem = unidadeInvestigacao.objects.get(pk=item)
+    salva = tarefasItem.objects.create(tarefaDesc=titulo, vinculoConhecimento=qualItem, categoria=categoria)
+    salva.save()
+    return HttpResponseRedirect("/detalhes_item/%s/%s" % (pk, item))
+
+def vincularTarefa(request, pk, item, nr):
+    vincItem = tarefasItem.objects.select_for_update().filter(id=nr).update(responsavel=request.user.username)
+    return HttpResponseRedirect("/detalhes_item/%s/%s/" % (pk, item))
 
 def elementosTextuais(request, pk, item):
     context = dict()

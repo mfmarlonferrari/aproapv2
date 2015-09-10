@@ -352,12 +352,12 @@
                     <i class="fa fa-tasks fa-5x"></i>
                   </div>
                   <div class="col-xs-9 text-right">
-                    <div class="huge">24</div>
-                    <div>Atividades Pendentes</div>
+                    <div class="huge">{{ qtdTarefasPendentes }}</div>
+                    <div>Tarefas Pendentes</div>
                   </div>
                 </div>
               </div>
-              <a href="#">
+              <a href="#tarefaspendentes">
                             <div class="panel-footer">
                                 <span class="pull-left">Ver detalhes</span>
                                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -396,7 +396,7 @@
                     <i class="fa fa-support fa-5x"></i>
                   </div>
                   <div class="col-xs-9 text-right">
-                    <div class="huge">13</div>
+                    <div class="huge">{{ ajudantes }}</div>
                     <div>Ajudando este item</div>
                   </div>
                 </div>
@@ -416,87 +416,46 @@
           <div class="col-lg-8">
             <div class="panel panel-default">
               <div class="panel-heading">
-                <i class="fa -o fa-fw fa-calendar"></i>Cronograma do item
-                <div class="pull-right">
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">Actions
-                      <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu pull-right" role="menu">
-                      <li>
-                        <a href="#">Novo Prazo</a>
-                      </li>
-                      <li>
-                        <a href="#">Another action</a>
-                      </li>
-                      <li>
-                        <a href="#">Something else here</a>
-                      </li>
-                      <li class="divider"></li>
-                      <li>
-                        <a href="#">Separated link</a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+                <i class="fa -o fa-fw fa-calendar"></i>Tarefas deste item
+
               </div>
               <!-- /.panel-heading -->
               <div class="panel-body">
                 <table class="table">
                   <thead>
                     <tr>
-                      <th>#</th>
-                      <th>First Name</th>
-                      <th>Last Name</th>
-                      <th>Username</th>
+                      <th>Tarefa</th>
+                      <th>Quem está fazendo</th>
+                      <th>Status</th>
+                      <th>Categoria</th>
                     </tr>
                   </thead>
                   <tbody>
+                  {% for tarefa in tarefasAndamento %}
                     <tr>
-                      <td>1</td>
-                      <td>Mark</td>
-                      <td>Otto</td>
-                      <td>@mdo</td>
+                      <td>{{ tarefa.tarefaDesc }}</td>
+                       <td>{{ tarefa.responsavel }}</td>
+                       <td>{{ tarefa.status }}</td>
+                       <td>{{ tarefa.categoria }}</td>
                     </tr>
-                    <tr>
-                      <td>2</td>
-                      <td>Jacob</td>
-                      <td>Thornton</td>
-                      <td>@fat</td>
-                    </tr>
-                    <tr>
-                      <td>3</td>
-                      <td>Larry</td>
-                      <td>the Bird</td>
-                      <td>@twitter</td>
-                    </tr>
+                  {% endfor %}
                   </tbody>
                 </table>
               </div>
               <!-- /.panel-body -->
             </div>
             <!-- /.panel -->
-            <div class="panel panel-default">
+            <div class="panel panel-default" id="tarefaspendentes">
               <div class="panel-heading">
                 <i class="fa -o fa-fw fa-bullhorn"></i>Tarefas pendentes
                 <div class="pull-right">
                   <div class="btn-group">
-                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">Actions
+                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">Menu
                       <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu pull-right" role="menu">
                       <li>
-                        <a href="#">Adicionar novo item pendente</a>
-                      </li>
-                      <li>
-                        <a href="#">Another action</a>
-                      </li>
-                      <li>
-                        <a href="#">Something else here</a>
-                      </li>
-                      <li class="divider"></li>
-                      <li>
-                        <a href="#">Separated link</a>
+                        <a href="#" data-toggle="modal" data-target="#novatarefa">Nova tarefa</a>
                       </li>
                     </ul>
                   </div>
@@ -507,7 +466,7 @@
                 <ul class="list-group">
                   {% for i in tarefasPendentes %}
 
-                      <form class="form-horizontal" method="post" action="/vincular/{{ espacoId }}/{{ unidade }}/{{ i.id }}/">
+                      <form class="form-horizontal" method="post" action="/vincular_tarefa/{{ pk }}/{{ item }}/{{ i.id }}/">
                       {% csrf_token %}
                       <div class="modal fade" id="confirmapendente{{ i.id }}">
                           <div class="modal-dialog">
@@ -742,5 +701,42 @@
     </div>
     <!-- /#wrapper -->
   </body>
+
+
+<form method="post" action="/inserir_tarefa/{{ pk }}/{{ qualItem }}/">
+{% csrf_token %}
+<div class="modal fade" id="novatarefa">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title">Inserir nova tarefa</h4>
+          </div>
+          <div class="modal-body">
+            <form role="form">
+              <div class="form-group">
+                <label class="control-label">Título da tarefa</label>
+                <input class="form-control" type="text" name="titulo">
+              </div>
+              <div class="form-group">
+                <label class="control-label">Tipo de investigação</label>
+                <select class="form-control" name="categoria">
+                  <option>Elemento textual</option>
+                  <option>Matéria, post, informativo</option>
+                  <option>Investigação de campo</option>
+                </select>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <a class="btn btn-default" data-dismiss="modal">Fechar</a>
+            <button class="btn btn-primary" type="submit">OK</button>
+          </div>
+        </div>
+      </div>
+</div>
+</form>
+
+
 <script>$('[title]').qtip();</script>
 </html>

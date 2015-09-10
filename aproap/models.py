@@ -1,6 +1,5 @@
 from django.db import models
 from datetime import datetime
-from ckeditor.fields import RichTextField
 
 class Usuarios(models.Model):
     nomeCompleto = models.CharField(max_length = 100)
@@ -81,11 +80,10 @@ class ajudantes(models.Model):
 
 class tarefasItem(models.Model):
     tarefaDesc = models.CharField(max_length=100)
-    vinculoConhecimento = models.CharField(max_length=100)
+    vinculoConhecimento = models.ForeignKey(unidadeInvestigacao)
     responsavel = models.CharField(max_length=100, blank=True)
-    prazoInicial = models.DateField(blank=True, null=True)
-    prazoFinal = models.DateField(blank=True, null=True)
-    finalizado = models.IntegerField(default=0)
+    status = models.IntegerField(default=0)
+    categoria = models.CharField(max_length=30)
 
     def __unicode__(self):
         return self.tarefaDesc

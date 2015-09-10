@@ -34,4 +34,7 @@ urlpatterns = patterns('',
     url(r'^elementos_textuais/(?P<pk>[0-9]+)/(?P<item>[0-9]+)/$', 'aproap.views.elementosTextuais', name='elementosTextuais'),
     url(r'^redator/$', 'aproap.views.redator', name='redator'),
     url(r'^areaDeTrabalho/(?P<pk>[0-9]+)/(?P<id>[0-9]+)/$', 'aproap.views.areaDeTrabalho', name='area'),
+    url(r'^inserir_tarefa/(?P<pk>[0-9]+)/(?P<item>[0-9]+)/$', 'aproap.views.insereTarefa', name='inserirTarefa'),
+    url(r'^vincular_tarefa/(?P<pk>[0-9]+)/(?P<item>[0-9]+)/(?P<nr>[0-9]+)/$', 'aproap.views.vincularTarefa', name='vincularTarefa'),
+
 )

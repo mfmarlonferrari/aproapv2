@@ -332,7 +332,7 @@
               <div class="panel-heading">
                 <div class="row">
                   <div class="col-xs-3">
-                    <i class="fa fa-comments fa-5x"></i>
+                    <i class="fa fa-file-text fa-5x"></i>
                   </div>
                   <div class="col-xs-9 text-right">
                     <div class="huge">{{ producoes }}</div>
@@ -376,7 +376,7 @@
               <div class="panel-heading">
                 <div class="row">
                   <div class="col-xs-3">
-                    <i class="fa fa-shopping-cart fa-5x"></i>
+                    <i class="fa fa-check-circle fa-5x"></i>
                   </div>
                   <div class="col-xs-9 text-right">
                     <div class="huge">12</div>
@@ -406,13 +406,23 @@
                   </div>
                 </div>
               </div>
-              <a href="#">
+              {% if vinculoItem.precisaAjuda == 0 %}
+              <a href='#' data-toggle="modal" data-target="#confirmaAjuda">
                             <div class="panel-footer">
-                                <span class="pull-left">Ver detalhes</span>
+                                <span class="pull-left">Precisa de ajuda?</span>
                                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                 <div class="clearfix"></div>
                             </div>
-                        </a>
+              </a>
+              {% else %}
+              <a href='#' data-toggle="modal" data-target="#confirmaAjuda">
+                            <div class="panel-footer">
+                                <span class="pull-left">Quem está ajudando</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+              </a>
+              {% endif %}
             </div>
           </div>
         </div>
@@ -741,7 +751,27 @@
       </div>
 </div>
 </form>
-
+<form method="post" action="/precisa_ajuda/{{ slug }}/{{ unidade }}/{{ itemslug }}/">
+{% csrf_token %}
+    <div class="modal fade" id="confirmaAjuda">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title">Confirmação</h4>
+          </div>
+          <div class="modal-body">
+            <p>Deseja marcar este item como "preciso de ajuda"? Se sim, ele ficará visível
+              aos seus colegas de unidade que poderão ajudar.</p>
+          </div>
+          <div class="modal-footer">
+            <a class="btn btn-default" data-dismiss="modal">Fechar</a>
+            <button type="submit" class="btn btn-primary">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+</form>
 
 <script>$('[title]').qtip();</script>
 </html>

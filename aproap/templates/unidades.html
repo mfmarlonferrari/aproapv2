@@ -26,22 +26,25 @@
         <div class="col-md-9">
           <div class="thumbnail">
             <div class="caption-full">
-              <h4> Resumo das atividades</h4>
-              <p>See more snippets like these online store reviews at
-                <a target="_blank"
-                href="#">Bootsnipp - http://bootsnipp.com</a>.</p>
-              <p>Want to make these reviews work? Check out
-                <strong>
-                  <a href="#">this building a review system tutorial</a>
-                </strong>over at maxoffsky.com!</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-                non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+
+              <h4> Unidades de investigação: Dividindo e organizando o conhecimento</h4>
+              <p>Unidades de investigação organizam as certezas provisórias e dúvidas temporárias
+                  do grupo do projeto para facilitar a validação e resposta aos itens.
+                  Ao lado, é possível visualizar as unidades geradas pelo ambiente. Dentro de cada uma delas
+                  encontram-se os conhecimentos prévios realizados na etapa anterior.
+              </p>
+              <p>Sinta-se livre para explorar as unidades e visualizar os itens! Se necessário,
+                  é possível incluir um novo item para que possa ser investigado.
+              </p>
+              <p>Dentro das unidades, você terá acesso aos itens pendentes e poderá associá-los à sua responsabilidade.
+                  Desta forma, você será o principal envolvido na validação e resposta daquele item. Entretanto, caso o
+                  item seja muito difícil para ser resolvido sozinho, você poderá pedir ajuda para seus colegas.
+                  Você poderá associar quantos itens achar necessário, mas lembre-se de sempre atualizar seu cronograma!
+              </p>
+              <p> Participe de seu projeto!</p>
             </div>
             <div class="ratings">
+              <p>Progresso total das unidades até agora</p>
               <p class="pull-right">3 participantes</p>
               <p>
                 <span class="glyphicon glyphicon-star"></span>
@@ -52,9 +55,12 @@
               </p>
             </div>
           </div>
+
           <div class="row">
             <div class="col-md-12 text-center">
-              <a class="btn btn-primary" href="/projeto/{{ slug }}/unidade/{{ unidade }}/detalhes/">Ir ao espaço da unidade</a>
+              {% if unidade != None %}
+                  <a class="btn btn-primary" href="/projeto/{{ slug }}/unidade/{{ unidade }}/detalhes/">Ir ao espaço da unidade</a>
+              {% endif %}
             </div>
           </div>
           <h4>Conhecimentos pendentes</h4>
@@ -67,7 +73,7 @@
           </ul>
           <div class="well">
             <div class="text-right">
-              <a class="btn btn-success">Leave a Review</a>
+              <a class="btn btn-success">Comente sobre o projeto!</a>
             </div>
             <hr>
             <div class="row">

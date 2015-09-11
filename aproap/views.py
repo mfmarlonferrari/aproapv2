@@ -50,7 +50,17 @@ def salvaCronograma(request):
             titulo.append(jsonDec[i]['title'])
             #pega a data no formato com hora
             dataBruta.append(jsonDec[i]['start'])
-            dataBrutaFinal.append(jsonDec[i]['end'])
+            #se a data final for None, entao a data inicial e final devem ser no mesmo dia
+            testeDtFinal = jsonDec[i]['end']
+            if testeDtFinal is None:
+                #recebe a mesma data de inicio
+                dataBrutaFinal.append(jsonDec[i]['start'])
+            else:
+                #senao recebe a data final que nao esta vazia. Isto ocorre porque ao arrastar o item para
+                #o calendario, o javascript nao preenche a data final como sendo a do mesmo dia em caso de tarefas
+                #de apenas um dia.
+                dataBrutaFinal.append(jsonDec[i]['end'])
+
         #rotina para formatar a data para salvamento
         dataApenas, dataApenasFinal = [],[]
         for i in range(len(dataBruta)):
@@ -69,7 +79,7 @@ def salvaCronograma(request):
         response_data['result'] = 'Create post successful!'
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-def cronograma(request):
+def cronograma(request, usuario):
     itensSemPrazo = unidadeInvestigacao.objects.filter(
         investigador=request.user.username, prazo__isnull=True, prazoFinal__isnull=True)
     context = dict(itensSemPrazo=itensSemPrazo)
@@ -100,6 +110,9 @@ def inserirIdeia(request, slug):
 def detalhesUnidade(request, slug, unidade):
     pk= espacoProjeto.objects.get(slugProjeto=slug).id
     idProjeto = Projeto.objects.get(espaco=pk)
+    #quantidade de itens que precisam de ajuda
+    ajuda = unidadeInvestigacao.objects.filter(qualProjeto=idProjeto, nomeDoBloco=unidade, precisaAjuda='1')
+    qtdAjuda = ajuda.count()
     #filtra todos os conhecimentos sem investigador vinculado
     pendentes = unidadeInvestigacao.objects.filter(qualProjeto=idProjeto, nomeDoBloco=unidade, investigador='')
     qtdPendentes = pendentes.count()
@@ -121,7 +134,7 @@ def detalhesUnidade(request, slug, unidade):
     mediaDaUnidade = somaUnidadeValor/qtdItens
     context = dict(pendentes=pendentes, espacoId=pk, unidade=unidade,
                    qtdPendentes=qtdPendentes, todos=todos, semCronograma=semCronograma, desteUsuario=desteUsuario,
-                   mediaDaUnidade=mediaDaUnidade, slug=slug)
+                   mediaDaUnidade=mediaDaUnidade, slug=slug, qtdAjuda=qtdAjuda, ajuda=ajuda)
     c = RequestContext(request, context)
     return render_to_response('detalhesUnidade.html', c)
 
@@ -148,7 +161,7 @@ def detalhesItem(request, slug, unidade, itemslug):
     context = dict(tarefasPendentes=tarefasPendentes, tarefasAndamento=tarefasAndamento,
                    qualItem=qualItemId, item=item, qtdTarefasPendentes=qtdTarefasPendentes,
                    ajudantes=ajudantes, slug=slug, unidade=unidade, itemslug=itemslug,
-                   semCronograma=semCronograma, producoes=producoes)
+                   semCronograma=semCronograma, producoes=producoes, vinculoItem=vinculoItem)
     c = RequestContext(request, context)
     return render_to_response('detalheItem.html', c)
 
@@ -458,6 +471,10 @@ def unidadesInvestigacao(request,slug, unidade=None):
     context = dict(numeroUnidades=numeroUnidades, lista=lista, slug=slug, unidade=unidade)
     c = RequestContext(request, context)
     return render_to_response('unidades.html', c)
+
+def precisaAjuda(request, slug, unidade, itemslug):
+    item = unidadeInvestigacao.objects.select_for_update().filter(slugConhecimento=itemslug).update(precisaAjuda=1)
+    return HttpResponseRedirect("/projeto/%s/unidade/%s/item/%s/" % (slug, unidade, itemslug))
 
 def areaDeTrabalho(request, pk, id):
     context = dict()

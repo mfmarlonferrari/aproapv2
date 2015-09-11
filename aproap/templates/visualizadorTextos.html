@@ -282,20 +282,21 @@
         <div class="row">
           <div class="col-lg-12">
             <h3 class="page-header">Redigindo: <strong>{{ itemId.titulo }}</strong></h3>
+            {% if usuarioAtual == itemId.criador %}
+                <a class="btn btn-primary" href="/projeto/{{ slug }}/{{ unidade }}/{{ itemslug }}/elementos_textuais/editando/{{ id }}/">Editar documento</a>
+            {% endif %}
           </div>
           <!-- /.col-lg-12 -->
         </div>
         <!-- /.row -->
-        <form id="salvatexto" action="/salva_texto/{{ slug }}/{{ unidade }}/{{ itemslug }}/editando/{{ itemId.id }}/" method="POST">
-            {% csrf_token %}
-            <textarea id="conteudo" name="conteudo">{{ texto }}</textarea>
+            <textarea id="conteudo" disabled name="conteudo">{{ texto }}</textarea>
 		    <script type="text/javascript">
 		        CKEDITOR.replace( 'conteudo', {
                     toolbar: 'Full',
                     uiColor: '#9AB8F3'
                 });
 		    </script>
-        </form>
       </div>
+    </div>
 </body>
 </html>

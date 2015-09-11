@@ -412,7 +412,7 @@
               <div class="panel-body">
                 <ul class="list-group">
                      {% for i in documentos %}
-                         <a href="{{ i.url }}"><li class="list-group-item" id="listaArquivos">{{ i.titulo }} </li> </a>
+                         <a href="/projeto/{{ slug }}/{{ unidade }}/{{ itemslug }}/elementos_textuais/visualizando/{{ i.id }}/"><li class="list-group-item" id="listaArquivos">{{ i.titulo }} </li> </a>
                      {% endfor %}
                 </ul>
                 <ul class="pagination">

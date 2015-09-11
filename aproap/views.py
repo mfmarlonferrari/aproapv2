@@ -127,7 +127,10 @@ def detalhesUnidade(request, slug, unidade):
 
 def detalhesItem(request, slug, unidade, itemslug):
     item = unidadeInvestigacao.objects.get(slugConhecimento=itemslug).id
+    vinculoItem = unidadeInvestigacao.objects.get(slugConhecimento=itemslug)
     qualItem = unidadeInvestigacao.objects.get(pk=item).conhecimentoPrevio
+    #quantos documentos associados ao item
+    producoes = textoProduzido.objects.filter(vinculadoItem=vinculoItem).count()
     #verifica se o item possui cronograma
     prazoInicial = unidadeInvestigacao.objects.get(pk=item).prazo
     if prazoInicial is None:
@@ -144,7 +147,8 @@ def detalhesItem(request, slug, unidade, itemslug):
     qtdTarefasPendentes = tarefasItem.objects.filter(vinculoConhecimento=qualItemId, responsavel='').count()
     context = dict(tarefasPendentes=tarefasPendentes, tarefasAndamento=tarefasAndamento,
                    qualItem=qualItemId, item=item, qtdTarefasPendentes=qtdTarefasPendentes,
-                   ajudantes=ajudantes, slug=slug, unidade=unidade, itemslug=itemslug, semCronograma=semCronograma)
+                   ajudantes=ajudantes, slug=slug, unidade=unidade, itemslug=itemslug,
+                   semCronograma=semCronograma, producoes=producoes)
     c = RequestContext(request, context)
     return render_to_response('detalheItem.html', c)
 
@@ -192,17 +196,33 @@ def redator(request, slug, unidade, itemslug):
     return render_to_response('edicaotextual.html', c)
 
 def modoEdicao(request, slug, unidade, itemslug, id):
+    #verifica se o usuario possui direito de editar
+    usuarioAtual = request.user.username
+    itemId = textoProduzido.objects.get(pk=id)
+    if usuarioAtual != itemId.criador:
+        return HttpResponseRedirect("/projeto/%s/%s/%s/elementos_textuais/visualizando/%s/" % (slug, unidade,
+                                                                                               itemslug, itemId.id))
+    else:
+        texto = itemId.texto
+        qualItem = unidadeInvestigacao.objects.get(slugConhecimento=itemslug)
+        nomeDoItem = qualItem.conhecimentoPrevio
+        todos = elementoTextual.objects.filter(vinculadoItem=qualItem)
+        context = dict(itemId=itemId, nomeDoItem=nomeDoItem, todos=todos, slug=slug,
+                       itemslug=itemslug, unidade=unidade, id=id, texto=texto)
+        c = RequestContext(request, context)
+        return render_to_response('editarDocumento.html', c)
+
+def modoLeitura(request, slug, unidade, itemslug, id):
+    usuarioAtual = request.user.username
     itemId = textoProduzido.objects.get(pk=id)
     texto = itemId.texto
-    print type(texto)
-    print texto
     qualItem = unidadeInvestigacao.objects.get(slugConhecimento=itemslug)
     nomeDoItem = qualItem.conhecimentoPrevio
     todos = elementoTextual.objects.filter(vinculadoItem=qualItem)
     context = dict(itemId=itemId, nomeDoItem=nomeDoItem, todos=todos, slug=slug,
-                   itemslug=itemslug, unidade=unidade, id=id, texto=texto)
+                   itemslug=itemslug, unidade=unidade, id=id, texto=texto, usuarioAtual=usuarioAtual)
     c = RequestContext(request, context)
-    return render_to_response('editarDocumento.html', c)
+    return render_to_response('visualizadorTextos.html', c)
 
 @login_required
 def votarIdeia(request,slug):

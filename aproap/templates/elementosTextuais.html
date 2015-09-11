@@ -407,28 +407,40 @@
             <div class="panel panel-default">
               <div class="panel-heading">
                 <i class="fa -o fa-fw fa-bullhorn"></i>Produções textuais de validação dos envolvidos
-                <div class="pull-right">
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">Adicione
-                      <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu pull-right" role="menu">
-                      <li>
-                        <a href="#">Artigo científico</a>
-                      </li>
-                      <li>
-                        <a href="#">Matéria ou post</a>
-                      </li>
-                      <li>
-                        <a href="#">Outro</a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
               </div>
               <!-- /.panel-heading -->
               <div class="panel-body">
+                <ul class="list-group">
+                     {% for i in documentos %}
+                         <a href="{{ i.url }}"><li class="list-group-item" id="listaArquivos">{{ i.titulo }} </li> </a>
+                     {% endfor %}
+                </ul>
+                <ul class="pagination">
+                  <li>
+                    <a href="#">Prev</a>
+                  </li>
+                  <li>
+                    <a href="#">1</a>
+                  </li>
+                  <li>
+                    <a href="#">2</a>
+                  </li>
+                  <li>
+                    <a href="#">3</a>
+                  </li>
+                  <li>
+                    <a href="#">4</a>
+                  </li>
+                  <li>
+                    <a href="#">5</a>
+                  </li>
+                  <li>
+                    <a href="#">Next</a>
+                  </li>
+                </ul>
               </div>
+              <!-- /.panel-body -->
+            </div>
               <!-- /.panel-body -->
             </div>
             <!-- /.panel -->

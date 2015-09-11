@@ -175,16 +175,34 @@ def vincularTarefa(request, slug, unidade, itemslug, slugtarefa):
 
 def elementosTextuais(request, slug, unidade, itemslug):
     itemId = unidadeInvestigacao.objects.get(slugConhecimento=itemslug)
+    documentos = textoProduzido.objects.filter(vinculadoItem=itemId)
     nomeDoItem = itemId.conhecimentoPrevio
     todos = elementoTextual.objects.filter(vinculadoItem=itemId)
-    context = dict(todos=todos, nomeDoItem=nomeDoItem, slug=slug, unidade=unidade, itemslug=itemslug)
+    context = dict(todos=todos, nomeDoItem=nomeDoItem, slug=slug, unidade=unidade,
+                   itemslug=itemslug, documentos=documentos)
     c = RequestContext(request, context)
     return render_to_response('elementosTextuais.html', c)
 
 def redator(request, slug, unidade, itemslug):
-    context = dict()
+    itemId = unidadeInvestigacao.objects.get(slugConhecimento=itemslug)
+    nomeDoItem = itemId.conhecimentoPrevio
+    todos = elementoTextual.objects.filter(vinculadoItem=itemId)
+    context = dict(itemId=itemId, nomeDoItem=nomeDoItem, todos=todos, slug=slug, itemslug=itemslug, unidade=unidade)
     c = RequestContext(request, context)
     return render_to_response('edicaotextual.html', c)
+
+def modoEdicao(request, slug, unidade, itemslug, id):
+    itemId = textoProduzido.objects.get(pk=id)
+    texto = itemId.texto
+    print type(texto)
+    print texto
+    qualItem = unidadeInvestigacao.objects.get(slugConhecimento=itemslug)
+    nomeDoItem = qualItem.conhecimentoPrevio
+    todos = elementoTextual.objects.filter(vinculadoItem=qualItem)
+    context = dict(itemId=itemId, nomeDoItem=nomeDoItem, todos=todos, slug=slug,
+                   itemslug=itemslug, unidade=unidade, id=id, texto=texto)
+    c = RequestContext(request, context)
+    return render_to_response('editarDocumento.html', c)
 
 @login_required
 def votarIdeia(request,slug):
@@ -425,3 +443,26 @@ def areaDeTrabalho(request, pk, id):
     context = dict()
     c = RequestContext(request, context)
     return render_to_response('area.html', c)
+
+#rotina que cria um novo texto
+def salvaTexto(request, slug, unidade, itemslug):
+    qualItem = unidadeInvestigacao.objects.get(slugConhecimento=itemslug)
+    titulo = request.POST.get('tituloDoc')
+    texto = request.POST['conteudo']
+    historico = '%s criou um documento' % request.user.username
+    response_data = {}
+    print texto
+    print historico
+    doc = textoProduzido.objects.create(titulo=titulo, vinculadoItem=qualItem, texto=texto, historico=historico,
+                                        criador=request.user.username)
+    doc.save()
+    docAtual = textoProduzido.objects.get(texto=texto).id
+    return HttpResponseRedirect("/projeto/%s/%s/%s/elementos_textuais/editando/%s" % (slug, unidade, itemslug, docAtual))
+
+#rotina que edita um texto ja existente
+def atualizaTexto(request, slug, unidade, itemslug, id):
+    texto = request.POST['conteudo']
+    historico = '%s editou um documento' % request.user.username
+    response_data = {}
+    doc = textoProduzido.objects.select_for_update().filter(pk=id).update(texto=texto, historico=historico)
+    return HttpResponseRedirect("/projeto/%s/%s/%s/elementos_textuais/editando/%s" % (slug, unidade, itemslug, id))

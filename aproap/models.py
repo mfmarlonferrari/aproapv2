@@ -100,7 +100,9 @@ class elementoTextual(models.Model):
     data = models.DateTimeField(default=datetime.now())
 
 class textoProduzido(models.Model):
+    titulo = models.CharField(max_length=300)
     vinculadoItem = models.ForeignKey(unidadeInvestigacao)
+    criador = models.CharField(max_length=100)
     texto = models.TextField()
     historico = models.CharField(max_length=300)
     data = models.DateTimeField(default=datetime.now())

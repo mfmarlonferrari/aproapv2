@@ -186,6 +186,16 @@ def insereTarefa(request, slug, unidade, itemslug):
     salva.save()
     return HttpResponseRedirect("/projeto/%s/unidade/%s/item/%s/" % (slug, unidade, itemslug))
 
+def insereItem(request, slug, unidade):
+    qualEspaco = espacoProjeto.objects.get(slugProjeto = slug)
+    qualProjeto = Projeto.objects.get(espaco=qualEspaco)
+    titulo = request.POST['titulo']
+    slugconhecimento = slugify(titulo)
+    salva = unidadeInvestigacao.objects.create(nomeDoBloco=unidade, qualProjeto=qualProjeto,
+                                               conhecimentoPrevio=titulo, slugConhecimento=slugconhecimento)
+    salva.save()
+    return HttpResponseRedirect("/projeto/%s/unidade/%s/detalhes/" % (slug, unidade))
+
 def vincularTarefa(request, slug, unidade, itemslug, slugtarefa):
     vincItem = tarefasItem.objects.select_for_update().filter(slugTarefa=slugtarefa).update(responsavel=request.user.username)
     return HttpResponseRedirect("/projeto/%s/unidade/%s/item/%s/" % (slug, unidade, itemslug))
@@ -456,10 +466,10 @@ def salvarConhecimento(request, pk):
     else:
         return HttpResponseRedirect("/projeto/%s/conhecimento_previo/" % slug)
 
-def participarProjeto(request, pk):
-    slug=espacoProjeto.objects.get(pk=pk).slugProjeto
+def participarProjeto(request, slug):
      #pesquisa o projeto do espaco atual pk
-    idProj = Projeto.objects.get(espaco=pk)
+    espaco = espacoProjeto.objects.get(slugProjeto=slug)
+    idProj = Projeto.objects.get(espaco=espaco)
     aluno = alunosNoProjeto.objects.create(aluno=request.user.username, projeto=idProj, ondeparou="/projeto/%s/ideias/" % slug)
     aluno.save()
     return HttpResponseRedirect("/lobby/%s/" % slug)

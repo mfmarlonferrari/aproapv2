@@ -79,10 +79,10 @@ def salvaCronograma(request):
         response_data['result'] = 'Create post successful!'
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-def cronograma(request, usuario):
+def cronograma(request, usuario, slug, unidade):
     itensSemPrazo = unidadeInvestigacao.objects.filter(
         investigador=request.user.username, prazo__isnull=True, prazoFinal__isnull=True)
-    context = dict(itensSemPrazo=itensSemPrazo)
+    context = dict(itensSemPrazo=itensSemPrazo, slug=slug, unidade=unidade)
     c = RequestContext(request, context)
     return render_to_response('cronograma.html', c)
 
@@ -152,15 +152,15 @@ def detalhesItem(request, slug, unidade, itemslug):
         semCronograma = False
     qualItemId = unidadeInvestigacao.objects.get(pk=item).id
     investigadorPrincipal = unidadeInvestigacao.objects.get(pk=item).investigador
-    ajudantes = tarefasItem.objects.filter(vinculoConhecimento=qualItemId).exclude(responsavel=investigadorPrincipal)
-    ajudantes = ajudantes.exclude(responsavel='')
-    ajudantes = ajudantes.count()
+    ajudante = tarefasItem.objects.filter(vinculoConhecimento=qualItemId).exclude(responsavel=investigadorPrincipal)
+    ajudante = ajudante.exclude(responsavel='')
+    qtdajudantes = ajudante.count()
     tarefasAndamento = tarefasItem.objects.filter(vinculoConhecimento=qualItemId).exclude(responsavel='')
     tarefasPendentes = tarefasItem.objects.filter(vinculoConhecimento=qualItemId, responsavel='')
     qtdTarefasPendentes = tarefasItem.objects.filter(vinculoConhecimento=qualItemId, responsavel='').count()
     context = dict(tarefasPendentes=tarefasPendentes, tarefasAndamento=tarefasAndamento,
                    qualItem=qualItemId, item=item, qtdTarefasPendentes=qtdTarefasPendentes,
-                   ajudantes=ajudantes, slug=slug, unidade=unidade, itemslug=itemslug,
+                   qtdajudantes=qtdajudantes, ajudantes=ajudante, slug=slug, unidade=unidade, itemslug=itemslug,
                    semCronograma=semCronograma, producoes=producoes, vinculoItem=vinculoItem)
     c = RequestContext(request, context)
     return render_to_response('detalheItem.html', c)

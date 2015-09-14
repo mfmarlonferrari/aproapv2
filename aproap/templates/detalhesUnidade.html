@@ -16,6 +16,8 @@
         <script src="{% static 'static/js/jquery.rateit.js' %}"></script>
         <script src="{% static 'static/js/jquery.cookie.js' %}"></script>
         <script src="{% static 'static/js/litetooltip.min.js' %}"></script>
+        <script src="{% static 'static/js/metisMenu.js' %}"></script>
+         <script src="{% static 'static/js/sb-admin-2.js' %}"></script>
         <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -226,7 +228,7 @@
                 <!-- /.nav-second-level -->
               </li>
               <li>
-                <a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>
+                <a href="/cronograma/{{ user.username }}/{{ slug }}/{{ unidade }}/"><i class="fa fa-table fa-fw"></i> Meu cronograma</a>
               </li>
               <li>
                 <a href="/areaDeTrabalho/{{ espacoId }}/{{ unidade }}/"><i class="fa fa-edit fa-fw"></i>Meu Espaço de Trabalho</a>
@@ -267,8 +269,19 @@
               {% if semCronograma > 0 %}
                   <div class="alert alert-danger alert-dismissable">
                   <strong>Atenção!&nbsp;</strong>Você tem itens a investigar que não estão no cronograma.
-                   Clique <a href="/cronograma/{{ user.username }}/">aqui</a> para resolver</div>
+                   Clique <a href="/cronograma/{{ user.username }}/{{ slug }}/{{ unidade }}/">aqui</a> para resolver</div>
               {% endif %}
+
+            <ul class="breadcrumb">
+              <li>
+                <a href="/lobby/{{ slug }}/">Início</a>
+              </li>
+              <li>
+                <a href="/projeto/{{ slug }}/unidades/">Unidades</a>
+              </li>
+                <li class="active">Unidade {{ unidade }}</li>
+            </ul>
+
             <h1 class="page-header">Quadro de informações</h1>
               <div>
                    <p>

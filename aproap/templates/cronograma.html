@@ -183,12 +183,15 @@
           <div class="col-md-12">
             <ul class="breadcrumb">
               <li>
-                <a href="#">Home</a>
+                <a href="/lobby/{{ slug }}/">Início</a>
               </li>
               <li>
-                <a href="#">Library</a>
+                <a href="/projeto/{{ slug }}/unidades/">Unidades</a>
               </li>
-              <li class="active">Data</li>
+              <li>
+                <a href="/projeto/{{ slug }}/unidade/{{ unidade }}/detalhes/">Unidade {{ unidade }}</a>
+              </li>
+              <li class="active">Meu cronograma</li>
             </ul>
           </div>
         </div>

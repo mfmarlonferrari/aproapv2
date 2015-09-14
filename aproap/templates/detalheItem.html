@@ -16,7 +16,6 @@
         <script src="{% static 'static/js/jquery.rateit.js' %}"></script>
         <script src="{% static 'static/js/jquery.cookie.js' %}"></script>
         <script src="{% static 'static/js/litetooltip.min.js' %}"></script>
-{#      <script src="{% static 'static/js/areaDeTrabalho.js' %}"></script>#}
         <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -305,11 +304,20 @@
       <div id="page-wrapper">
         <div class="row">
           <div class="col-lg-12">
-              {% if semCronograma == True %}
-                  <div class="alert alert-danger alert-dismissable">
-                  <strong>Atenção!&nbsp;</strong>Você ainda não definiu um cronograma para este item.
-                   Clique <a href="/cronograma/">aqui</a> para resolver</div>
-              {% endif %}
+
+            <ul class="breadcrumb">
+              <li>
+                <a href="/lobby/{{ slug }}/">Início</a>
+              </li>
+              <li>
+                <a href="/projeto/{{ slug }}/unidades/">Unidades</a>
+              </li>
+              <li>
+                <a href="/projeto/{{ slug }}/unidade/{{ unidade }}/detalhes/">Unidade {{ unidade }}</a>
+              </li>
+              <li class="active">{{ vinculoItem.conhecimentoPrevio }}</li>
+            </ul>
+
             <h1 class="page-header">Quadro de informações</h1>
               <div>
                    <p>
@@ -401,7 +409,7 @@
                     <i class="fa fa-support fa-5x"></i>
                   </div>
                   <div class="col-xs-9 text-right">
-                    <div class="huge">{{ ajudantes }}</div>
+                    <div class="huge">{{ qtdajudantes }}</div>
                     <div>Ajudando este item</div>
                   </div>
                 </div>
@@ -543,54 +551,15 @@
               <!-- /.panel-heading -->
               <div class="panel-body">
                 <div class="list-group">
-                  <a href="#" class="list-group-item">
-                                    <i class="fa fa-comment fa-fw"></i> João Paulo - Responsável
-                                    <span class="pull-right text-muted small"><em>4 minutes ago</em>
-                                    </span>
-                                </a>
-                  <a href="#" class="list-group-item">
-                                    <i class="fa fa-twitter fa-fw"></i> Augusto Lemos
-                                    <span class="pull-right text-muted small"><em>12 minutes ago</em>
-                                    </span>
-                                </a>
-                  <a href="#" class="list-group-item">
-                                    <i class="fa fa-envelope fa-fw"></i> Message Sent
-                                    <span class="pull-right text-muted small"><em>27 minutes ago</em>
-                                    </span>
-                                </a>
-                  <a href="#" class="list-group-item">
-                                    <i class="fa fa-tasks fa-fw"></i> New Task
-                                    <span class="pull-right text-muted small"><em>43 minutes ago</em>
-                                    </span>
-                                </a>
-                  <a href="#" class="list-group-item">
-                                    <i class="fa fa-upload fa-fw"></i> Server Rebooted
-                                    <span class="pull-right text-muted small"><em>11:32 AM</em>
-                                    </span>
-                                </a>
-                  <a href="#" class="list-group-item">
-                                    <i class="fa fa-bolt fa-fw"></i> Server Crashed!
-                                    <span class="pull-right text-muted small"><em>11:13 AM</em>
-                                    </span>
-                                </a>
-                  <a href="#" class="list-group-item">
-                                    <i class="fa fa-warning fa-fw"></i> Server Not Responding
-                                    <span class="pull-right text-muted small"><em>10:57 AM</em>
-                                    </span>
-                                </a>
-                  <a href="#" class="list-group-item">
-                                    <i class="fa fa-shopping-cart fa-fw"></i> New Order Placed
-                                    <span class="pull-right text-muted small"><em>9:49 AM</em>
-                                    </span>
-                                </a>
-                  <a href="#" class="list-group-item">
-                                    <i class="fa fa-money fa-fw"></i> Payment Received
-                                    <span class="pull-right text-muted small"><em>Yesterday</em>
-                                    </span>
-                                </a>
+                    {% for i in ajudantes %}
+                        <a class="list-group-item">
+                           <i class="fa fa-comment fa-fw"></i> {{ i.responsavel }}
+                           <span class="pull-right text-muted small"><em>4 minutes ago</em></span>
+                    {% endfor %}
+                  </a>
                 </div>
                 <!-- /.list-group -->
-                <a href="#" class="btn btn-default btn-block">View All Alerts</a>
+                <a href="#" class="btn btn-default btn-block">Visualizar participações</a>
               </div>
               <!-- /.panel-body -->
             </div>

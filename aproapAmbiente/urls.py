@@ -43,4 +43,6 @@ urlpatterns = patterns('',
     url(r'^inserir_item/(?P<slug>[\w-]+)/(?P<unidade>[0-9]+)/$', 'aproap.views.insereItem', name='inserirItem'),
     url(r'^vincular_tarefa/(?P<slug>[\w-]+)/(?P<unidade>[0-9]+)/(?P<itemslug>[\w-]+)/(?P<slugtarefa>[\w-]+)/$', 'aproap.views.vincularTarefa', name='vincularTarefa'),
     url(r'^inserir_elementoTextual/(?P<slug>[\w-]+)/(?P<unidade>[0-9]+)/(?P<itemslug>[\w-]+)/$', 'aproap.views.salvarElementoTextual', name='salvarElementoTextual'),
+    url(r'^postar_conversa/(?P<slug>[\w-]+)/(?P<unidade>[0-9]+)/(?P<itemslug>[\w-]+)/$', 'aproap.views.postarConversa', name='postar_conversa'),
+    url(r'^mapa/$', 'aproap.views.mapa', name='mapa'),
 )

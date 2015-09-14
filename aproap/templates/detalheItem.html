@@ -16,6 +16,8 @@
         <script src="{% static 'static/js/jquery.rateit.js' %}"></script>
         <script src="{% static 'static/js/jquery.cookie.js' %}"></script>
         <script src="{% static 'static/js/litetooltip.min.js' %}"></script>
+        <script src="{% static 'static/js/metisMenu.js' %}"></script>
+        <script src="{% static 'static/js/sb-admin-2.js' %}"></script>
         <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -455,11 +457,12 @@
                   <tbody>
                   {% for tarefa in tarefasAndamento %}
                     <tr>
-                      <td>{{ tarefa.tarefaDesc }}</td>
+                       <td><a href="#"> {{ tarefa.tarefaDesc }}</a></td>
                        <td>{{ tarefa.responsavel }}</td>
                        <td>{{ tarefa.status }}%</td>
                        <td>{{ tarefa.categoria }}</td>
                     </tr>
+
                   {% endfor %}
                   </tbody>
                 </table>
@@ -547,7 +550,7 @@
           <div class="col-lg-4">
             <div class="panel panel-default">
               <div class="panel-heading">
-                <i class="fa fa-bell fa-fw"></i>Investigando este Item</div>
+                <i class="fa fa-bell fa-fw"></i>Ajudando neste item</div>
               <!-- /.panel-heading -->
               <div class="panel-body">
                 <div class="list-group">
@@ -567,112 +570,41 @@
             <!-- /.panel -->
             <div class="chat-panel panel panel-default">
               <div class="panel-heading">
-                <i class="fa fa-comments fa-fw"></i>Chat
-                <div class="btn-group pull-right">
-                  <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                    <i class="fa fa-chevron-down"></i>
-                  </button>
-                  <ul class="dropdown-menu slidedown">
-                    <li>
-                      <a href="#">
-                                            <i class="fa fa-refresh fa-fw"></i> Refresh
-                                        </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                                            <i class="fa fa-check-circle fa-fw"></i> Available
-                                        </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                                            <i class="fa fa-times fa-fw"></i> Busy
-                                        </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                                            <i class="fa fa-clock-o fa-fw"></i> Away
-                                        </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                      <a href="#">
-                                            <i class="fa fa-sign-out fa-fw"></i> Sign Out
-                                        </a>
-                    </li>
-                  </ul>
-                </div>
+                <i class="fa fa-comments fa-fw"></i>Sala de conversas assíncrona
               </div>
               <!-- /.panel-heading -->
               <div class="panel-body">
                 <ul class="chat">
+                {% for mens in conversas %}
                   <li class="left clearfix">
                     <span class="chat-img pull-left">
                       <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle">
                     </span>
                     <div class="chat-body clearfix">
                       <div class="header">
-                        <strong class="primary-font">Jack Sparrow</strong>
+                        <strong class="primary-font">{{ mens.usuario }}</strong>
                         <small class="pull-right text-muted">
-                          <i class="fa fa-clock-o fa-fw"></i>12 mins ago</small>
+                          <i class="fa fa-clock-o fa-fw"></i>{{ mens.dataHora }}</small>
                       </div>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum
-                        ornare dolor, quis ullamcorper ligula sodales.</p>
+                      <p>{{ mens.mensagem }}</p>
                     </div>
                   </li>
-                  <li class="right clearfix">
-                    <span class="chat-img pull-right">
-                      <img src="http://placehold.it/50/FA6F57/fff" alt="User Avatar" class="img-circle">
-                    </span>
-                    <div class="chat-body clearfix">
-                      <div class="header">
-                        <small class=" text-muted">
-                          <i class="fa fa-clock-o fa-fw"></i>13 mins ago</small>
-                        <strong class="pull-right primary-font">Bhaumik Patel</strong>
-                      </div>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum
-                        ornare dolor, quis ullamcorper ligula sodales.</p>
-                    </div>
-                  </li>
-                  <li class="left clearfix">
-                    <span class="chat-img pull-left">
-                      <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle">
-                    </span>
-                    <div class="chat-body clearfix">
-                      <div class="header">
-                        <strong class="primary-font">Jack Sparrow</strong>
-                        <small class="pull-right text-muted">
-                          <i class="fa fa-clock-o fa-fw"></i>14 mins ago</small>
-                      </div>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum
-                        ornare dolor, quis ullamcorper ligula sodales.</p>
-                    </div>
-                  </li>
-                  <li class="right clearfix">
-                    <span class="chat-img pull-right">
-                      <img src="http://placehold.it/50/FA6F57/fff" alt="User Avatar" class="img-circle">
-                    </span>
-                    <div class="chat-body clearfix">
-                      <div class="header">
-                        <small class=" text-muted">
-                          <i class="fa fa-clock-o fa-fw"></i>15 mins ago</small>
-                        <strong class="pull-right primary-font">Bhaumik Patel</strong>
-                      </div>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum
-                        ornare dolor, quis ullamcorper ligula sodales.</p>
-                    </div>
-                  </li>
+                {% endfor %}
                 </ul>
               </div>
               <!-- /.panel-body -->
+            <form method="post" action="/postar_conversa/{{ slug }}/{{ unidade }}/{{ itemslug }}/">
+            {% csrf_token %}
               <div class="panel-footer">
                 <div class="input-group">
-                  <input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here...">
+                  <input id="btn-input" type="text" class="form-control input-sm" name="mensagem" placeholder="Digite sua mensagem...">
                   <span class="input-group-btn">
-                    <button class="btn btn-warning btn-sm" id="btn-chat">Send</button>
+                    <button class="btn btn-warning btn-sm" type="submit">Enviar</button>
                   </span>
                 </div>
               </div>
               <!-- /.panel-footer -->
+            </form>
             </div>
             <!-- /.panel .chat-panel -->
           </div>

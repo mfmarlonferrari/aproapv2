@@ -19,6 +19,9 @@ def index(request):
 def cadastrar(request):
     return render_to_response('cadastrar.html', {})
 
+def mapa(request):
+    return render_to_response('mapa.html', {})
+
 def showcronograma(request):
     from django.utils.timezone import utc
     from django.core.serializers.json import DjangoJSONEncoder
@@ -142,6 +145,7 @@ def detalhesItem(request, slug, unidade, itemslug):
     item = unidadeInvestigacao.objects.get(slugConhecimento=itemslug).id
     vinculoItem = unidadeInvestigacao.objects.get(slugConhecimento=itemslug)
     qualItem = unidadeInvestigacao.objects.get(pk=item).conhecimentoPrevio
+    conversas = conversa.objects.filter(qualItem=vinculoItem)
     #quantos documentos associados ao item
     producoes = textoProduzido.objects.filter(vinculadoItem=vinculoItem).count()
     #verifica se o item possui cronograma
@@ -161,9 +165,17 @@ def detalhesItem(request, slug, unidade, itemslug):
     context = dict(tarefasPendentes=tarefasPendentes, tarefasAndamento=tarefasAndamento,
                    qualItem=qualItemId, item=item, qtdTarefasPendentes=qtdTarefasPendentes,
                    qtdajudantes=qtdajudantes, ajudantes=ajudante, slug=slug, unidade=unidade, itemslug=itemslug,
-                   semCronograma=semCronograma, producoes=producoes, vinculoItem=vinculoItem)
+                   semCronograma=semCronograma, producoes=producoes, vinculoItem=vinculoItem, conversas=conversas)
     c = RequestContext(request, context)
     return render_to_response('detalheItem.html', c)
+
+def postarConversa(request, slug, unidade, itemslug):
+    qualItem = unidadeInvestigacao.objects.get(slugConhecimento=itemslug)
+    mensagem = request.POST['mensagem']
+    a = conversa.objects.create(usuario=request.user.username, mensagem=mensagem,
+                                dataHora=datetime.now(), qualItem=qualItem)
+    a.save()
+    return HttpResponseRedirect("/projeto/%s/unidade/%s/item/%s/" % (slug, unidade, itemslug))
 
 def salvarElementoTextual(request, slug, unidade, itemslug):
     qualItem = unidadeInvestigacao.objects.get(slugConhecimento=itemslug)

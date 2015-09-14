@@ -14,3 +14,5 @@ admin.site.register(tarefasItem)
 admin.site.register(elementoTextual)
 admin.site.register(textoProduzido)
 admin.site.register(ajudantes)
+admin.site.register(conversa)
+

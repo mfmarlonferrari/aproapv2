@@ -106,3 +106,9 @@ class textoProduzido(models.Model):
     texto = models.TextField()
     historico = models.CharField(max_length=300)
     data = models.DateTimeField(default=datetime.now())
+
+class conversa(models.Model):
+    usuario = models.CharField(max_length=100)
+    mensagem = models.CharField(max_length=200)
+    dataHora = models.DateTimeField()
+    qualItem = models.ForeignKey(unidadeInvestigacao)

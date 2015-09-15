@@ -155,10 +155,21 @@ def detalhesItem(request, slug, unidade, itemslug):
     tarefasAndamento = tarefasItem.objects.filter(vinculoConhecimento=qualItemId).exclude(responsavel='')
     tarefasPendentes = tarefasItem.objects.filter(vinculoConhecimento=qualItemId, responsavel='')
     qtdTarefasPendentes = tarefasItem.objects.filter(vinculoConhecimento=qualItemId, responsavel='').count()
+    #media do progresso
+    qtdTarefasGeral = tarefasItem.objects.filter(vinculoConhecimento=qualItemId).count()
+    #converte para float para o python nao arredondar valores decimais para zero
+    qtdTarefasGeral = float(qtdTarefasGeral)
+    qtdTarefasFinalizadas = tarefasItem.objects.filter(vinculoConhecimento=qualItemId, status=1).count()
+    qtdTarefasFinalizadas = float(qtdTarefasFinalizadas)
+    mediaTarefas = (qtdTarefasFinalizadas/qtdTarefasGeral)*100
+    #converte para int para cortar casas decimais
+    mediaTarefas = int(mediaTarefas)
+    qtdTarefasFinalizadas = int(qtdTarefasFinalizadas)
     context = dict(tarefasPendentes=tarefasPendentes, tarefasAndamento=tarefasAndamento,
                    qualItem=qualItemId, item=item, qtdTarefasPendentes=qtdTarefasPendentes,
                    qtdajudantes=qtdajudantes, ajudantes=ajudante, slug=slug, unidade=unidade, itemslug=itemslug,
-                   semCronograma=semCronograma, producoes=producoes, vinculoItem=vinculoItem, conversas=conversas)
+                   semCronograma=semCronograma, producoes=producoes, vinculoItem=vinculoItem, conversas=conversas,
+                   mediaTarefas=mediaTarefas, qtdTarefasFinalizadas=qtdTarefasFinalizadas)
     c = RequestContext(request, context)
     return render_to_response('detalheItem.html', c)
 
@@ -253,6 +264,7 @@ def vinculaDocItem(request, slug, unidade, itemslug, idDoc):
     qualTarefa = tarefasItem.objects.get(tarefaDesc=tarefa)
     qualDocumento = textoProduzido.objects.get(pk=idDoc)
     a = textoProduzido.objects.select_for_update().filter(pk=idDoc).update(vinculadoTarefa=qualTarefa)
+    b = tarefasItem.objects.select_for_update().filter(pk=qualTarefa.id).update(status=1)
     return HttpResponseRedirect("/projeto/%s/%s/%s/elementos_textuais/visualizando/%s/" % (slug, unidade,
                                                                                                itemslug, qualDocumento.id))
 

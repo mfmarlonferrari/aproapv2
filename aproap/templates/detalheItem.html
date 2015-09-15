@@ -116,11 +116,11 @@
                                 <div>
                                     <p>
                                         <strong>Task 2</strong>
-                                        <span class="pull-right text-muted">20% Complete</span>
+                                        <span class="pull-right text-muted">{{ mediaTarefas }}% Completa</span>
                                     </p>
                                     <div class="progress progress-striped active">
-                                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                                            <span class="sr-only">20% Complete</span>
+                                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{ mediaTarefas }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ mediaTarefas }}%">
+                                            <span class="sr-only">{{ mediaTarefas }}% Completa</span>
                                         </div>
                                     </div>
                                 </div>
@@ -324,11 +324,11 @@
               <div>
                    <p>
                        <strong>Andamento da validação e resposta a este item</strong>
-                       <span class="pull-right text-muted">20% Completo</span>
+                       <span class="pull-right text-muted">{{ mediaTarefas }}% Completo</span>
                    </p>
                    <div class="progress progress-striped active">
-                       <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                           <span class="sr-only">20% Complete</span>
+                       <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{ mediaTarefas }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ mediaTarefas }}%">
+                           <span class="sr-only">{{ mediaTarefas }}% Completo</span>
                        </div>
                    </div>
               </div>
@@ -346,7 +346,7 @@
                   </div>
                   <div class="col-xs-9 text-right">
                     <div class="huge">{{ producoes }}</div>
-                    <div>Textos viculados</div>
+                    <div>Textos produzidos</div>
                   </div>
                 </div>
               </div>
@@ -389,7 +389,7 @@
                     <i class="fa fa-check-circle fa-5x"></i>
                   </div>
                   <div class="col-xs-9 text-right">
-                    <div class="huge">12</div>
+                    <div class="huge">{{ qtdTarefasFinalizadas }}</div>
                     <div>Atividades concluídas</div>
                   </div>
                 </div>
@@ -459,10 +459,13 @@
                     <tr>
                        <td><a href="#"> {{ tarefa.tarefaDesc }}</a></td>
                        <td>{{ tarefa.responsavel }}</td>
-                       <td>{{ tarefa.status }}%</td>
+                        {% if tarefa.status == 1 %}
+                        <td>Completada</td>
+                        {% else %}
+                        <td>Sem resultados ainda</td>
+                        {% endif %}
                        <td>{{ tarefa.categoria }}</td>
                     </tr>
-
                   {% endfor %}
                   </tbody>
                 </table>

@@ -266,11 +266,19 @@
                 </li>
               <li>
                 <!-- /input-group -->
-                <strong>Referências textuais</strong>
+                <strong>Produções textuais</strong>
               </li>
               {% for i in todos %}
                 <li>
                   <a href="{{ i.url }}"><i class="fa fa-dashboard fa-fw"></i> {{ i.titulo }}</a>
+                </li>
+              {% endfor %}
+              <li>
+              <strong>Referências</strong>
+              </li>
+              {% for i in todosRef %}
+                <li>
+                  <a href="{{ i.url }}"><i class="fa fa-dashboard fa-fw"></i> {{ i.url }}</a>
                 </li>
               {% endfor %}
           </div>
@@ -281,7 +289,39 @@
       <div id="page-wrapper">
         <div class="row">
           <div class="col-lg-12">
-            <h3 class="page-header">Redigindo: <strong>{{ itemId.titulo }}</strong></h3>
+            <h3 class="page-header">Redigindo: <strong>{{ itemId.titulo }} - {{ itemId.vinculadoTarefa }}</strong></h3>
+            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#vinculaTarefa">Vincular documento à tarefa</a>
+
+          <form method="post" action="/vincular_tarefaDocumento/{{ slug }}/{{ unidade }}/{{ itemslug }}/{{ itemId.id }}/">
+            {% csrf_token %}
+            <div class="modal fade" id="vinculaTarefa">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                <h4 class="modal-title">Vincular documento à tarefa</h4>
+                        </div>
+                      <div class="modal-body">
+                        <form role="form">
+                            <div class="form-group">
+                                <label class="control-label">Qual tarefa este documento é relativo?</label>
+                                <select class="form-control" name="tarefas">
+                                    {% for i in tarefasAvincular %}
+                                        <option>{{ i.tarefaDesc }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </form>
+                      </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-default" data-dismiss="modal">Fechar</a>
+                        <button class="btn btn-primary" type="submit">OK</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
+          </form>
+
           </div>
           <!-- /.col-lg-12 -->
         </div>

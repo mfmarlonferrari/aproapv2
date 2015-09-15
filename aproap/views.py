@@ -23,11 +23,6 @@ def mapa(request):
     return render_to_response('mapa.html', {})
 
 def showcronograma(request):
-    from django.utils.timezone import utc
-    from django.core.serializers.json import DjangoJSONEncoder
-
-    if request.is_ajax():
-        print 'Its ajax from fullCalendar()'
     #filtra as entradas cujo investigador seja o usuario atual e os prazos nao sejam nulos
     entries = unidadeInvestigacao.objects.filter(investigador=request.user.username, prazo__isnull=False, prazoFinal__isnull=False)
     print entries
@@ -131,9 +126,7 @@ def detalhesUnidade(request, slug, unidade):
     #calcula o andamento da unidade pela media de andamento dos itens
     somaUnidade = unidadeInvestigacao.objects.filter(qualProjeto=idProjeto, nomeDoBloco=unidade).annotate(total=Sum('status'))
     somaUnidadeValor = somaUnidade[0].status
-    print 'SOMA:%s ' % somaUnidadeValor
     qtdItens = unidadeInvestigacao.objects.filter(qualProjeto=idProjeto, nomeDoBloco=unidade).count()
-    print 'QTD: %s' % qtdItens
     mediaDaUnidade = somaUnidadeValor/qtdItens
     context = dict(pendentes=pendentes, espacoId=pk, unidade=unidade,
                    qtdPendentes=qtdPendentes, todos=todos, semCronograma=semCronograma, desteUsuario=desteUsuario,
@@ -188,6 +181,10 @@ def salvarElementoTextual(request, slug, unidade, itemslug):
     a.save()
     return HttpResponseRedirect("/projeto/%s/unidade/%s/item/%s/" % (slug, unidade, itemslug))
 
+def concluirDocumento(request, slug, unidade, itemslug):
+    qualItem = unidadeInvestigacao.objects.get(slugConhecimento=itemslug)
+
+
 def insereTarefa(request, slug, unidade, itemslug):
     titulo = request.POST['titulo']
     categoria = request.POST['categoria']
@@ -238,14 +235,26 @@ def modoEdicao(request, slug, unidade, itemslug, id):
         return HttpResponseRedirect("/projeto/%s/%s/%s/elementos_textuais/visualizando/%s/" % (slug, unidade,
                                                                                                itemslug, itemId.id))
     else:
+        #se possuir direito de editar
         texto = itemId.texto
         qualItem = unidadeInvestigacao.objects.get(slugConhecimento=itemslug)
+        qualItemId = qualItem.id
         nomeDoItem = qualItem.conhecimentoPrevio
-        todos = elementoTextual.objects.filter(vinculadoItem=qualItem)
-        context = dict(itemId=itemId, nomeDoItem=nomeDoItem, todos=todos, slug=slug,
-                       itemslug=itemslug, unidade=unidade, id=id, texto=texto)
+        todos = textoProduzido.objects.filter(vinculadoItem=qualItemId)
+        todosRef = elementoTextual.objects.filter(vinculadoItem=qualItem)
+        tarefasAvincular=tarefasItem.objects.filter(vinculoConhecimento=qualItemId)
+        context = dict(itemId=itemId, nomeDoItem=nomeDoItem, todos=todos, todosRef=todosRef, slug=slug,
+                       itemslug=itemslug, unidade=unidade, id=id, texto=texto, tarefasAvincular=tarefasAvincular)
         c = RequestContext(request, context)
         return render_to_response('editarDocumento.html', c)
+
+def vinculaDocItem(request, slug, unidade, itemslug, idDoc):
+    tarefa = request.POST['tarefas']
+    qualTarefa = tarefasItem.objects.get(tarefaDesc=tarefa)
+    qualDocumento = textoProduzido.objects.get(pk=idDoc)
+    a = textoProduzido.objects.select_for_update().filter(pk=idDoc).update(vinculadoTarefa=qualTarefa)
+    return HttpResponseRedirect("/projeto/%s/%s/%s/elementos_textuais/visualizando/%s/" % (slug, unidade,
+                                                                                               itemslug, qualDocumento.id))
 
 def modoLeitura(request, slug, unidade, itemslug, id):
     usuarioAtual = request.user.username

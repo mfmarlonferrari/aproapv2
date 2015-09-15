@@ -327,7 +327,7 @@
                 <a href="#"><i class="fa fa-wrench fa-fw"></i> Validações e respostas<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                   <li>
-                    <a href="panels-wells.html">Artigos, documentos, textos</a>
+                    <a href="/projeto/{{ slug }}/{{ unidade }}/{{ itemslug }}/elementos_textuais/editor/">Editor de elementos textuais</a>
                   </li>
                   <li>
                     <a href="buttons.html">Multimídia</a>
@@ -374,7 +374,7 @@
               <div class="panel-body">
                 <ul class="list-group">
                      {% for i in todos %}
-                         <a href="{{ i.url }}"><li class="list-group-item" id="listaArquivos">{{ i.titulo }} </li> </a>
+                         <a href="{{ i.url }}"><li class="list-group-item" id="listaArquivos">{{ i.titulo }} - ({{ i.subcategoria }}) </li> </a>
                      {% endfor %}
                 </ul>
                 <ul class="pagination">

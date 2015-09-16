@@ -271,7 +271,11 @@
                   <strong>Atenção!&nbsp;</strong>Você tem itens a investigar que não estão no cronograma.
                    Clique <a href="/cronograma/{{ user.username }}/{{ slug }}/{{ unidade }}/">aqui</a> para resolver</div>
               {% endif %}
-
+              {% if mediaDaUnidade == 100 %}
+                  <div class="alert alert-danger alert-dismissable">
+                      <strong>Atenção!&nbsp;</strong>Todos os itens de conhecimento desta unidade estão concluídos.
+                  </div>
+              {% endif %}
             <ul class="breadcrumb">
               <li>
                 <a href="/lobby/{{ slug }}/">Início</a>
@@ -283,6 +287,7 @@
             </ul>
 
             <h1 class="page-header">Quadro de informações</h1>
+
               <div>
                    <p>
                        <strong>Status geral da unidade</strong>
@@ -352,7 +357,7 @@
                     <i class="fa fa-check-circle fa-5x"></i>
                   </div>
                   <div class="col-xs-9 text-right">
-                    <div class="huge">124</div>
+                    <div class="huge">{{ qtdCompletados }}</div>
                     <div>Atividades concluídas</div>
                   </div>
                 </div>
@@ -413,7 +418,11 @@
                       <td><a href="/projeto/{{ slug }}/unidade/{{ unidade }}/item/{{ item.slugConhecimento }}/">{{ item.conhecimentoPrevio }}</a></td>
                       <td>{{ item.investigador }}</td>
                       <td>0</td>
-                      <td>Em andamento - {{ item.status }}%</td>
+                      {% if item.status == 100 %}
+                          <td>Concluído - {{ item.status }}%</td>
+                      {% else %}
+                          <td>Em andamento - {{ item.status }}%</td>
+                      {% endif %}
                     </tr>
                   {% endfor %}
                   </tbody>
@@ -597,10 +606,13 @@
                 <a href="#" class="btn btn-default btn-block">View All Alerts</a>
               </div>
               <!-- /.panel-body -->
+
             </div>
             <!-- /.CHAT AQUI -->
-              <script id="cid0020000103071000147" data-cfasync="false" async src="//st.chatango.com/js/gz/emb.js" style="width: 100%;height: 100%;">{"handle":"aproap","arch":"js","styles":{"a":"33ccff","b":100,"c":"000000","d":"000000","k":"33ccff","l":"33ccff","m":"33ccff","p":"10","q":"33ccff","r":100,"usricon":0,"surl":0,"allowpm":0,"cnrs":"0.94","fwtickm":0, "useonm":1}}</script>
+            <script id="cid0020000103071000147" data-cfasync="false" async src="//st.chatango.com/js/gz/emb.js" style="width: 100%;height: 55%;">{"handle":"aproap","arch":"js","styles":{"a":"33ccff","b":100,"c":"000000","d":"000000","k":"33ccff","l":"33ccff","m":"33ccff","p":"10","q":"33ccff","r":100,"usricon":0,"surl":0,"allowpm":0,"cnrs":"0.94","fwtickm":0, "useonm":1}}</script>
+
           </div>
+
           <!-- /.col-lg-4 -->
         </div>
         <!-- /.row -->

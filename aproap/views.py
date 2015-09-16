@@ -108,8 +108,12 @@ def inserirIdeia(request, slug):
 def detalhesUnidade(request, slug, unidade):
     pk= espacoProjeto.objects.get(slugProjeto=slug).id
     idProjeto = Projeto.objects.get(espaco=pk)
-    #quantidade de itens que precisam de ajuda
-    ajuda = unidadeInvestigacao.objects.filter(qualProjeto=idProjeto, nomeDoBloco=unidade, precisaAjuda='1')
+    #itens ja completados
+    qtdCompletados = unidadeInvestigacao.objects.filter(qualProjeto=idProjeto,
+                                               nomeDoBloco=unidade, status=100).count()
+    #quantidade de itens que precisam de ajuda, excluindo os que ja foram completados
+    ajuda = unidadeInvestigacao.objects.filter(qualProjeto=idProjeto,
+                                               nomeDoBloco=unidade, precisaAjuda='1').exclude(status=100)
     qtdAjuda = ajuda.count()
     #filtra todos os conhecimentos sem investigador vinculado
     pendentes = unidadeInvestigacao.objects.filter(qualProjeto=idProjeto, nomeDoBloco=unidade, investigador='')
@@ -124,13 +128,14 @@ def detalhesUnidade(request, slug, unidade):
     desteUsuario = unidadeInvestigacao.objects.filter(qualProjeto=idProjeto, nomeDoBloco=unidade,
                                                       investigador=request.user.username)
     #calcula o andamento da unidade pela media de andamento dos itens
-    somaUnidade = unidadeInvestigacao.objects.filter(qualProjeto=idProjeto, nomeDoBloco=unidade).annotate(total=Sum('status'))
-    somaUnidadeValor = somaUnidade[0].status
+    somaUnidade = unidadeInvestigacao.objects.filter(qualProjeto=idProjeto, nomeDoBloco=unidade).aggregate(total=Sum('status'))
+    somaUnidadeValor = somaUnidade['total']
     qtdItens = unidadeInvestigacao.objects.filter(qualProjeto=idProjeto, nomeDoBloco=unidade).count()
     mediaDaUnidade = somaUnidadeValor/qtdItens
     context = dict(pendentes=pendentes, espacoId=pk, unidade=unidade,
                    qtdPendentes=qtdPendentes, todos=todos, semCronograma=semCronograma, desteUsuario=desteUsuario,
-                   mediaDaUnidade=mediaDaUnidade, slug=slug, qtdAjuda=qtdAjuda, ajuda=ajuda)
+                   mediaDaUnidade=mediaDaUnidade, slug=slug, qtdAjuda=qtdAjuda,
+                   ajuda=ajuda, qtdCompletados=qtdCompletados)
     c = RequestContext(request, context)
     return render_to_response('detalhesUnidade.html', c)
 
@@ -156,15 +161,8 @@ def detalhesItem(request, slug, unidade, itemslug):
     tarefasPendentes = tarefasItem.objects.filter(vinculoConhecimento=qualItemId, responsavel='')
     qtdTarefasPendentes = tarefasItem.objects.filter(vinculoConhecimento=qualItemId, responsavel='').count()
     #media do progresso
-    qtdTarefasGeral = tarefasItem.objects.filter(vinculoConhecimento=qualItemId).count()
-    #converte para float para o python nao arredondar valores decimais para zero
-    qtdTarefasGeral = float(qtdTarefasGeral)
+    mediaTarefas = vinculoItem.status
     qtdTarefasFinalizadas = tarefasItem.objects.filter(vinculoConhecimento=qualItemId, status=1).count()
-    qtdTarefasFinalizadas = float(qtdTarefasFinalizadas)
-    mediaTarefas = (qtdTarefasFinalizadas/qtdTarefasGeral)*100
-    #converte para int para cortar casas decimais
-    mediaTarefas = int(mediaTarefas)
-    qtdTarefasFinalizadas = int(qtdTarefasFinalizadas)
     context = dict(tarefasPendentes=tarefasPendentes, tarefasAndamento=tarefasAndamento,
                    qualItem=qualItemId, item=item, qtdTarefasPendentes=qtdTarefasPendentes,
                    qtdajudantes=qtdajudantes, ajudantes=ajudante, slug=slug, unidade=unidade, itemslug=itemslug,
@@ -172,6 +170,10 @@ def detalhesItem(request, slug, unidade, itemslug):
                    mediaTarefas=mediaTarefas, qtdTarefasFinalizadas=qtdTarefasFinalizadas)
     c = RequestContext(request, context)
     return render_to_response('detalheItem.html', c)
+
+def concluirItem(request, slug, unidade, itemslug):
+    qualItem = unidadeInvestigacao.objects.select_for_update().filter(slugConhecimento=itemslug).update(status=100)
+    return HttpResponseRedirect("/projeto/%s/unidade/%s/item/%s/" % (slug, unidade, itemslug))
 
 def postarConversa(request, slug, unidade, itemslug):
     qualItem = unidadeInvestigacao.objects.get(slugConhecimento=itemslug)
@@ -190,7 +192,7 @@ def salvarElementoTextual(request, slug, unidade, itemslug):
     a = elementoTextual.objects.create(vinculadoItem=qualItem, quemEnviou=request.user.username,
                                        titulo=titulo, url=url, subcategoria=subcategoria, historico=historico)
     a.save()
-    return HttpResponseRedirect("/projeto/%s/unidade/%s/item/%s/" % (slug, unidade, itemslug))
+    return HttpResponseRedirect("/projeto/%s/%s/%s/elementos_textuais/" % (slug, unidade, itemslug))
 
 def concluirDocumento(request, slug, unidade, itemslug):
     qualItem = unidadeInvestigacao.objects.get(slugConhecimento=itemslug)
@@ -201,9 +203,21 @@ def insereTarefa(request, slug, unidade, itemslug):
     categoria = request.POST['categoria']
     slugtarefa = slugify(titulo)
     qualItem = unidadeInvestigacao.objects.get(slugConhecimento=itemslug)
+    qualItemId = qualItem.id
     salva = tarefasItem.objects.create(tarefaDesc=titulo, vinculoConhecimento=qualItem,
                                        categoria=categoria, slugTarefa=slugtarefa)
     salva.save()
+    #recalcula o status do item
+    #media do progresso
+    qtdTarefasGeral = tarefasItem.objects.filter(vinculoConhecimento=qualItemId).count()
+    #converte para float para o python nao arredondar valores decimais para zero
+    qtdTarefasGeral = float(qtdTarefasGeral)
+    qtdTarefasFinalizadas = tarefasItem.objects.filter(vinculoConhecimento=qualItemId, status=1).count()
+    qtdTarefasFinalizadas = float(qtdTarefasFinalizadas)
+    mediaTarefas = (qtdTarefasFinalizadas/qtdTarefasGeral)*100
+    #converte para int para cortar casas decimais
+    mediaTarefas = int(mediaTarefas)
+    x = unidadeInvestigacao.objects.select_for_update().filter(slugConhecimento=itemslug).update(status=mediaTarefas)
     return HttpResponseRedirect("/projeto/%s/unidade/%s/item/%s/" % (slug, unidade, itemslug))
 
 def insereItem(request, slug, unidade):
@@ -265,6 +279,18 @@ def vinculaDocItem(request, slug, unidade, itemslug, idDoc):
     qualDocumento = textoProduzido.objects.get(pk=idDoc)
     a = textoProduzido.objects.select_for_update().filter(pk=idDoc).update(vinculadoTarefa=qualTarefa)
     b = tarefasItem.objects.select_for_update().filter(pk=qualTarefa.id).update(status=1)
+    #salva a media no status do Item
+    qualItemId = unidadeInvestigacao.objects.get(slugConhecimento=itemslug).id
+    #media do progresso
+    qtdTarefasGeral = tarefasItem.objects.filter(vinculoConhecimento=qualItemId).count()
+    #converte para float para o python nao arredondar valores decimais para zero
+    qtdTarefasGeral = float(qtdTarefasGeral)
+    qtdTarefasFinalizadas = tarefasItem.objects.filter(vinculoConhecimento=qualItemId, status=1).count()
+    qtdTarefasFinalizadas = float(qtdTarefasFinalizadas)
+    mediaTarefas = (qtdTarefasFinalizadas/qtdTarefasGeral)*100
+    #converte para int para cortar casas decimais
+    mediaTarefas = int(mediaTarefas)
+    x = unidadeInvestigacao.objects.select_for_update().filter(slugConhecimento=itemslug).update(status=mediaTarefas)
     return HttpResponseRedirect("/projeto/%s/%s/%s/elementos_textuais/visualizando/%s/" % (slug, unidade,
                                                                                                itemslug, qualDocumento.id))
 

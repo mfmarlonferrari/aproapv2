@@ -321,6 +321,34 @@
             </ul>
 
             <h1 class="page-header">Quadro de informações</h1>
+              <a class="btn btn-warning" href="#" data-toggle="modal" data-target="#concluirItem">Concluir item</a>
+              <form method="post" action="/concluir_item/{{ slug }}/{{ unidade }}/{{ itemslug }}/">
+            {% csrf_token %}
+            <div class="modal fade" id="concluirItem">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                <h4 class="modal-title">Concluir item</h4>
+                        </div>
+                      <div class="modal-body">
+                        <form role="form">
+                            <div class="form-group">
+                                <label class="control-label">Deseja marcar o item atual como concluído?</label>
+                                 <label class="control-label">Isto significa que o item está respondido e
+                                     ficará como concluído na unidade. É possível reabrir o item caso necessário.</label>
+                            </div>
+                        </form>
+                      </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-default" data-dismiss="modal">Fechar</a>
+                        <button class="btn btn-primary" type="submit">OK</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
+          </form>
+
               <div>
                    <p>
                        <strong>Andamento da validação e resposta a este item</strong>

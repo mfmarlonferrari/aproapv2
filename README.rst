@@ -8,7 +8,7 @@ AProAp - Ambiente para Projetos de Aprendizagem
 - Ferramentas de apoio à produção de conteúdos dos alunos;
 - Suporte à autonomia e articulação discente;
 
-.. image:: https://raw.github.com/sandlbn/django-bootstrap-calendar/master/screenshot.png
+.. image:: http://s17.postimg.org/nymb443v3/image.png
 
 Como Funciona?
 ------------
@@ -17,6 +17,7 @@ O ambiente conduz as etapas desde o descobrimento da questão de investigação 
 Suporte pedagógico
 ----------
 O ambiente segue a arquitetura pedagógica de projetos de aprendizagem, aliando tecnologia e educação, para fomentar o conhecimento por meio da autonomia proposta pelas abordagens baseadas em projetos.
+.. image:: http://s17.postimg.org/a3o0ln9fz/image.png
 
 Aplicações do AProAp
 -------------------

@@ -1,5 +1,7 @@
-# AProAp
+=============================
+AProAp
 Ambiente para Projetos de Aprendizagem
+=============================
 
 - Suporte à aprendizagem baseada em projetos simples e eficiente! 
 - Condução às etapas iniciais, intermediárias e finais dos projetos;

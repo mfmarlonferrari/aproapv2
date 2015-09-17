@@ -108,6 +108,8 @@ def inserirIdeia(request, slug):
 def detalhesUnidade(request, slug, unidade):
     pk= espacoProjeto.objects.get(slugProjeto=slug).id
     idProjeto = Projeto.objects.get(espaco=pk)
+    #carrega as mensagens automaticas do usuario
+    mensagens = mensagemAssistente.objects.filter(usuario=request.user.username)
     #itens ja completados
     qtdCompletados = unidadeInvestigacao.objects.filter(qualProjeto=idProjeto,
                                                nomeDoBloco=unidade, status=100).count()
@@ -135,7 +137,7 @@ def detalhesUnidade(request, slug, unidade):
     context = dict(pendentes=pendentes, espacoId=pk, unidade=unidade,
                    qtdPendentes=qtdPendentes, todos=todos, semCronograma=semCronograma, desteUsuario=desteUsuario,
                    mediaDaUnidade=mediaDaUnidade, slug=slug, qtdAjuda=qtdAjuda,
-                   ajuda=ajuda, qtdCompletados=qtdCompletados)
+                   ajuda=ajuda, qtdCompletados=qtdCompletados, mensagens=mensagens)
     c = RequestContext(request, context)
     return render_to_response('detalhesUnidade.html', c)
 

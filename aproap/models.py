@@ -113,3 +113,9 @@ class conversa(models.Model):
     mensagem = models.CharField(max_length=200)
     dataHora = models.DateTimeField()
     qualItem = models.ForeignKey(unidadeInvestigacao)
+
+class mensagemAssistente(models.Model):
+    usuario = models.CharField(max_length=100)
+    mensagem = models.CharField(max_length=200)
+    dataHora = models.DateTimeField()
+    qualItem = models.ForeignKey(unidadeInvestigacao)

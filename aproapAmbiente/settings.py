@@ -40,6 +40,11 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'aproap',
+    'django_cron',
+)
+
+CRON_CLASSES = (
+    'aproap.AssistenteCron.MyCronJob',
 )
 
 MIDDLEWARE_CLASSES = (

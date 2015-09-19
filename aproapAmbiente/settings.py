@@ -44,7 +44,7 @@ INSTALLED_APPS = (
 )
 
 CRON_CLASSES = (
-    'aproap.AssistenteCron.MyCronJob',
+    'aproap.AssistenteCron.verificaPrazoCronograma',
 )
 
 MIDDLEWARE_CLASSES = (

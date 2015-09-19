@@ -2,7 +2,7 @@ from django_cron import CronJobBase, Schedule
 from aproap.models import *
 import datetime
 
-class MyCronJob(CronJobBase):
+class verificaPrazoCronograma(CronJobBase):
     RUN_EVERY_MINS = 1 # every 2 hours
 
     schedule = Schedule(run_every_mins=RUN_EVERY_MINS)

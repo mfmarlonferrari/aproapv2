@@ -94,10 +94,15 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
-
 STATICFILES_DIRS = (
-    # ...
-    ("static", "C:\Users\Marlon\PycharmProjects\\aproap\static"), )
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    #Caso outro IDE estranhe (erro 404), adicionar 'static' apos base_dir,
+    os.path.join(
+        BASE_DIR,
+    ),
+)
 
 STATIC_URL = '/static/'
 

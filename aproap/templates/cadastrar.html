@@ -2,30 +2,43 @@
 
 <div class="section">
     <div class="background-image" style="background-image : url('{{ STATIC_URL }}../static/img/Rocket.jpg')"></div>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <form role="form">
-                    <div class="form-group">
-                        <label class="control-label">Nome completo</label>
-                        <input class="form-control" type="text" placeholder="Digite seu nome completo">
+<div class="container">
+    <div class="row">
+        <form role="form">
+            <div class="col-lg-12">
+                <div class="well well-sm"><strong><span class="glyphicon glyphicon-check"></span>Falta pouco! Basta preencher as informações</strong></div>
+                <div class="form-group">
+                    <label for="InputName">Nome</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="InputName" id="InputName" placeholder="Enter Name" required>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label" for="exampleInputEmail1">Endereço de email</label>
-                        <input class="form-control" id="exampleInputEmail1" placeholder="Digite seu email" type="email">
-                    </div><div class="form-group">
-                    <label class="control-label" for="exampleInputPassword1">Senha</label>
-                    <input class="form-control" id="exampleInputPassword1" placeholder="Escolha uma senha" type="password">
                 </div>
-                    <div class="form-group">
-                        <div class="checkbox">
-                            <label><input type="checkbox" onchange="document.getElementById('concordo').disabled = !this.checked;">Concordo com os termos de serviço</label>
-                        </div>
+                <div class="form-group">
+                    <label for="InputEmail">Email</label>
+                    <div class="input-group">
+                        <input type="email" class="form-control" id="InputEmailFirst" name="InputEmail" placeholder="Enter Email" required>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                     </div>
-                    <button type="submit" class="btn btn-default" disabled= "disabled" id="concordo">Cadastrar</button>
-                </form>
+                </div>
+                <div class="form-group">
+                    <label for="InputEmail">Confirmar Email</label>
+                    <div class="input-group">
+                        <input type="email" class="form-control" id="InputEmailSecond" name="InputEmail" placeholder="Confirm Email" required>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="InputEmail">Escolha uma senha</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="InputPassword" name="InputPassword" placeholder="Escolha uma senha" required>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                    </div>
+                </div>
+                <input type="submit" name="submit" id="submit" value="Registrar" class="btn btn-info pull-right">
             </div>
-        </div>
+        </form>
     </div>
+</div>
 </div>
 {%include "footer.html" %}

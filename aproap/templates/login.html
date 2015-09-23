@@ -8,6 +8,7 @@
             <div class="modal-header">
                 <h4 class="modal-title">Faça login para entrar</h4>
             </div>
+
             <div class="modal-body">
                 <form class="form-horizontal" role="form"  method="POST" action="{% url 'django.contrib.auth.views.login' %}">
                     {% csrf_token %}
@@ -53,6 +54,5 @@
  </div>
  </div>
  </div>
-</div>
 
 {%include "footer.html" %}

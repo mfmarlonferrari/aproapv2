@@ -9,9 +9,9 @@ See the file LICENSE.txt for copying permission.
 <link href="{% static 'static/css/mapaConceitual/style.css' %}" rel="stylesheet">
 <link href="{% static 'static/css/mapaConceitual/jquery.wysiwyg.css' %}" rel="stylesheet">
 
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/jquery-ui.min.js"></script>
-
+<script src="{% static 'static/js/mapaConceitual/jquery.min.js' %}"></script>
+<script src="{% static 'static/js/mapaConceitual/jquery-ui.min.js' %}"></script>
+<script src="{% static 'static/js/mapaConceitual/SpringLayout.js' %}"></script>
 <script src="{% static 'static/js/mapaConceitual/Rectangle.js' %}"></script>
 <script src="{% static 'static/js/mapaConceitual/ListenerPool.js' %}"></script>
 <script src="{% static 'static/js/mapaConceitual/Point.js' %}"></script>
@@ -35,7 +35,8 @@ $(function() {
 });
 </script>
 
-<div id="container"></div>
+      <div id="container"></div>
+
 <textarea id="concepts" rows="10" cols="60">
 Climate Change is caused by Natural Causes
 Climate Change is caused by Human Activities
@@ -52,5 +53,6 @@ Environmental Policies such as Political Sanctions
 Climate Change should be further Researched
 Changing Behavior such as Recycling
 </textarea>
+
 
 {% include "footer.html" %}

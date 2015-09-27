@@ -1,0 +1,56 @@
+{% include "header.html" %}
+{% load static %}
+<!--
+Copyright (C) 2011 by Allain Lalonde (allain.lalonde@gmail.com)
+
+See the file LICENSE.txt for copying permission.
+-->
+
+<link href="{% static 'static/css/mapaConceitual/style.css' %}" rel="stylesheet">
+<link href="{% static 'static/css/mapaConceitual/jquery.wysiwyg.css' %}" rel="stylesheet">
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/jquery-ui.min.js"></script>
+
+<script src="{% static 'static/js/mapaConceitual/Rectangle.js' %}"></script>
+<script src="{% static 'static/js/mapaConceitual/ListenerPool.js' %}"></script>
+<script src="{% static 'static/js/mapaConceitual/Point.js' %}"></script>
+<script src="{% static 'static/js/mapaConceitual/Relation.js' %}"></script>
+<script src="{% static 'static/js/mapaConceitual/Concept.js' %}"></script>
+<script src="{% static 'static/js/mapaConceitual/ConceptMap.js' %}"></script>
+<script src="{% static 'static/js/mapaConceitual/ConceptMapUI.js' %}"></script>
+<script src="{% static 'static/js/mapaConceitual/SpringLayout.js' %}"></script>
+
+<script type="text/javascript">
+$(function() {
+  var conceptMap = new ConceptMap();
+  var conceptMapUI = new ConceptMapUI("container", conceptMap, new SpringLayout());
+  conceptMap.listeners.push(conceptMapUI);  
+  conceptMap.loadFacts($("#concepts").val());
+  $("#concepts").change(function(e) {
+    conceptMap.loadFacts(this.value);
+  });
+
+  setInterval(function () { conceptMapUI.paint(); }, 50);
+});
+</script>
+
+<div id="container"></div>
+<textarea id="concepts" rows="10" cols="60">
+Climate Change is caused by Natural Causes
+Climate Change is caused by Human Activities
+Human Activities such as Population Increase
+Human Activities such as Burning Fossil Fuels
+Rising Sea Levels are evidence for Climate Change
+Melting Ice Caps are evidence for Climate Change
+Warming Oceans are evidence for Climate Change
+Warming Oceans impact Animal Habitat
+Climate Change can be managed by Changing Behavior
+Climate Change can be managed by Environmental Policies
+Environmental Policies such as Carbon Taxes
+Environmental Policies such as Political Sanctions
+Climate Change should be further Researched
+Changing Behavior such as Recycling
+</textarea>
+
+{% include "footer.html" %}

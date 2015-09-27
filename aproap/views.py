@@ -19,8 +19,11 @@ def index(request):
 def cadastrar(request):
     return render_to_response('cadastrar.html', {})
 
+def contato(request):
+    return render_to_response('contato.html', {})
+
 def mapa(request):
-    return render_to_response('mapa.html', {})
+    return render_to_response('mapaConceitual.html', {})
 
 def showcronograma(request):
     #filtra as entradas cujo investigador seja o usuario atual e os prazos nao sejam nulos

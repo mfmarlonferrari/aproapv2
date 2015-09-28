@@ -22,8 +22,35 @@ def cadastrar(request):
 def contato(request):
     return render_to_response('contato.html', {})
 
-def mapa(request):
-    return render_to_response('mapaConceitual.html', {})
+def mapa(request, slug, unidade, itemslug):
+    existente = mapaConceitual.objects.filter(pertence=itemslug, usuario=request.user.username)
+    contExistente = existente.count()
+    # pega o conteudo do mapa
+    if contExistente == 1:
+        existente = mapaConceitual.objects.get(pertence=itemslug, usuario=request.user.username)
+    context = dict(slug=slug, unidade=unidade, itemslug=itemslug, existente=existente,
+                   contExistente=contExistente)
+    c = RequestContext(request, context)
+    return render_to_response('mapaConceitual.html', c)
+
+def visualizaMapa(request, slug, unidade, itemslug):
+    mapaTexto = mapaConceitual.objects.get(pertence=itemslug)
+    context = dict(slug=slug, unidade=unidade, itemslug=itemslug, mapaTexto=mapaTexto)
+    c = RequestContext(request, context)
+    return render_to_response('mapaConceitual.html', c)
+
+def salvaMapa(request, slug, unidade, itemslug):
+    # verifica se ja ha um mapa associado a este usuario e item, se houver havera apenas a atualizacao
+    existente = mapaConceitual.objects.filter(pertence=itemslug, usuario=request.user.username)
+    contExistente = existente.count()
+    texto = request.POST['conceitos']
+    if contExistente == 1:
+        existente = mapaConceitual.objects.select_for_update().filter(
+            pertence=itemslug, usuario=request.user.username).update(conceitosRelacoes=texto)
+    else:
+        a = mapaConceitual.objects.create(pertence=itemslug, usuario=request.user.username, conceitosRelacoes=texto)
+        a.save()
+    return HttpResponseRedirect("/projeto/%s/%s/%s/mapas_conceituais/editor/" % (slug, unidade, itemslug))
 
 def showcronograma(request):
     #filtra as entradas cujo investigador seja o usuario atual e os prazos nao sejam nulos

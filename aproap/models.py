@@ -119,3 +119,8 @@ class mensagemAssistente(models.Model):
     mensagem = models.CharField(max_length=200)
     data = models.DateField(default=datetime.now())
     qualItem = models.ForeignKey(unidadeInvestigacao)
+
+class mapaConceitual(models.Model):
+    pertence = models.CharField(max_length=200)
+    usuario = models.CharField(max_length=100)
+    conceitosRelacoes = models.TextField()

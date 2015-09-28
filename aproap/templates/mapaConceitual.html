@@ -35,24 +35,32 @@ $(function() {
 });
 </script>
 
-      <div id="container"></div>
 
-<textarea id="concepts" rows="10" cols="60">
-Climate Change is caused by Natural Causes
-Climate Change is caused by Human Activities
-Human Activities such as Population Increase
-Human Activities such as Burning Fossil Fuels
-Rising Sea Levels are evidence for Climate Change
-Melting Ice Caps are evidence for Climate Change
-Warming Oceans are evidence for Climate Change
-Warming Oceans impact Animal Habitat
-Climate Change can be managed by Changing Behavior
-Climate Change can be managed by Environmental Policies
-Environmental Policies such as Carbon Taxes
-Environmental Policies such as Political Sanctions
-Climate Change should be further Researched
-Changing Behavior such as Recycling
-</textarea>
+<div id="container"></div>
+<form method="post" action="/salvar_mapa/{{ slug }}/{{ unidade }}/{{ itemslug }}/">
+{% csrf_token %}
+  <div class="row">
+          <div class="col-lg-12">
+                  <div class="alert alert-info alert-dismissable">
+                    <strong>Utilize o editor abaixo para criar o mapa conceitual. Siga o modelo do exemplo.
+                      Para atualizar, utilize a tecla TAB. </strong>
+                  </div>
+          </div>
+  </div>
+  <button type="submit" class="btn btn-primary">Salvar</button>
 
+<div class="section">
+  <div class="row">
+    <div class="col-lg-12">
+        {% if contExistente == 1 %}
+            <textarea id="concepts" name='conceitos' rows="10" cols="60">{{ existente.conceitosRelacoes }}</textarea>
+        {% else %}
+            <textarea id="concepts" name='conceitos' rows="10" cols="60">Conceito relacao Outro Conceito</textarea>
+        {% endif %}
+    </div>
+  </div>
+</div>
+
+</form>
 
 {% include "footer.html" %}

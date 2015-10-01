@@ -27,7 +27,7 @@
           </button>
         </div>
         <div class="collapse navbar-collapse" id="navbar-ex-collapse">
-          <p class="navbar-right navbar-text"><a href="/admin/logout">Sair </a></p>
+          <p class="navbar-right navbar-text"><a href="/logout/">Sair </a></p>
           <ul class="nav navbar-left navbar-nav">
             <li class="">
               <a href="/espacos/"><i class="fa fa-fw fa-home"></i>Página Inicial</a>
@@ -53,7 +53,7 @@
       </div>
     </div>
 
-<form role="form"  method="POST" action="{% url 'django.contrib.auth.views.login' %}">
+<form method="POST" action="{% url 'django.contrib.auth.views.login' %}">
 {% csrf_token %}
   <div class="modal fade" id="login">
          {% if form.errors %}
@@ -89,8 +89,6 @@
       </div>
   </div>
 </form>
-
-
 
 
 

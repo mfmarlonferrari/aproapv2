@@ -1,0 +1,98 @@
+{% include "header.html" %}
+{% load static %}
+
+<link href="{% static 'static/css/forum.css' %}" rel="stylesheet">
+
+
+<div class="container">
+  <div class="post-comments">
+
+    <form>
+      <div class="form-group">
+        <label for="comment">Digite sua pergunta:</label>
+        <textarea name="comment" class="form-control" rows="3"></textarea>
+      </div>
+      <button type="submit" class="btn btn-default">Postar</button>
+    </form>
+
+    <div class="comments-nav">
+      <ul class="nav nav-pills">
+        <li role="presentation" class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                  existem xx respostas <span class="caret"></span>
+                </a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Mais comentadas</a></li>
+            <li><a href="#">Menos comentadas</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+
+    {% for i in postagens %}
+    <div class="row">
+      <div class="media">
+        <!-- first comment -->
+
+        <div class="media-heading">
+          <button class="btn btn-default btn-xs" type="button" data-toggle="collapse" data-target="#collapse{{ i.id }}" aria-expanded="false" aria-controls="collapseExample"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button> <span class="label label-info">12314</span> {{ i.usuario }}
+        </div>
+
+        <div class="panel-collapse collapse in" id="collapse{{ i.id }}">
+         <div class="media-body">
+            <p>{{ i.texto }}</p>
+          </div>
+
+            <div class="comment-meta">
+              <span><a href="#">apagar</a></span>
+              <span>
+                        <a class="" role="button" data-toggle="collapse" href="#replyCommentT{{ i.id }}" aria-expanded="false" aria-controls="collapseExample">Responder</a>
+                      </span>
+              <div class="collapse" id="replyCommentT{{ i.id }}">
+                <form>
+                  <div class="form-group">
+                    <label for="comment">Responder:</label>
+                    <textarea name="comment" class="form-control" rows="3"></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-default">Postar</button>
+                </form>
+              </div>
+            </div>
+
+
+            {% for a in respostas %}
+            {% if a.forum == i %}
+              <div class="media">
+
+                <div class="media-heading">
+                  <button class="btn btn-default btn-collapse btn-xs" type="button" data-toggle="collapse" data-target="#collapseDois{{ a.id }}" aria-expanded="false" aria-controls="collapseExample"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button> <span class="label label-info">12314</span> {{ a.usuario }}
+                </div>
+
+                <div class="panel-collapse collapse in" id="collapseDois{{ a.id }}">
+
+
+                  <div class="media-body">
+                    <p>{{ a.resposta }}</p>
+                  </div>
+
+                  <!-- comment-meta -->
+                </div>
+              </div>
+            {% endif %}
+
+            {% endfor %}
+
+            </div>
+
+          </div>
+
+         &nbsp;
+
+        </div>
+      {% endfor %}
+      </div>
+      </div>
+
+
+</div>

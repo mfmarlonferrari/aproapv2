@@ -1,7 +1,10 @@
 {%include "header.html" %}
+{% load static %}
 
+<form method="post" action="/salvar_usuario/">
+{% csrf_token %}
 <div class="section">
-    <div class="background-image" style="background-image : url('{{ STATIC_URL }}../static/img/Rocket.jpg')"></div>
+    <div class="background-image" style="background-image : url('{% static 'static/img/usertesting.jpg' %}')"></div>
 <div class="container">
     <div class="row">
         <form role="form">
@@ -10,28 +13,28 @@
                 <div class="form-group">
                     <label for="InputName">Nome</label>
                     <div class="input-group">
-                        <input type="text" class="form-control" name="InputName" id="InputName" placeholder="Enter Name" required>
+                        <input type="text" class="form-control" name="usuario" id="InputName" placeholder="Enter Name" required>
                         <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="InputEmail">Email</label>
                     <div class="input-group">
-                        <input type="email" class="form-control" id="InputEmailFirst" name="InputEmail" placeholder="Enter Email" required>
+                        <input type="email" class="form-control" id="InputEmailFirst" name="email" placeholder="Enter Email" required>
                         <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="InputEmail">Confirmar Email</label>
                     <div class="input-group">
-                        <input type="email" class="form-control" id="InputEmailSecond" name="InputEmail" placeholder="Confirm Email" required>
+                        <input type="email" class="form-control" id="InputEmailSecond" name="emailConf" placeholder="Confirm Email" required>
                         <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="InputEmail">Escolha uma senha</label>
                     <div class="input-group">
-                        <input type="password" class="form-control" id="InputPassword" name="InputPassword" placeholder="Escolha uma senha" required>
+                        <input type="password" class="form-control" id="InputPassword" name="senha" placeholder="Escolha uma senha" required>
                         <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                     </div>
                 </div>
@@ -41,4 +44,6 @@
     </div>
 </div>
 </div>
+</form>
+
 {%include "footer.html" %}

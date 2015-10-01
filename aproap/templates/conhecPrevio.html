@@ -1,5 +1,6 @@
 {% include "header.html" %}
 <form class="salvaCerteza" method="post" action="/salvar_conhecimento/{{ espacoId }}/">
+    {% csrf_token %}
     <div class="section">
       <div class="background-image" style="background-image : url('http://images8.alphacoders.com/405/405672.jpg')"></div>
       <div class="container">

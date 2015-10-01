@@ -1,7 +1,9 @@
 {%include "header.html" %}
+{% load static %}
+
 <div class="section">
-            <div class="background-image" style="background-image : url('{{ STATIC_URL }}../static/img/Rocket.jpg')"></div>
-            <div class="container">
+    <div class="background-image" style="background-image : url('{% static 'static/img/usertesting.jpg' %}')"></div>
+       <div class="container">
 <div class="modal-dialog" id="mymodal">
     <div class="modal-dialog">
         <div class="modal-content">

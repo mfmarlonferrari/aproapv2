@@ -32,7 +32,7 @@ def cadastrar(request):
     c = RequestContext(request, context)
     return render_to_response('cadastrar.html', c)
 
-
+@login_required
 def salvaUsuario(request):
     try:
         usuario = request.POST['usuario']
@@ -59,6 +59,23 @@ def forum(request, slug):
     context = dict(slug=slug, postagens=postagens, respostas=respostasAoPost)
     c = RequestContext(request, context)
     return render_to_response('forum.html', c)
+
+
+def salvaPost(request, slug):
+    qualProjeto = espacoProjeto.objects.get(slugProjeto=slug)
+    texto = request.POST['post']
+    post = postagem.objects.create(usuario=request.user.username, texto=texto, pertence=qualProjeto)
+    post.save()
+    return HttpResponseRedirect("/forum/%s/" % slug)
+
+def salvaResposta(request, slug, postagemId):
+    qualPost = postagem.objects.get(pk=postagemId)
+    texto = request.POST['resposta']
+    post = respostas.objects.create(usuario=request.user.username, resposta=texto, forum=qualPost)
+    post.save()
+    return HttpResponseRedirect("/forum/%s/" % slug)
+
+
 
 @login_required
 def mapa(request, slug, unidade, itemslug):

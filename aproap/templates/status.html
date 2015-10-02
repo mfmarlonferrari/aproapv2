@@ -9,7 +9,7 @@
 </div>
 
 <div class="hotspot" style="top: 15.702479338842975%; left: 31.6781898177247%; width: 24.512884978001257%; height: 19.111570247933884%; background: transparent; border: 1px solid transparent; border-radius: 20px; opacity: 0.8" id="questaodeinvestigacao" data-location="top" data-template="" data-templatename="" data-opacity="0.8" data-backcolor="#000000" data-textcolor="#ffffff" data-textalign="center" data-margin="5" data-padding="10" data-width="0" data-delay="0" data-trigger="hover" data-issticky="true" data-hotspot-x="31.6781898177247" data-hotspot-y="15.702479338842975" data-hotspot-blink="false" data-hotspot-bgcolor="transparent" data-hotspot-bordercolor="transparent" data-hotspot-borderradius="20">
-<div class="data-container">{{ questaoDeInvestigacao }}</div>
+<div class="data-container">Espaço de debates sobre {{ questaoDeInvestigacao }}</div>
 </div>
 
 <div class="hotspot" style="top: 40.39256355979226%; left: 10.873664362036454%; width: 37.586423632935265%; height: 42.14876033057851%; background: transparent; border: 1px solid transparent; border-radius: 20px; opacity: 0.8" id="etapaatual" data-location="top" data-template="" data-templatename="" data-opacity="0.8" data-backcolor="#000000" data-textcolor="#ffffff" data-textalign="center" data-margin="5" data-padding="10" data-width="0" data-delay="0" data-trigger="hover" data-issticky="true" data-hotspot-x="10.873664362036454" data-hotspot-y="40.39256355979226" data-hotspot-blink="false" data-hotspot-bgcolor="transparent" data-hotspot-bordercolor="transparent" data-hotspot-borderradius="20">
@@ -46,7 +46,7 @@ spyElement.onmousedown = function () {
 var spyElement = document.getElementById("questaodeinvestigacao");
 var oldMousedown = spyElement.onmousedown;
 spyElement.onmousedown = function () {
-    window.location.href = "#QI";
+    window.location.href = "/forum/{{ pk }}/";
     if(oldMousedown) oldMousedown();
 };
 

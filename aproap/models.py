@@ -148,6 +148,7 @@ class postagem(models.Model):
     pertence = models.ForeignKey(espacoProjeto)
     texto = models.CharField(max_length=300)
 
+
 class respostas(models.Model):
     usuario = models.CharField(max_length=100)
     forum = models.ForeignKey(postagem)

@@ -3,17 +3,28 @@
 
 <link href="{% static 'static/css/forum.css' %}" rel="stylesheet">
 
+<div class="container">
+<div class="section">
+<ul class="breadcrumb">
+              <li>
+                <a href="/lobby/{{ slug }}/">Voltar ao lobby do projeto</a>
+              </li>
+</ul>
+</div>
+</div>
 
 <div class="container">
   <div class="post-comments">
-
+<form method="post" action="/salvar_postagem/{{ slug }}/">
+{% csrf_token %}
     <form>
       <div class="form-group">
         <label for="comment">Digite sua pergunta:</label>
-        <textarea name="comment" class="form-control" rows="3"></textarea>
+        <textarea name="post" class="form-control" rows="3"></textarea>
       </div>
       <button type="submit" class="btn btn-default">Postar</button>
     </form>
+</form>
 
     <div class="comments-nav">
       <ul class="nav nav-pills">
@@ -28,7 +39,6 @@
         </li>
       </ul>
     </div>
-
 
     {% for i in postagens %}
     <div class="row">
@@ -50,13 +60,17 @@
                         <a class="" role="button" data-toggle="collapse" href="#replyCommentT{{ i.id }}" aria-expanded="false" aria-controls="collapseExample">Responder</a>
                       </span>
               <div class="collapse" id="replyCommentT{{ i.id }}">
+
+              <form method="post" action="/salvar_resposta/{{ slug }}/{{ i.id }}/">
+              {% csrf_token %}
                 <form>
                   <div class="form-group">
                     <label for="comment">Responder:</label>
-                    <textarea name="comment" class="form-control" rows="3"></textarea>
+                    <textarea name="resposta" class="form-control" rows="3"></textarea>
                   </div>
                   <button type="submit" class="btn btn-default">Postar</button>
                 </form>
+               </form>
               </div>
             </div>
 

@@ -71,5 +71,9 @@ urlpatterns = patterns('',
     url(r'^salvar_mapa/(?P<slug>[\w-]+)/(?P<unidade>[0-9]+)/(?P<itemslug>[\w-]+)/$', 'aproap.views.salvaMapa',
         name='salvaMapa'),
     url(r'^forum/(?P<slug>[\w-]+)/$', 'aproap.views.forum', name='forum'),
+    url(r'^salvar_postagem/(?P<slug>[\w-]+)/$', 'aproap.views.salvaPost', name='salva_post'),
+    url(r'^salvar_resposta/(?P<slug>[\w-]+)/(?P<postagemId>[0-9]+)/$', 'aproap.views.salvaResposta',
+        name='salva_resposta'),
+
 
 )

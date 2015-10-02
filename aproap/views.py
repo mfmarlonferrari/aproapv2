@@ -11,6 +11,7 @@ from itertools import chain
 from datetime import datetime
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
+from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
@@ -49,7 +50,17 @@ def salvaUsuario(request):
 
 
 def contato(request):
-    return render_to_response('contato.html', {})
+    context = dict()
+    c = RequestContext(request, context)
+    return render_to_response('contato.html', c)
+
+def enviaEmail(request):
+    nome = request.POST['nome']
+    mensagem = request.POST['mensagem']
+    emailRetorno = request.POST['email']
+    salva = mensagemDeContato.objects.create(nome=nome, email=emailRetorno, mensagem=mensagem)
+    salva.save()
+    return HttpResponseRedirect('/contato/')
 
 @login_required
 def forum(request, slug):

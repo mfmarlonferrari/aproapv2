@@ -8,7 +8,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h4 class="modal-title">Novo espaço de projeto</h4>
+                <h4 class="modal-title">Novo espaço de projeto</h4>
           </div>
           <div class="modal-body">
             <form role="form">
@@ -37,7 +37,9 @@
               <center> Bem-vindo aos espaços de projeto de aprendizagem do AProAp! Você poderá
                 ingressar no espaço de sua turma a partir daqui. </center>
             </div>
-            <a class="btn btn-primary" data-toggle="modal" data-target="#myModal"><i class="fa fa-fw fa-folder-open"></i>Novo Espaço</a>
+            {% if user.is_staff %}
+                <a class="btn btn-primary" data-toggle="modal" data-target="#myModal"><i class="fa fa-fw fa-folder-open"></i>Novo Espaço</a>
+            {% endif %}
           </div>
         </div>
       </div>

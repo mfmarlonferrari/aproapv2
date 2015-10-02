@@ -153,3 +153,9 @@ class respostas(models.Model):
     usuario = models.CharField(max_length=100)
     forum = models.ForeignKey(postagem)
     resposta = models.CharField(max_length=300)
+
+
+class mensagemDeContato(models.Model):
+    nome = models.CharField(max_length=100)
+    email = models.CharField(max_length=50)
+    mensagem = models.TextField()

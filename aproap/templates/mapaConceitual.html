@@ -35,8 +35,8 @@ $(function() {
 });
 </script>
 
-
 <div id="container"></div>
+
 <form method="post" action="/salvar_mapa/{{ slug }}/{{ unidade }}/{{ itemslug }}/">
 {% csrf_token %}
   <div class="row">
@@ -62,5 +62,3 @@ $(function() {
 </div>
 
 </form>
-
-{% include "footer.html" %}

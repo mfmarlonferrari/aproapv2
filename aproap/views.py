@@ -603,8 +603,8 @@ def terminaEtapa3(request, pk):
         idProjeto.etapa = 4
         idProjeto.save()
         # pega as certezas e duvidas do projeto
-        qtdCertezas = conhecimento.objects.filter(qualProjeto=idProjeto, certezaOuDuvida=True)
-        qtdDuvidas = conhecimento.objects.filter(qualProjeto=idProjeto, certezaOuDuvida=False)
+        qtdCertezas = conhecimento.objects.filter(qualProjeto=idProjeto, certezaOuDuvida='C')
+        qtdDuvidas = conhecimento.objects.filter(qualProjeto=idProjeto, certezaOuDuvida='D')
         # une as certezas e duvidas
         uneConhecimento = list(chain(qtdCertezas, qtdDuvidas))
         # forma uma lista com sublista de 4 elementos contendo certezas e duvidas
@@ -654,11 +654,11 @@ def conhecimentoPrevio(request, slug):
     idProj = Projeto.objects.get(espaco=pk)
     #  filtra as certezas e duvidas que pertencem a este projeto e este usuario
     try:
-        certezas = conhecimento.objects.filter(qualProjeto=idProj, usuario=request.user.username, certezaOuDuvida=True)
+        certezas = conhecimento.objects.filter(qualProjeto=idProj, usuario=request.user.username, certezaOuDuvida='C')
     except:
         certezas = None
     try:
-        duvidas = conhecimento.objects.filter(qualProjeto=idProj, usuario=request.user.username, certezaOuDuvida=False)
+        duvidas = conhecimento.objects.filter(qualProjeto=idProj, usuario=request.user.username, certezaOuDuvida='D')
     except:
         duvidas = None
     context = dict(certezas=certezas, duvidas=duvidas, espacoId=pk)
@@ -676,9 +676,9 @@ def salvarConhecimento(request, pk):
         texto = p['conhecimento']
         # se houver uma interrogacao, trata-se de uma duvida
         if "?" in texto:
-            certezaOuDuvida = False
+            certezaOuDuvida = 'D'
         else:
-            certezaOuDuvida = True
+            certezaOuDuvida = 'C'
         conhec = conhecimento.objects.create(usuario=request.user.username, texto=texto, qualProjeto=idProj,
                                              certezaOuDuvida=certezaOuDuvida)
         conhec.save()

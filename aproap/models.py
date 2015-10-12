@@ -61,8 +61,8 @@ class conhecimento(models.Model):
     qualProjeto = models.ForeignKey(Projeto)
     usuario = models.CharField(max_length=100)
     texto = models.CharField(max_length=200)
-    # por convencao, True sera certeza e False sera duvida
-    certezaOuDuvida = models.BooleanField()
+    # por convencao, C sera certeza e D sera duvida
+    certezaOuDuvida = models.CharField(max_length=1)
 
     def __unicode__(self):
         return self.texto

@@ -23,8 +23,18 @@ def custom_login(request):
     else:
         return HttpResponseRedirect("/login2/")
 
+
 def index(request):
     return render_to_response('index.html', {})
+
+
+def sinteseQi(request, slug):
+    qualEspaco = espacoProjeto.objects.get(slugProjeto=slug)
+    projeto = Projeto.objects.get(espaco=qualEspaco)
+    conhecimentos = unidadeInvestigacao.objects.filter(qualProjeto=projeto)
+    context = dict(projeto=projeto, conhecimentos=conhecimentos)
+    c = RequestContext(request, context)
+    return render_to_response('mapaQI.html', c)
 
 
 def cadastrar(request):
@@ -295,6 +305,14 @@ def detalhesItem(request, slug, unidade, itemslug):
 @login_required
 def concluirItem(request, slug, unidade, itemslug):
     qualItem = unidadeInvestigacao.objects.select_for_update().filter(slugConhecimento=itemslug).update(status=100)
+    # cria um arquivo de texto da sintese
+    qualItem = unidadeInvestigacao.objects.get(slugConhecimento=itemslug)
+    titulo = 'SINTESE %s' %itemslug
+    texto = ''
+    historico = '%s criou a sintese' % request.user.username
+    doc = textoProduzido.objects.create(titulo=titulo, vinculadoItem=qualItem, texto=texto, historico=historico,
+                                        criador=request.user.username)
+    doc.save()
     return HttpResponseRedirect("/projeto/%s/unidade/%s/item/%s/" % (slug, unidade, itemslug))
 
 
@@ -729,9 +747,6 @@ def salvaTexto(request, slug, unidade, itemslug):
     titulo = request.POST.get('tituloDoc')
     texto = request.POST['conteudo']
     historico = '%s criou um documento' % request.user.username
-    response_data = {}
-    print texto
-    print historico
     doc = textoProduzido.objects.create(titulo=titulo, vinculadoItem=qualItem, texto=texto, historico=historico,
                                         criador=request.user.username)
     doc.save()

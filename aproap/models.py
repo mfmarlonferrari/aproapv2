@@ -122,7 +122,6 @@ class textoProduzido(models.Model):
     historico = models.CharField(max_length=300)
     data = models.DateTimeField(default=timezone.now())
 
-
 class conversa(models.Model):
     usuario = models.CharField(max_length=100)
     mensagem = models.CharField(max_length=200)

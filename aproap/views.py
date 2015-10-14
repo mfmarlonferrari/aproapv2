@@ -32,9 +32,18 @@ def sinteseQi(request, slug):
     qualEspaco = espacoProjeto.objects.get(slugProjeto=slug)
     projeto = Projeto.objects.get(espaco=qualEspaco)
     conhecimentos = unidadeInvestigacao.objects.filter(qualProjeto=projeto)
-    context = dict(projeto=projeto, conhecimentos=conhecimentos)
+    textos = textoProduzido.objects.filter(vinculadoItem__qualProjeto=projeto)
+    context = dict(projeto=projeto, conhecimentos=conhecimentos, textos=textos, slug=slug)
     c = RequestContext(request, context)
     return render_to_response('mapaQI.html', c)
+
+
+def mostraSintese(request, slug, itemslug):
+    titulo = 'SINTESE %s' %itemslug
+    texto = textoProduzido.objects.get(titulo=titulo)
+    context = dict(texto=texto, slug=slug, itemslug=itemslug)
+    c = RequestContext(request, context)
+    return render_to_response('visualizadorsintese.html', c)
 
 
 def cadastrar(request):

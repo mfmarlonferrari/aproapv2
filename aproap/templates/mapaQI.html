@@ -8,9 +8,12 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <link href="{% static 'static/css/MapViewer/js-mindmap.css' %}" rel="stylesheet">
   <link href="{% static 'static/css/MapViewer/style.css' %}" rel="stylesheet">
+  <link href="{% static 'static/css/litetooltip.min.css' %}" rel="stylesheet">
 
   <!-- jQuery -->
   <script src="{% static 'static/js/jquery-1.11.3.min.js' %}"></script>
+  <!-- LiteTooltip -->
+  <script src="{% static 'static/js/litetooltip.min.js' %}"></script>
   <!-- UI, for draggable nodes -->
   <script src="{% static 'static/js/jquery-ui.custom.min.js' %}"></script>
 
@@ -25,20 +28,17 @@
 
 </head>
 <body>
+
   <ul>
-    <li><a href="http://kenneth.kufluk.com/blog/">{{ projeto.questaoInvestigacao }}</a>
+    <li><a href="/projeto/{{ slug }}/sintese/">{{ projeto.questaoInvestigacao }}</a>
       <ul>
         {% for i in conhecimentos %}
-        <li><a href="http://kenneth.kufluk.com/blog/">{{ i.conhecimentoPrevio }}</a>
-          <ul>
-            {% for a in textos %}
-            <li><a href="http://kenneth.kufluk.com/blog/blog/general/" title="View all posts filed under General">{{ a.titulo }}</a></li>
-            {% endfor %}
-          </ul>
+        <li><a href="/projeto/{{ slug }}/{{ i.slugConhecimento }}/sintese/" title="teste">{{ i.conhecimentoPrevio }}</a>
         </li>
         {% endfor %}
       </ul>
     </li>
   </ul>
+
 </body>
 </html>

@@ -1,0 +1,40 @@
+{% load static %}
+
+<html><head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="{% static 'static/js/jquery-1.11.3.min.js' %}"></script>
+        <script src="{% static 'static/js/jquery.qtip.min.js' %}"></script>
+        <script src="{% static 'static/js/bootstrap.min.js' %}"></script>
+        <link href="{% static 'static/css/font-awesome.min.css' %}" rel="stylesheet">
+        <link href="{% static 'static/css/jquery.qtip.min.css' %}" rel="stylesheet">
+        <link href="{% static 'static/css/bootstrap.css' %}" rel="stylesheet">
+        <link href="{% static 'static/css/metisMenu.css' %}" rel="stylesheet">
+        <link href="{% static 'static/css/sb-admin-2.css' %}" rel="stylesheet">
+        <link href="{% static 'static/css/litetooltip.min.css' %}" rel="stylesheet">
+        <link href="{% static 'static/css/rateit.css' %}" rel="stylesheet">
+        <script src="{% static 'static/js/jquery.rateit.js' %}"></script>
+        <script src="{% static 'static/js/jquery.cookie.js' %}"></script>
+        <script src="{% static 'static/js/litetooltip.min.js' %}"></script>
+        <script src="//cdn.ckeditor.com/4.5.3/full/ckeditor.js"></script>
+{#      <script src="{% static 'static/js/areaDeTrabalho.js' %}"></script>#}
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head><body>
+
+    <div class="section">
+        <div class="container">
+            <textarea id="conteudo" disabled name="conteudo">{{ texto.texto }}</textarea>
+		    <script type="text/javascript">
+		        CKEDITOR.replace( 'conteudo', {
+                    toolbar: 'Full',
+                    uiColor: '#B7CDD1'
+                });
+		    </script>
+        </div>
+    </div>
+
+</body>
+</html>

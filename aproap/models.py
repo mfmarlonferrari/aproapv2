@@ -158,3 +158,14 @@ class mensagemDeContato(models.Model):
     nome = models.CharField(max_length=100)
     email = models.CharField(max_length=50)
     mensagem = models.TextField()
+
+
+class historicoAluno(models.Model):
+    aluno = models.CharField(max_length=100)
+    tarefa = models.CharField(max_length=200)
+    data = models.DateTimeField()
+    qualEspaco = models.ForeignKey(espacoProjeto)
+    link = models.CharField(max_length=200)
+
+    def __unicode__(self):
+        return "%s %s" %(self.aluno, self.tarefa)

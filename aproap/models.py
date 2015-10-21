@@ -166,6 +166,7 @@ class historicoAluno(models.Model):
     data = models.DateTimeField()
     qualEspaco = models.ForeignKey(espacoProjeto)
     link = models.CharField(max_length=200)
+    tipoConteudo = models.CharField(max_length=100)
 
     def __unicode__(self):
         return "%s %s" %(self.aluno, self.tarefa)

@@ -16,10 +16,10 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 register = template.Library()
 
-def escreveHistorico(aluno, tarefa, data, slug, link):
+def escreveHistorico(aluno, tarefa, data, slug, link, tipo):
     qualProjeto = espacoProjeto.objects.get(slugProjeto=slug)
     registro = historicoAluno.objects.create(aluno=aluno, tarefa=tarefa, data=data,
-                                             qualEspaco=qualProjeto, link=link)
+                                             qualEspaco=qualProjeto, link=link, tipoConteudo=tipo)
     registro.save()
 
 
@@ -107,7 +107,8 @@ def salvaPost(request, slug):
     post.save()
     tarefa = 'criou um post no forum'
     link = 'nada ainda'
-    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link)
+    tipo = 'Social'
+    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link, tipo)
     return HttpResponseRedirect("/forum/%s/" % slug)
 
 def salvaResposta(request, slug, postagemId):
@@ -117,7 +118,8 @@ def salvaResposta(request, slug, postagemId):
     post.save()
     tarefa = 'respondeu um assunto no forum'
     link = 'nada ainda'
-    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link)
+    tipo = 'Social'
+    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link, tipo)
     return HttpResponseRedirect("/forum/%s/" % slug)
 
 
@@ -153,13 +155,15 @@ def salvaMapa(request, slug, unidade, itemslug):
             pertence=itemslug, usuario=request.user.username).update(conceitosRelacoes=texto)
         tarefa = 'editou seu mapa conceitual sobre %s' %itemslug
         link = 'nada ainda'
-        escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link)
+        tipo = 'Conteudo'
+        escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link, tipo)
     else:
         a = mapaConceitual.objects.create(pertence=itemslug, usuario=request.user.username, conceitosRelacoes=texto)
         a.save()
         tarefa = 'criou seu mapa conceitual sobre %s' %itemslug
+        tipo = 'Conteudo'
         link = 'nada ainda'
-        escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link)
+        escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link, tipo)
     return HttpResponseRedirect("/projeto/%s/%s/%s/mapas_conceituais/editor/" % (slug, unidade, itemslug))
 
 
@@ -238,7 +242,8 @@ def vincularItem(request, id, unidade, pk):
     qualItem = unidadeInvestigacao.objects.get(id=pk).conhecimentoPrevio
     tarefa = 'ficou responsavel pelo item %s' %qualItem
     link = 'nada ainda'
-    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link)
+    tipo = 'Atitude'
+    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link, tipo)
     return HttpResponseRedirect("/projeto/%s/unidade/%s/detalhes/" % (slug, unidade))
 
 
@@ -262,8 +267,19 @@ def inserirIdeia(request, slug):
 
 
 @login_required
+def showHistorico(request, slug, unidade):
+    projetoId = espacoProjeto.objects.get(slugProjeto=slug)
+    qualProjeto = Projeto.objects.get(espaco=projetoId)
+    historico = historicoAluno.objects.filter(qualEspaco=projetoId).order_by("-data")
+    context = dict(slug=slug, unidade=unidade, historico=historico, qualProjeto=qualProjeto)
+    c = RequestContext(request, context)
+    return render_to_response('timelineProjeto.html', c)
+
+
+@login_required
 def detalhesUnidade(request, slug, unidade):
     pk = espacoProjeto.objects.get(slugProjeto=slug).id
+    qualEspaco = espacoProjeto.objects.get(slugProjeto=slug)
     idProjeto = Projeto.objects.get(espaco=pk)
     # carrega as mensagens automaticas do usuario
     mensagens = mensagemAssistente.objects.filter(usuario=request.user.username)
@@ -292,10 +308,12 @@ def detalhesUnidade(request, slug, unidade):
     somaUnidadeValor = somaUnidade['total']
     qtdItens = unidadeInvestigacao.objects.filter(qualProjeto=idProjeto, nomeDoBloco=unidade).count()
     mediaDaUnidade = somaUnidadeValor / qtdItens
+    #carrega o historico da unidade
+    historico = historicoAluno.objects.filter(qualEspaco=qualEspaco).order_by("data").reverse()[:7]
     context = dict(pendentes=pendentes, espacoId=pk, unidade=unidade,
                    qtdPendentes=qtdPendentes, todos=todos, semCronograma=semCronograma, desteUsuario=desteUsuario,
                    mediaDaUnidade=mediaDaUnidade, slug=slug, qtdAjuda=qtdAjuda,
-                   ajuda=ajuda, qtdCompletados=qtdCompletados, mensagens=mensagens)
+                   ajuda=ajuda, qtdCompletados=qtdCompletados, mensagens=mensagens, historico=historico)
     c = RequestContext(request, context)
     return render_to_response('detalhesUnidade.html', c)
 
@@ -347,7 +365,8 @@ def concluirItem(request, slug, unidade, itemslug):
     doc.save()
     tarefa = 'concluiu os trabalhos do item %s' %itemslug
     link = 'nada ainda'
-    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link)
+    tipo = 'Atitude'
+    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link, tipo)
     return HttpResponseRedirect("/projeto/%s/unidade/%s/item/%s/" % (slug, unidade, itemslug))
 
 
@@ -373,7 +392,8 @@ def salvarElementoTextual(request, slug, unidade, itemslug):
     a.save()
     tarefa = 'criou o elemento textual %s em %s' %(titulo, itemslug)
     link = 'nada ainda'
-    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link)
+    tipo = 'Conteudo'
+    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link, tipo)
     return HttpResponseRedirect("/projeto/%s/%s/%s/elementos_textuais/" % (slug, unidade, itemslug))
 
 
@@ -389,7 +409,8 @@ def insereTarefa(request, slug, unidade, itemslug):
     salva.save()
     tarefa = 'inseriu a tarefa %s em %s' %(titulo, itemslug)
     link = 'nada ainda'
-    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link)
+    tipo = 'Atitude'
+    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link, tipo)
     # recalcula o status do item
     # media do progresso
     qtdTarefasGeral = tarefasItem.objects.filter(vinculoConhecimento=qualItemId).count()
@@ -415,7 +436,8 @@ def insereItem(request, slug, unidade):
     salva.save()
     tarefa = 'inseriu o item %s em %s' %(titulo, slug)
     link = 'nada ainda'
-    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link)
+    tipo = 'Atitude'
+    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link, tipo)
     return HttpResponseRedirect("/projeto/%s/unidade/%s/detalhes/" % (slug, unidade))
 
 
@@ -425,7 +447,8 @@ def vincularTarefa(request, slug, unidade, itemslug, slugtarefa):
         responsavel=request.user.username)
     tarefa = 'ficou responsavel pela tarefa %s em %s' %(slugtarefa, itemslug)
     link = 'nada ainda'
-    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link)
+    tipo = 'Atitude'
+    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link, tipo)
     return HttpResponseRedirect("/projeto/%s/unidade/%s/item/%s/" % (slug, unidade, itemslug))
 
 
@@ -496,7 +519,8 @@ def vinculaDocItem(request, slug, unidade, itemslug, idDoc):
     documento = qualDocumento.titulo
     tarefa = 'vinculou o texto %s a tarefa %s' %(documento, tarefa)
     link = 'nada ainda'
-    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link)
+    tipo = 'Atitude'
+    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link, tipo)
     return HttpResponseRedirect("/projeto/%s/%s/%s/elementos_textuais/visualizando/%s/" % (slug, unidade,
                                                                                            itemslug, qualDocumento.id))
 
@@ -551,6 +575,16 @@ def salvarEspaco(request):
         link = "/projeto/%s/ideias" % slug
         part = alunosNoProjeto.objects.create(projeto=idProjeto, aluno=request.user.username, ondeparou=link)
         part.save()
+        #primeiro o registro da criacao do espaco
+        tarefa = 'criou o espaco de projeto %s' %espaco
+        link = 'nada ainda'
+        tipo = 'Admin'
+        escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link, tipo)
+        #agora, o registro de inicio da etapa 1
+        tarefa = 'Inicio da etapa 1: Levantamento de QIs em %s' %espaco
+        link = 'nada ainda'
+        tipo = 'Etapa'
+        escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link, tipo)
         return HttpResponseRedirect("/espacos/")
 
 
@@ -565,7 +599,8 @@ def salvarIdeia(request, pk):
     doc.save()
     tarefa = 'inseriu a ideia %s' %ideia
     link = 'nada ainda'
-    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link)
+    tipo = 'Conteudo'
+    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link, tipo)
     return HttpResponseRedirect("/projeto/%s/ideias/" % slug)
 
 
@@ -593,18 +628,23 @@ def lobbyProjeto(request, slug):
 @login_required
 def terminaEtapa1(request, pk):
     idProjeto = Projeto.objects.get(espaco=pk)
-    slug = espacoProjeto.objects.get(id=idProjeto).slugProjeto
+    slug = espacoProjeto.objects.get(id=idProjeto.id).slugProjeto
     atualiza = alunosNoProjeto.objects.get(projeto=idProjeto, aluno=request.user.username)
     atualiza.etapaAtual = 2
-    link = '/projeto/%s/votar/' % slug
+    linkEtapa = '/projeto/%s/votar/' % slug
     atualiza.save()
     # verifica se todos os alunos do projeto estao em status 2
     if alunosNoProjeto.objects.filter(projeto=idProjeto).count() == alunosNoProjeto.objects.filter(projeto=idProjeto,
                                                                                                    etapaAtual=2).count():
+        #agora, o registro de inicio da etapa 2
+        tarefa = 'Inicio da etapa 2: Escolha da QI'
+        link = 'nada ainda'
+        tipo = 'Etapa'
+        escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link, tipo)
         idProjeto.etapa = 2
         idProjeto.save()
         # atualiza o campo ondeparou de todos os alunos do projeto
-        a = alunosNoProjeto.objects.filter(projeto=idProjeto).update(ondeparou=link)
+        a = alunosNoProjeto.objects.filter(projeto=idProjeto).update(ondeparou=linkEtapa)
         return HttpResponseRedirect("/projeto/%s/votar/" % slug)
     else:
         return HttpResponseRedirect("/espacos/")
@@ -613,14 +653,20 @@ def terminaEtapa1(request, pk):
 @login_required
 def terminaEtapa2(request, pk):
     idProjeto = Projeto.objects.get(espaco=pk)
+    qualQuestao = idProjeto.questaoInvestigacao
     slug = espacoProjeto.objects.get(pk=pk).slugProjeto
     atualiza = alunosNoProjeto.objects.get(projeto=idProjeto, aluno=request.user.username)
     atualiza.etapaAtual = 3
-    link = '/projeto/%s/conhecimento_previo/' % slug
+    linkEtapa = '/projeto/%s/conhecimento_previo/' % slug
     atualiza.save()
     # verifica se todos os alunos do projeto estao em status 3
     if alunosNoProjeto.objects.filter(projeto=idProjeto).count() == alunosNoProjeto.objects.filter(projeto=idProjeto,
                                                                                                    etapaAtual=3).count():
+        #agora, o registro de inicio da etapa 3
+        tarefa = 'Inicio da etapa 3: Conhecimento Previo sobre %s' %qualQuestao
+        link = 'nada ainda'
+        tipo = 'Etapa'
+        escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link, tipo)
         idQuestao = ideaDeQuestao.objects.filter(espaco=pk)
         # Soma todos os votos de uma questao
         somaDosVotos = ideaDeQuestao.objects.filter(espaco=pk).annotate(total=Sum('votosquestao__classificacao'))
@@ -655,7 +701,7 @@ def terminaEtapa2(request, pk):
             idProjeto.questaoInvestigacao = listaDecrescente[0].texto
             idProjeto.save()
             # atualiza o campo ondeparou de todos os alunos do projeto
-            a = alunosNoProjeto.objects.filter(projeto=idProjeto).update(ondeparou=link)
+            a = alunosNoProjeto.objects.filter(projeto=idProjeto).update(ondeparou=linkEtapa)
             return HttpResponseRedirect("/lobby/%s/" % slug)
     else:
         return HttpResponseRedirect("/espacos/")
@@ -667,11 +713,16 @@ def terminaEtapa3(request, pk):
     slug = espacoProjeto.objects.get(pk=pk).slugProjeto
     atualiza = alunosNoProjeto.objects.get(projeto=idProjeto, aluno=request.user.username)
     atualiza.etapaAtual = 4
-    link = '/projeto/%s/unidades/' % slug
+    linkEtapa = '/projeto/%s/unidades/' % slug
     atualiza.save()
     # verifica se todos os alunos do projeto estao em status 2
     if alunosNoProjeto.objects.filter(projeto=idProjeto).count() == alunosNoProjeto.objects.filter(projeto=idProjeto,
                                                                                                    etapaAtual=4).count():
+        #agora, o registro de inicio da etapa 4
+        tarefa = 'Inicio da etapa 4: Unidades de investigacao sobre %s' %idProjeto.questaoInvestigacao
+        link = 'nada ainda'
+        tipo = 'Etapa'
+        escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link, tipo)
         idProjeto.etapa = 4
         idProjeto.save()
         # pega as certezas e duvidas do projeto
@@ -690,7 +741,7 @@ def terminaEtapa3(request, pk):
                                                        slugConhecimento=slugCon)
                 a.save()
         # atualiza o campo ondeparou de todos os alunos do projeto
-        a = alunosNoProjeto.objects.filter(projeto=idProjeto).update(ondeparou=link)
+        a = alunosNoProjeto.objects.filter(projeto=idProjeto).update(ondeparou=linkEtapa)
         return HttpResponseRedirect("/lobby/%s/" % slug)
     else:
         return HttpResponseRedirect("/espacos/")
@@ -756,7 +807,8 @@ def salvarConhecimento(request, pk):
         conhec.save()
         tarefa = 'inseriu o item de conhecimento %s' %texto
         link = 'nada ainda'
-        escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link)
+        tipo = 'Conteudo'
+        escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link, tipo)
         return HttpResponseRedirect("/projeto/%s/conhecimento_previo/" % slug)
     else:
         return HttpResponseRedirect("/projeto/%s/conhecimento_previo/" % slug)
@@ -788,13 +840,15 @@ def participarProjeto(request, slug):
 
     tarefa = 'entrou no projeto %s na etapa %s' %(slug, idProj.etapa)
     link = 'nada ainda'
-    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link)
+    tipo = 'Atitude'
+    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link, tipo)
     return HttpResponseRedirect("/lobby/%s/" % slug)
 
 
 @login_required
 def unidadesInvestigacao(request, slug, unidade=None):
     idProjeto = espacoProjeto.objects.get(slugProjeto=slug).id
+    #pega os nomes dos blocos
     numeroUnidades = unidadeInvestigacao.objects.filter(qualProjeto=idProjeto).values_list('nomeDoBloco',
                                                                                            flat=True).distinct()
     lista = unidadeInvestigacao.objects.filter(qualProjeto=idProjeto, nomeDoBloco=unidade)
@@ -808,7 +862,8 @@ def precisaAjuda(request, slug, unidade, itemslug):
     item = unidadeInvestigacao.objects.select_for_update().filter(slugConhecimento=itemslug).update(precisaAjuda=1)
     tarefa = 'precisou de ajuda em %s' %itemslug
     link = 'nada ainda'
-    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link)
+    tipo = 'Atitude'
+    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link, tipo)
     return HttpResponseRedirect("/projeto/%s/unidade/%s/item/%s/" % (slug, unidade, itemslug))
 
 
@@ -831,7 +886,8 @@ def salvaTexto(request, slug, unidade, itemslug):
     doc.save()
     tarefa = 'redigiu o texto %s' %titulo
     link = 'nada ainda'
-    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link)
+    tipo = 'Conteudo'
+    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link, tipo)
     docAtual = textoProduzido.objects.get(texto=texto).id
     return HttpResponseRedirect(
         "/projeto/%s/%s/%s/elementos_textuais/editando/%s" % (slug, unidade, itemslug, docAtual))
@@ -846,5 +902,6 @@ def atualizaTexto(request, slug, unidade, itemslug, id):
     doc = textoProduzido.objects.select_for_update().filter(pk=id).update(texto=texto, historico=historico)
     tarefa = 'editou um texto em %s' %itemslug
     link = 'nada ainda'
-    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link)
+    tipo = 'Conteudo'
+    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link, tipo)
     return HttpResponseRedirect("/projeto/%s/%s/%s/elementos_textuais/editando/%s" % (slug, unidade, itemslug, id))

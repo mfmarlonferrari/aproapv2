@@ -78,6 +78,8 @@ urlpatterns = patterns('',
     url(r'^salvar_postagem/(?P<slug>[\w-]+)/$', 'aproap.views.salvaPost', name='salva_post'),
     url(r'^salvar_resposta/(?P<slug>[\w-]+)/(?P<postagemId>[0-9]+)/$', 'aproap.views.salvaResposta',
         name='salva_resposta'),
+    url(r'^projeto/(?P<slug>[\w-]+)/unidade/(?P<unidade>[0-9]+)/historico/$', 'aproap.views.showHistorico',
+        name='show_historico'),
 
 
 )

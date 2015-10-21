@@ -1,0 +1,75 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href='http://fonts.googleapis.com/css?family=Droid+Serif|Open+Sans:400,700' rel='stylesheet' type='text/css'>
+
+    <link href="{% static 'static/css/Timeline/reset.css' %}" rel="stylesheet">
+    <link href="{% static 'static/css/Timeline/style.css' %}" rel="stylesheet">
+    <script src="{% static 'static/js/Timeline/modernizr.js' %}"></script>
+
+  	
+	<title> Linha do tempo {{ slug }}</title>
+</head>
+<body>
+	<header>
+		<h1>Linha do tempo - "{{ qualProjeto.questaoInvestigacao }}"</h1>
+	</header>
+
+	<section id="cd-timeline" class="cd-container">
+    {% for i in historico %}
+        <!-- Se for do tipo etapa, exibe a linha diferente -->
+        {% if i.tipoConteudo == 'Etapa' %}
+        <div class="cd-timeline-block">
+			<div class="cd-timeline-img cd-movie">
+				<img src="{% static 'static/img/Timeline/cd-icon-location.svg' %}" alt="Movie">
+			</div> <!-- cd-timeline-img -->
+
+			<div class="cd-timeline-content">
+				    <h2>{{ i.tarefa }}</h2>
+                    <p>{{ i.tarefa }} em {{ i.data }}.  </p>
+
+				<a href="#0" class="cd-read-more">Ver</a>
+				<span class="cd-date">{{ i.data }}</span>
+			</div> <!-- cd-timeline-content -->
+
+		</div> <!-- cd-timeline-block -->
+       {% elif i.tipoConteudo != 'Etapa' %}
+       <!-- Se nao for etapa -->
+		<div class="cd-timeline-block">
+			<div class="cd-timeline-img cd-movie">
+				<img src="{% static 'static/img/Timeline/mail.png' %}" alt="Movie">
+			</div> <!-- cd-timeline-img -->
+
+			<div class="cd-timeline-content">
+                {% if i.tipoConteudo == 'Conteudo' %}
+				    <h2>Conteúdo construído por {{ i.aluno }}</h2>
+                    <p>{{ i.aluno }} {{ i.tarefa }}, realizando uma tarefa do tipo {{ i.tipoConteudo }} em {{ i.data }}.  </p>
+                {% elif i.tipoConteudo == 'Atitude' %}
+				    <h2>{{ i.aluno }} tomou uma atitude!</h2>
+                    <p>{{ i.aluno }} {{ i.tarefa }}, realizando uma tarefa do tipo {{ i.tipoConteudo }} em {{ i.data }}.  </p>
+                {% elif i.tipoConteudo == 'Admin' %}
+				    <h2>Tarefa administrativa</h2>
+                    <p>{{ i.aluno }} {{ i.tarefa }}, realizando uma tarefa do tipo {{ i.tipoConteudo }} em {{ i.data }}.  </p>
+                {% elif i.tipoConteudo == 'Social' %}
+				    <h2>{{ i.aluno }} interagiu!</h2>
+                    <p>{{ i.aluno }} {{ i.tarefa }}, realizando uma tarefa do tipo {{ i.tipoConteudo }} em {{ i.data }}.  </p>
+                {% endif %}
+
+				<a href="#0" class="cd-read-more">Ver</a>
+				<span class="cd-date">{{ i.data }}</span>
+			</div> <!-- cd-timeline-content -->
+
+		</div> <!-- cd-timeline-block -->
+      {% endif %}
+    {% endfor %}
+	</section> <!-- cd-timeline -->
+
+<script src="{% static 'static/js/jquery-1.11.3.min.js' %}"></script>
+<script src="{% static 'static/js/Timeline/main.js' %}"></script>
+</body>
+</html>

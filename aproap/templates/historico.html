@@ -1,0 +1,69 @@
+{% include "header.html" %}
+
+<body>
+    <div class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <ul class="breadcrumb">
+              <li>
+                <a href="/lobby/{{ slug }}/">Início</a>
+              </li>
+              <li>
+                <a href="/projeto/{{ slug }}/unidade/{{ unidade }}/detalhes/">Unidade {{ unidade }}</a>
+              </li>
+              <li class="active">Histórico da unidade</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <ul class="list-group">
+              {% for aviso in historico %}
+                  <a href="#" class="list-group-item">
+                                    <i class="fa fa-tasks fa-fw"></i> {{ aviso.tarefa }}
+                                    <span class="pull-right text-muted small"><em>{{ aviso.data }}</em>
+                                    </span>
+                                </a>
+                  {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section text-right">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <ul class="pagination">
+              <li>
+                <a href="#">Prev</a>
+              </li>
+              <li>
+                <a href="#">1</a>
+              </li>
+              <li>
+                <a href="#">2</a>
+              </li>
+              <li>
+                <a href="#">3</a>
+              </li>
+              <li>
+                <a href="#">4</a>
+              </li>
+              <li>
+                <a href="#">5</a>
+              </li>
+              <li>
+                <a href="#">Next</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>

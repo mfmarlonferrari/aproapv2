@@ -10,9 +10,10 @@
               <div class="form-group has-feedback">
               {% csrf_token %}
                 <label class="control-label">O que você sabe ou precisará saber sobre a questão de investigação?</label>
-                <input class="form-control input-lg" type="text" name="conhecimento">
-                  <span class="fa fa-check form-control-feedback"></span>
+                <input class="form-control input-lg" type="text" name="conhecimento" required>
+                <span class="fa fa-check form-control-feedback"></span>
               <button type="submit" class="btn btn-default">Enviar</button>
+              </div>
               </form>
           </div>
           </div>

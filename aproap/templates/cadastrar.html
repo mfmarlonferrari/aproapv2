@@ -1,6 +1,20 @@
 {%include "header.html" %}
 {% load static %}
 
+{% if erro == 'erro' %}
+<div class="alert alert-danger alert-dismissable">
+              <button contenteditable="false" type="button" class="close" data-dismiss="alert"
+              aria-hidden="true">×</button>
+              <strong>Ops!</strong>&nbsp;Verifique as informações e tente novamente.
+</div>
+{% elif erro == 'existente' %}
+<div class="alert alert-danger alert-dismissable">
+              <button contenteditable="false" type="button" class="close" data-dismiss="alert"
+              aria-hidden="true">×</button>
+              <strong>Ops!</strong>&nbsp;Este nome de usuário já existe. Tente outro.
+</div>
+{% endif %}
+
 <form method="post" action="/salvar_usuario/">
 {% csrf_token %}
 <div class="section">
@@ -13,21 +27,28 @@
                 <div class="form-group">
                     <label for="InputName">Nome</label>
                     <div class="input-group">
-                        <input type="text" class="form-control" name="usuario" id="InputName" placeholder="Enter Name" required>
+                        <input type="text" class="form-control" name="nome" id="InputName" placeholder="Nome" required>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="InputName">Sobrenome</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="sobrenome" id="InputName" placeholder="Sobrenome" required>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="InputName">Seu nome de usuário</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="usuario" id="InputName" placeholder="Nome de usuário" required>
                         <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="InputEmail">Email</label>
                     <div class="input-group">
-                        <input type="email" class="form-control" id="InputEmailFirst" name="email" placeholder="Enter Email" required>
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="InputEmail">Confirmar Email</label>
-                    <div class="input-group">
-                        <input type="email" class="form-control" id="InputEmailSecond" name="emailConf" placeholder="Confirm Email" required>
+                        <input type="email" class="form-control" id="InputEmailFirst" name="email" placeholder="Email" required>
                         <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                     </div>
                 </div>

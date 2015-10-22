@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, include, url
+from django.conf import settings
 from django.contrib import admin
 
 urlpatterns = patterns('',
@@ -8,6 +9,7 @@ urlpatterns = patterns('',
     url(r'^login/$', 'aproap.views.custom_login', name='verifLogin'),
     url(r'^login2/$', 'django.contrib.auth.views.login', {'template_name':'login.html'}),
     url(r'^cadastrar/$', 'aproap.views.cadastrar', name='cadastrar'),
+    url(r'^cadastrar/(?P<erro>[\w-]+)/$', 'aproap.views.cadastrarErro', name='cadastrarErro'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/login2/'}),
     url(r'^salvar_usuario/$', 'aproap.views.salvaUsuario', name='salvaUsuario'),
     url(r'^projeto/(?P<slug>[\w-]+)/sintese/$', 'aproap.views.sinteseQi', name='sinteseQi'),
@@ -80,6 +82,14 @@ urlpatterns = patterns('',
         name='salva_resposta'),
     url(r'^projeto/(?P<slug>[\w-]+)/unidade/(?P<unidade>[0-9]+)/historico/$', 'aproap.views.showHistorico',
         name='show_historico'),
+    url(r'^perfil/(?P<usuario>[\w-]+)/$', 'aproap.views.perfilUsuario',
+        name='perfil'),
+    url(r'^salvar_perfil/$', 'aproap.views.salvaPerfil',
+        name='salvar_perfil'),
 
 
 )
+
+#MEDIA
+if settings.DEBUG:
+  urlpatterns.append(url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}))

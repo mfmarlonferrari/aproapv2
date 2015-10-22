@@ -1,0 +1,159 @@
+{% include "header.html" %}
+
+<div class="modal fade" id="editaPerfil">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title">Editar Perfil</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal" method="post" enctype="multipart/form-data" action="/salvar_perfil/">
+             {% csrf_token %}
+                <div class="form-group">
+                    <div class="col-sm-2">
+                        <label class="control-label">Avatar do perfil</label>
+                    </div>
+                    <div class="col-sm-10">
+                        <input type="file" id="avatarUpload" name="avatarUpload">
+                    </div>
+                </div>
+              <div class="form-group has-feedback">
+                <div class="col-sm-2">
+                  <label for="nome" class="control-label">Nome</label>
+                </div>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome"
+                         value="{{ perfil.nome }}">
+                </div>
+              </div>
+              <div class="form-group has-feedback">
+                <div class="col-sm-2">
+                  <label for="sobrenome" class="control-label">Sobrenome</label>
+                </div>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="sobrenome" name="sobrenome" placeholder="Sobrenome"
+                         value="{{ perfil.sobrenome }}">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-2">
+                  <label for="educacao" class="control-label">Educação</label>
+                </div>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="educacao" name="educacao"
+                         placeholder="Escola, universidade, centro, etc." value="{{ perfil.educacao }}">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-2">
+                  <label for="curso" class="control-label">Curso</label>
+                </div>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="curso" name="curso"
+                         placeholder="Curso que frequenta, assiste ou leciona" value="{{ perfil.curso }}">
+                </div>
+              </div>
+              <div class="modal-footer">
+                  <a class="btn btn-default" data-dismiss="modal">Fechar</a>
+                  <button class="btn btn-default" type="submit">Salvar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+</div>
+
+    <div class="modal fade" id="enviaMensagem">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title">Enviar mensagem para {{ usuario }}</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal" method="post" action="/enviar_mensagem/">
+            {% csrf_token %}
+              <div class="form-group has-feedback">
+                <div class="col-sm-2">
+                  <label for="inputEmail3" class="control-label">Assunto</label>
+                </div>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="inputEmail3" name="assunto" placeholder="Assunto da mensagem">
+                </div>
+              </div>
+            <div class="form-group"><div class="col-sm-2"><label class="control-label">Mensagem</label></div><div class="col-sm-10"><textarea class="form-control" name="mensagem"></textarea></div></div>
+            <div class="modal-footer">
+                <a class="btn btn-default" data-dismiss="modal">Fechar</a>
+                <button class="btn btn-primary" type="submit">Salvar</button>
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<body>
+
+
+<div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad" >
+
+
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h3 class="panel-title">{{ nomeCompleto }}</h3>
+            </div>
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-md-3 col-lg-3 " align="center"> <img alt="User Pic" src="{{ MEDIA_URL }}{{ perfil.avatar }}" class="img-circle img-responsive"> </div>
+
+                <div class=" col-md-9 col-lg-9 ">
+                  <table class="table table-user-information">
+                    <tbody>
+                      <tr>
+                        <td>Educação:</td>
+                        <td>{{ perfil.educacao }}</td>
+                      </tr>
+                      <tr>
+                        <td>Curso:</td>
+                        <td>{{ perfil.curso }}</td>
+                      </tr>
+                      <tr>
+                        <td>No ambiente desde:</td>
+                        <td>{{ qualUsuario.date_joined|date:"d M, Y" }}</td>
+                      </tr>
+                      <tr>
+                        <td>Último login:</td>
+                        <td>{{ qualUsuario.last_login|date:"d M, Y" }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <a href="#" class="btn btn-primary">Projetos que participo</a>
+                </div>
+              </div>
+            </div>
+                 <div class="panel-footer">
+                     {% if user.username != usuario %}
+                        <a data-original-title="Broadcast Message" data-toggle="modal" data-target="#enviaMensagem" type="button" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-envelope"></i></a>
+                     {% else %}
+                        <a data-original-title="Broadcast Message" data-toggle="modal" data-target="#enviaMensagem" type="button" class="btn btn-sm btn-primary disabled"><i class="glyphicon glyphicon-envelope"></i></a>
+                     {% endif %}
+                     {% if user.username == usuario %}
+                     <span class="pull-right">
+                            <a href="#" data-original-title="Edit this user" data-toggle="modal" data-target="#editaPerfil" type="button" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-edit"></i></a>
+                            <a data-original-title="Remove this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-remove"></i></a>
+                        </span>
+                     {% endif %}
+                    </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+</body>
+
+{% include "footer.html" %}

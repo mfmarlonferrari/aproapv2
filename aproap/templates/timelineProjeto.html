@@ -1,10 +1,5 @@
 {% load static %}
-
-<!doctype html>
-<html lang="en" class="no-js">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+{% include "header.html" %}
 
 	<link href='http://fonts.googleapis.com/css?family=Droid+Serif|Open+Sans:400,700' rel='stylesheet' type='text/css'>
 
@@ -14,11 +9,28 @@
   	
 	<title> Linha do tempo {{ slug }}</title>
 
-</head>
 <body>
 	<header>
 		<h1>Linha do tempo - "{{ qualProjeto.questaoInvestigacao }}"</h1>
 	</header>
+
+<div class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <ul class="breadcrumb">
+              <li>
+                <a href="/lobby/{{ slug }}/">Início</a>
+              </li>
+              <li>
+                <a href="/projeto/{{ slug }}/unidade/{{ unidade }}/detalhes/">Unidade {{ unidade }}</a>
+              </li>
+              <li class="active">Histórico da unidade</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
 
 	<section id="cd-timeline" class="cd-container">
     {% for i in historico %}

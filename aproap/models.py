@@ -2,9 +2,17 @@ from django.db import models
 from datetime import datetime
 from django.utils import timezone
 
-class Usuarios(models.Model):
-    nomeCompleto = models.CharField(max_length=100)
 
+class Usuarios(models.Model):
+    nome = models.CharField(max_length=100)
+    sobrenome = models.CharField(max_length=100)
+    curso = models.CharField(max_length=100, blank=True)
+    educacao = models.CharField(max_length=100, blank=True)
+    avatar = models.ImageField(blank=True)
+    nomeUsuario = models.CharField(max_length=100)
+
+    def __unicode__(self):
+        return "%s %s - %s" %(self.nome, self.sobrenome, self.nomeUsuario)
 
 class espacoProjeto(models.Model):
     nome = models.CharField(max_length=50)

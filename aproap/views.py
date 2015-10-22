@@ -9,7 +9,7 @@ from django.db.models import Sum, Max
 from django import template
 from itertools import chain
 from datetime import datetime
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, UserManager
 from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -59,19 +59,30 @@ def cadastrar(request):
     return render_to_response('cadastrar.html', c)
 
 
-@login_required
+def cadastrarErro(request, erro):
+    context = dict(erro=erro)
+    c = RequestContext(request, context)
+    return render_to_response('cadastrar.html', c)
+
+
 def salvaUsuario(request):
+    nome = request.POST['nome']
+    sobrenome = request.POST['sobrenome']
+    usuario = request.POST['usuario']
+    senha = request.POST['senha']
+    email = request.POST['email']
+    #ve se o nome de usuario ja existe
+    existe = User.objects.filter(username=usuario).count()
+    if existe > 0:
+        return HttpResponseRedirect("/cadastrar/existente/")
     try:
-        usuario = request.POST['usuario']
-        senha = request.POST['senha']
-        email = request.POST['email']
-        senha = make_password(senha)
-        user = User(username=usuario, password=senha, email=email)
-        user.is_staff = False
-        user.is_superuser = False
-        user.save()
+        #senhaSegura = make_password(senha)
+        user = User.objects.create_user(username=usuario, password=senha, email=email, first_name=nome,
+                                        last_name=sobrenome)
+        perfil = Usuarios.objects.create(nome=nome, sobrenome=sobrenome, nomeUsuario=usuario)
+        perfil.save()
     except:
-        return HttpResponseRedirect("/cadastrar/")
+        return HttpResponseRedirect("/cadastrar/erro/")
     return HttpResponseRedirect("/login2/")
 
 
@@ -277,6 +288,34 @@ def showHistorico(request, slug, unidade):
 
 
 @login_required
+def salvaPerfil(request):
+    try:
+        avatar = request.FILES['avatarUpload']
+    except:
+        #pega o avatar atual
+        avatar = Usuarios.objects.get(nomeUsuario=request.user.username).avatar
+    nome = request.POST['nome']
+    sobrenome = request.POST['sobrenome']
+    curso = request.POST['curso']
+    educacao = request.POST['educacao']
+    perfil = Usuarios.objects.select_for_update().filter(nomeUsuario=request.user.username).update(avatar=avatar, nome=nome, sobrenome=sobrenome,
+                                             curso=curso, educacao=educacao)
+    return HttpResponseRedirect("/perfil/%s/" % request.user.username)
+
+
+@login_required
+def perfilUsuario(request, usuario):
+    qualUsuario = User.objects.get(username=usuario)
+    perfil = Usuarios.objects.get(nomeUsuario=qualUsuario.username)
+    nome = perfil.nome
+    sobrenome = perfil.sobrenome
+    nomeCompleto = "%s %s" %(nome, sobrenome)
+    context = dict(usuario=usuario, nomeCompleto=nomeCompleto, perfil=perfil, qualUsuario=qualUsuario)
+    c = RequestContext(request, context)
+    return render_to_response('perfil.html', c)
+
+
+@login_required
 def detalhesUnidade(request, slug, unidade):
     pk = espacoProjeto.objects.get(slugProjeto=slug).id
     qualEspaco = espacoProjeto.objects.get(slugProjeto=slug)
@@ -309,7 +348,7 @@ def detalhesUnidade(request, slug, unidade):
     qtdItens = unidadeInvestigacao.objects.filter(qualProjeto=idProjeto, nomeDoBloco=unidade).count()
     mediaDaUnidade = somaUnidadeValor / qtdItens
     #carrega o historico da unidade
-    historico = historicoAluno.objects.filter(qualEspaco=qualEspaco).order_by("data").reverse()[:7]
+    historico = historicoAluno.objects.filter(qualEspaco=qualEspaco).order_by("-data")[:7]
     context = dict(pendentes=pendentes, espacoId=pk, unidade=unidade,
                    qtdPendentes=qtdPendentes, todos=todos, semCronograma=semCronograma, desteUsuario=desteUsuario,
                    mediaDaUnidade=mediaDaUnidade, slug=slug, qtdAjuda=qtdAjuda,

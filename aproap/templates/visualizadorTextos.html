@@ -266,11 +266,11 @@
                 </li>
               <li>
                 <!-- /input-group -->
-                <strong>Referências textuais</strong>
+                <strong>Referências textuais usadas no texto</strong>
               </li>
               {% for i in todos %}
                 <li>
-                  <a href="{{ i.url }}"><i class="fa fa-dashboard fa-fw"></i> {{ i.titulo }}</a>
+                  <a href="{{ i.url }}"><i class="fa fa-external-link fa-fw"></i> {{ i.titulo }}</a>
                 </li>
               {% endfor %}
           </div>
@@ -282,9 +282,9 @@
         <div class="row">
           <div class="col-lg-12">
             {% if itemId.vinculadoTarefa == None %}
-                <h3 class="page-header">Redigindo: <strong>{{ itemId.titulo }}</strong></h3>
+                <h3 class="page-header"><strong>{{ itemId.titulo }}</strong></h3>
             {% else %}
-                <h3 class="page-header">Redigindo: <strong>{{ itemId.titulo }} - {{ itemId.vinculadoTarefa }}</strong></h3>
+                <h3 class="page-header"><strong>{{ itemId.titulo }} - {{ itemId.vinculadoTarefa }}</strong></h3>
             {% endif %}
             {% if usuarioAtual == itemId.criador %}
                 <a class="btn btn-primary" href="/projeto/{{ slug }}/{{ unidade }}/{{ itemslug }}/elementos_textuais/editando/{{ id }}/">Editar documento</a>

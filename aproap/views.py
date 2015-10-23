@@ -569,10 +569,19 @@ def modoLeitura(request, slug, unidade, itemslug, id):
     usuarioAtual = request.user.username
     itemId = textoProduzido.objects.get(pk=id)
     texto = itemId.texto
+    #pega todas as referencias usadas no texto
     qualItem = unidadeInvestigacao.objects.get(slugConhecimento=itemslug)
     nomeDoItem = qualItem.conhecimentoPrevio
     todos = elementoTextual.objects.filter(vinculadoItem=qualItem)
-    context = dict(itemId=itemId, nomeDoItem=nomeDoItem, todos=todos, slug=slug,
+    #lista das referencias
+    referencias = list()
+    #percorre a lista para ver as referencias
+    for i in range(todos.count()):
+        referenciaAtual = todos[i].titulo
+        if referenciaAtual in texto:
+            referencias.append(elementoTextual.objects.get(titulo=referenciaAtual))
+    print referencias
+    context = dict(itemId=itemId, nomeDoItem=nomeDoItem, todos=referencias, slug=slug,
                    itemslug=itemslug, unidade=unidade, id=id, texto=texto, usuarioAtual=usuarioAtual)
     c = RequestContext(request, context)
     return render_to_response('visualizadorTextos.html', c)

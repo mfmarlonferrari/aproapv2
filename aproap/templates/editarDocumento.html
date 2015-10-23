@@ -270,7 +270,7 @@
               </li>
               {% for i in todos %}
                 <li>
-                  <a href="{{ i.url }}"><i class="fa fa-dashboard fa-fw"></i> {{ i.titulo }}</a>
+                  <a href="{{ i.url }}"><i class="fa fa-file-text fa-fw"></i> {{ i.titulo }}</a>
                 </li>
               {% endfor %}
               <li>
@@ -278,7 +278,10 @@
               </li>
               {% for i in todosRef %}
                 <li>
-                  <a href="{{ i.url }}"><i class="fa fa-dashboard fa-fw"></i> {{ i.url }}</a>
+                  <a href="#" data-toggle="collapse" data-target="#url{{ i.id }}">
+                      <i class="fa fa-external-link fa-fw"></i>{{ i.titulo }}
+                      <iframe class="collapse" src="{{ i.url }}" id="url{{ i.id }}"></iframe>
+                  </a>
                 </li>
               {% endfor %}
           </div>
@@ -336,10 +339,13 @@
 		    <script type="text/javascript">
 		        CKEDITOR.replace( 'conteudo', {
                     toolbar: 'Full',
+                    removeButtons: 'NewPage',
                     uiColor: '#9AB8F3'
                 });
 		    </script>
         </form>
       </div>
+    </div>
 </body>
+
 </html>

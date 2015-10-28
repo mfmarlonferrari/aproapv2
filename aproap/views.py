@@ -359,6 +359,13 @@ def detalhesUnidade(request, slug, unidade):
 
 @login_required
 def detalhesItem(request, slug, unidade, itemslug):
+    pk = espacoProjeto.objects.get(slugProjeto=slug).id
+    idProjeto = Projeto.objects.get(espaco=pk)
+    # carrega as mensagens automaticas do usuario
+    mensagens = mensagemAssistente.objects.filter(usuario=request.user.username)
+    # filtra todos os itens do usuario atual
+    desteUsuario = unidadeInvestigacao.objects.filter(qualProjeto=idProjeto, nomeDoBloco=unidade,
+                                                      investigador=request.user.username)
     item = unidadeInvestigacao.objects.get(slugConhecimento=itemslug).id
     vinculoItem = unidadeInvestigacao.objects.get(slugConhecimento=itemslug)
     qualItem = unidadeInvestigacao.objects.get(pk=item).conhecimentoPrevio
@@ -386,7 +393,8 @@ def detalhesItem(request, slug, unidade, itemslug):
                    qualItem=qualItemId, item=item, qtdTarefasPendentes=qtdTarefasPendentes,
                    qtdajudantes=qtdajudantes, ajudantes=ajudante, slug=slug, unidade=unidade, itemslug=itemslug,
                    semCronograma=semCronograma, producoes=producoes, vinculoItem=vinculoItem, conversas=conversas,
-                   mediaTarefas=mediaTarefas, qtdTarefasFinalizadas=qtdTarefasFinalizadas)
+                   mediaTarefas=mediaTarefas, qtdTarefasFinalizadas=qtdTarefasFinalizadas, mensagens=mensagens,
+                   desteUsuario=desteUsuario)
     c = RequestContext(request, context)
     return render_to_response('detalheItem.html', c)
 

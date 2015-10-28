@@ -32,16 +32,12 @@
     <li><a href="/projeto/{{ slug }}/sintese/">{{ projeto.questaoInvestigacao }}</a>
       <ul>
         {% for i in conhecimentos %}
-        <li><a href="/projeto/{{ slug }}/{{ i.slugConhecimento }}/sintese/" title="teste">{{ i.conhecimentoPrevio }}</a>
+        <li><a href="/projeto/{{ slug }}/{{ i.slugConhecimento }}/sintese/" title="teste" id="no{{ i.pk }}" onclick="ir()">{{ i.conhecimentoPrevio }}</a>
         </li>
         {% endfor %}
       </ul>
     </li>
   </ul>
 
-
-<div class="section">
-    <a class="btn-default"></a>
-</div>
 </body>
 </html>

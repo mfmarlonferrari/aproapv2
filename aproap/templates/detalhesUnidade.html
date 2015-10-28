@@ -244,10 +244,27 @@
                    Clique <a href="/cronograma/{{ user.username }}/{{ slug }}/{{ unidade }}/">aqui</a> para resolver</div>
               {% endif %}
               {% if mediaDaUnidade == 100 %}
-                  <div class="alert alert-danger alert-dismissable">
-                      <strong>Atenção!&nbsp;</strong>Todos os itens de conhecimento desta unidade estão concluídos.
-                      Veja <a href="/projeto/{{ slug }}/sintese/">aqui</a> como está ficando o projeto!
-                  </div>
+                  <div class="panel-group">
+                     <div class="panel panel-default">
+                         <div class="panel-heading">
+                             <h4 class="panel-title">
+                                 <a data-toggle="collapse" href="#collapse1" onclick="atualiza()">Clique aqui para ver o projeto!</a>
+                             </h4>
+                         </div>
+                         <script>
+                             function atualiza() {
+                                 document.getElementById('iframeMapa').contentWindow.location.reload(true);
+                             }
+                         </script>
+                     <div id="collapse1" class="panel-collapse collapse">
+                         <div class="panel-body">
+                             <div class="embed-responsive embed-responsive-16by9">
+                                 <iframe class="embed-responsive-item" src="/projeto/{{ slug }}/sintese/" id="iframeMapa"></iframe>
+                             </div>
+                         </div>
+                     </div>
+                     </div>
+                 </div>
               {% endif %}
             <ul class="breadcrumb">
               <li>
@@ -585,4 +602,5 @@
 </form>
 
 <script>$('[title]').qtip();</script>
+
 </html>

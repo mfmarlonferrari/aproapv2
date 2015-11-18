@@ -1,0 +1,56 @@
+{% include "header.html" %}
+
+<body>
+    <div class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <ul class="breadcrumb">
+              <li>
+                <a href="/lobby/{{ slug }}/">Início</a>
+              </li>
+              <li>
+                <a href="/projeto/{{ slug }}/unidades/">Unidades</a>
+              </li>
+              <li>
+                <a href="/projeto/{{ slug }}/unidade/{{ unidade }}/detalhes/">Unidade {{ unidade }}</a>
+              </li>
+              <li>
+                <a href="/projeto/{{ slug }}/unidade/{{ unidade }}/item/{{ itemslug }}">{{ itemslug }}</a>
+              </li>
+                <li class="active">Atividades de Campo</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 text-right">
+            <a class="btn btn-lg btn-primary"
+               href="/projeto/{{ slug }}/{{ unidade }}/{{ itemslug }}/atividades_campo/nova/">
+                <i class="fa fa-star fa-fw"></i>Nova atividade de campo<br>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <ul class="list-group">
+              <li class="list-group-item">Cras justo odio</li>
+              <li class="list-group-item">Dapibus ac facilisis in</li>
+              <li class="list-group-item">Morbi leo risus</li>
+              <li class="list-group-item">Porta ac consectetur ac</li>
+              <li class="list-group-item">Vestibulum at eros</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+{% include "footer.html" %}

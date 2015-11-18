@@ -961,3 +961,35 @@ def atualizaTexto(request, slug, unidade, itemslug, id):
     tipo = 'Conteudo'
     escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link, tipo)
     return HttpResponseRedirect("/projeto/%s/%s/%s/elementos_textuais/editando/%s" % (slug, unidade, itemslug, id))
+
+
+@login_required
+def listarAtividadeCampo(request, slug, unidade, itemslug):
+    context = dict(slug=slug, unidade=unidade, itemslug=itemslug)
+    c = RequestContext(request, context)
+    return render_to_response('listar_atividadeCampo.html', c)
+
+
+@login_required
+def atividadeCampo(request, slug, unidade, itemslug):
+    context = dict(slug=slug, unidade=unidade, itemslug=itemslug)
+    c = RequestContext(request, context)
+    return render_to_response('atividadeCampo.html', c)
+
+
+@login_required
+def salvarAtividadeCampo(request, slug, unidade, itemslug):
+    qualItem = unidadeInvestigacao.objects.get(slugConhecimento=itemslug)
+    titulo = request.POST.get('titulo')
+    descricao = request.POST['descricao']
+    resumo = request.POST['resumo']
+    relato = request.POST['relato']
+    ativ = atividadesCampo.objects.create(aluno=request.user.username, titulo=titulo, descricao=descricao,
+                                          resumo=resumo, relato=relato, data=datetime.now(), qualItem=qualItem)
+    ativ.save()
+    tarefa = 'inseriu a atividade de campo %s' %titulo
+    link = 'nada ainda'
+    tipo = 'Campo'
+    escreveHistorico(request.user.username, tarefa, datetime.now(), slug, link, tipo)
+    return HttpResponseRedirect(
+        "/projeto/%s/%s/%s/atividades_campo/" % (slug, unidade, itemslug))

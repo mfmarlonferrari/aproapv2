@@ -86,8 +86,12 @@ urlpatterns = patterns('',
         name='perfil'),
     url(r'^salvar_perfil/$', 'aproap.views.salvaPerfil',
         name='salvar_perfil'),
-
-
+    url(r'^projeto/(?P<slug>[\w-]+)/(?P<unidade>[0-9]+)/(?P<itemslug>[\w-]+)/atividades_campo/nova/$',
+        'aproap.views.atividadeCampo', name='atividadeCampo'),
+    url(r'^projeto/(?P<slug>[\w-]+)/(?P<unidade>[0-9]+)/(?P<itemslug>[\w-]+)/atividades_campo/$',
+        'aproap.views.listarAtividadeCampo', name='listar_atividadeCampo'),
+        url(r'^projeto/(?P<slug>[\w-]+)/(?P<unidade>[0-9]+)/(?P<itemslug>[\w-]+)/atividades_campo/salvar/$',
+        'aproap.views.salvarAtividadeCampo', name='salvar_atividadeCampo'),
 )
 
 #MEDIA

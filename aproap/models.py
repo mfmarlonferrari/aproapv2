@@ -178,3 +178,16 @@ class historicoAluno(models.Model):
 
     def __unicode__(self):
         return "%s %s" %(self.aluno, self.tarefa)
+
+
+class atividadesCampo(models.Model):
+    aluno = models.CharField(max_length=100)
+    titulo = models.CharField(max_length=100)
+    descricao = models.CharField(max_length=200)
+    resumo = models.CharField(max_length=200)
+    relato = models.CharField(max_length=200)
+    data = models.DateTimeField()
+    qualItem = models.ForeignKey(unidadeInvestigacao)
+
+    def __unicode__(self):
+        return "%s %s" %(self.aluno, self.titulo)

@@ -588,7 +588,6 @@ def modoLeitura(request, slug, unidade, itemslug, id):
         referenciaAtual = todos[i].titulo
         if referenciaAtual in texto:
             referencias.append(elementoTextual.objects.get(titulo=referenciaAtual))
-    print referencias
     context = dict(itemId=itemId, nomeDoItem=nomeDoItem, todos=referencias, slug=slug,
                    itemslug=itemslug, unidade=unidade, id=id, texto=texto, usuarioAtual=usuarioAtual)
     c = RequestContext(request, context)
@@ -965,7 +964,9 @@ def atualizaTexto(request, slug, unidade, itemslug, id):
 
 @login_required
 def listarAtividadeCampo(request, slug, unidade, itemslug):
-    context = dict(slug=slug, unidade=unidade, itemslug=itemslug)
+    qualItem = unidadeInvestigacao.objects.get(slugConhecimento=itemslug)
+    atividades = atividadesCampo.objects.filter(qualItem=qualItem)
+    context = dict(slug=slug, unidade=unidade, itemslug=itemslug, atividades=atividades)
     c = RequestContext(request, context)
     return render_to_response('listar_atividadeCampo.html', c)
 

@@ -981,9 +981,9 @@ def atividadeCampo(request, slug, unidade, itemslug):
 def salvarAtividadeCampo(request, slug, unidade, itemslug):
     qualItem = unidadeInvestigacao.objects.get(slugConhecimento=itemslug)
     titulo = request.POST.get('titulo')
-    descricao = request.POST['descricao']
-    resumo = request.POST['resumo']
-    relato = request.POST['relato']
+    descricao = request.POST.get('descricaoText')
+    resumo = request.POST.get('resumoText')
+    relato = request.POST.get('relatoText')
     ativ = atividadesCampo.objects.create(aluno=request.user.username, titulo=titulo, descricao=descricao,
                                           resumo=resumo, relato=relato, data=datetime.now(), qualItem=qualItem)
     ativ.save()

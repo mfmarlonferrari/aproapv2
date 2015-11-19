@@ -1,8 +1,6 @@
 {% include "header.html" %}
 
-<form method="post" action="/projeto/{{ slug }}/{{ unidade }}/{{ itemslug }}/atividades_campo/salvar/">
-  {% csrf_token %}
-    <div class="section">
+<div class="section">
       <div class="container">
         <div class="row">
           <div class="col-md-12">
@@ -29,25 +27,15 @@
         </div>
       </div>
     </div>
+
+<form method="post" action="/projeto/{{ slug }}/{{ unidade }}/{{ itemslug }}/atividades_campo/salvar/">
+  {% csrf_token %}
+
     <div class="section">
       <div class="container">
         <div class="row">
-          <div class="col-md-6">
-            <img class="img-responsive"
-                 src="http://maps.googleapis.com/maps/api/staticmap?center=Tombouctou,Mali&amp;zoom=12&amp;size=200x200&amp;sensor=false">
-          </div>
-          <div class="col-md-6">
-            <form role="form">
-              <div class="form-group">
-                <label class="control-label" for="exampleInputEmail1">Nome da visita de campo</label>
-                <input class="form-control" id="exampleInputEmail1" name="titulo"
-                type="text">
-              </div>
-              <div class="form-group">
-                <label class="control-label">O que foi feito?</label>
-                <textarea class="form-control" name="descricao"></textarea>
-              </div>
-            </form>
+          <div class="col-md-12">
+            <img class="img-responsive" src="http://pingendo.github.io/pingendo-bootstrap/assets/placeholder.png">
           </div>
         </div>
       </div>
@@ -58,23 +46,23 @@
           <div class="col-md-12">
             <form role="form">
               <div class="form-group">
-                <label class="control-label">Resumo da visita</label>
-                <textarea class="form-control" name="resumo"></textarea>
+                <label class="control-label" for="exampleInputEmail1">Qual o nome da atividade de campo?</label>
+                <input class="form-control" id="exampleInputEmail1" name="titulo">
               </div>
               <div class="form-group">
-                <label class="control-label">Contribuições da visita para o projeto</label>
-                <textarea class="form-control" name="relato"></textarea>
+                <label class="control-label">Qual é o objetivo da atividade de campo?</label>
+                <textarea class="form-control" name="descricaoText"></textarea>
               </div>
+              <div class="form-group">
+                <label class="control-label">Resumo da atividade de campo</label>
+                <textarea class="form-control" name="resumoText"></textarea>
+              </div>
+              <div class="form-group">
+                <label class="control-label">Contribuições da atividade de campo ao projeto</label>
+                <textarea class="form-control" name="relatoText"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Salvar</button>
             </form>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="section">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12 text-center">
-            <button class="btn btn-primary" type="submit">Salvar</button>
           </div>
         </div>
       </div>
